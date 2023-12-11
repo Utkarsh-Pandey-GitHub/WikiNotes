@@ -1,12 +1,10 @@
 import type { Metadata } from 'next'
-import { Inter, Ubuntu } from 'next/font/google'
-
-import './globals.css'
+import { Inter } from 'next/font/google'
+import '../globals.css'
 import { ClerkProvider, RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
 import { MyContextProvider, useMyContext } from '@/components/Context'
 
 const inter = Inter({ subsets: ['latin'] })
-const ubuntu = Ubuntu({weight:"300",subsets: ['latin']})
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -20,10 +18,10 @@ export default function RootLayout({
 }) {
   
   return (
-    
+    <ClerkProvider>
       <html lang="en">
-        <body className={`${ubuntu.className}` }>
-          
+        <body className={`${inter.className}` }>
+          <SignedIn>
 
             <MyContextProvider>
 
@@ -31,9 +29,13 @@ export default function RootLayout({
             </MyContextProvider>
 
 
+          </SignedIn>
+          <SignedOut>
+            <RedirectToSignIn />
+          </SignedOut>
         </body>
       </html>
-    
+    </ClerkProvider>
 
   )
 }
