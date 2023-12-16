@@ -8,10 +8,10 @@ function RightBar() {
   const { myValue, setMyValue } = useMyContext()
   let u;
 
-  const toggleDark=(event)=>{
+  const toggleDark=(event: { preventDefault: () => void; })=>{
     event.preventDefault();
 
-    setMyValue(prev=>!prev)
+    setMyValue((prev: any)=>!prev)
   }
   return (
     <div className={`bg-opacity-10 border-l-slate-300 border-l-2 pt-52 lg:block hidden px-10 h-screen ${myValue&&"text-white"}`} >
