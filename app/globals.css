@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 .leftslide{
-    animation:slideLeft 3s ;
+    animation:slideLeft 1.5s ;
 }
 @keyframes slideLeft{
     0%{

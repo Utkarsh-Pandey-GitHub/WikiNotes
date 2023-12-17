@@ -15,6 +15,8 @@ import { stringify } from 'querystring'
 import Link from 'next/link'
 import { useUser } from '@clerk/nextjs'
 import UserCard from '@/components/cards/UserCard'
+import PostCard from '@/components/cards/PostCard'
+
 
 
 
@@ -24,6 +26,7 @@ export default  function Home() {
   const [us, setUs] = useState([])  
   const [currUser,setcurrUser] =useState(null)
   const { isSignedIn, user, isLoaded } = useUser();
+  const [userid, setuserid] = useState(null)
 
   interface obj {
     name:String
@@ -34,7 +37,7 @@ export default  function Home() {
   const create_user = ()=>{
     console.log(user);
     
-    axios.post('http://localhost:3001/routes/new-user',user).then((res)=>{console.log(res);})
+    axios.post('http://localhost:3001/routes/new-user',user).then((res)=>{console.log(res);setuserid(res.data.active)})
     // fetch('http://localhost:3001/routes/new-user',{
     //   method:'POST',
     //   headers: {
@@ -88,12 +91,16 @@ export default  function Home() {
   }
 
   const heading = "WikiNotes"
-
+  const handleOpacity=()=>{
+    if (document.getElementById("main")?.classList?.contains("opacity-40")) {
+      document.getElementById("main")?.classList.remove("opacity-40")
+    }
+  }
 
 
 
   return (
-    <div className={`grid grid-cols-11 ${ myValue&&"bg-black"}`}>
+    <div className={`grid grid-cols-11 ${ myValue&&"bg-black"} `} id="main" >
 
       <LeftBar mode={myValue}/>
 
@@ -118,7 +125,7 @@ export default  function Home() {
           </div>
 
         </div>
-        <div className=' md:m-10 m-10 clear-both'>
+        <div className=' md:m-10 m-10 clear-both grid grid-cols-1 '>
 
           <div className='sm:flex sm:gap-4 sm:justify-evenly gap-4 grid grid-cols-1'>
             <button className='bg-green-400 md:w-1/6 p-2 rounded-3xl text-white active:bg-green-600 focus:bg-green-700 focus:font-extrabold' 
@@ -166,14 +173,14 @@ export default  function Home() {
               <li>
                 
                 <label htmlFor="author" className={`${myValue&&"text-white"}`}>author name</label><br />
-                <input type="text" defaultValue={`${'utkarsh'}`} id='author'name='author' className='border border-yellow-700 rounded-3xl mx-2 px-2 py-1 w-full'/>
+                <input type="text" defaultValue={`${userid}`} id='author'name='author' className='border border-yellow-700 rounded-3xl mx-2 px-2 py-1 w-full'/>
               </li>
               
               <button type="submit" className={`bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 border-b-4 border-blue-500 hover:border-blue-500 rounded-3xl ${myValue&&"text-white"}`}>submit</button>
             </ul>
           </form>
-          <div className={`col-span-1 ${myValue&&"text-white "} grid md:grid-flow-col grid-flow-row md:grid-cols-4 grid-cols-1  gap-4`} id='experimental'>{(us.map((data)=>{
-            return <><UserCard user={data} dark={myValue}/></>
+          <div className={` ${myValue&&"text-white "} grid  grid-flow-row md:grid-cols-4 sm:grid-cols-2  grid-cols-1  gap-5`} id='experimental'>{(us.map((data)=>{
+            return <><PostCard post={data} dark={myValue}/></>
 
           }))}
           </div>

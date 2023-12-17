@@ -27,7 +27,7 @@ function LeftBar({
 
       </button>
       <div className='leftslide' id='leftslideBtn'>
-        <div className={`lg:grid lg:gap-2 lg:grid-flow-row lg:grid-cols-1 bg-opacity-10 border-r-slate-300 border-r-2 pt-52 px-2  hidden bg-slate-300 h-screen leftslide  ${mode && "text-white"}`}
+        <div className={`lg:grid lg:gap-2 lg:grid-flow-row lg:grid-cols-1 bg-opacity-0 border-r-slate-700 border-r-2 pt-52 px-2  hidden h-screen leftslide  ${mode && "text-white"}`}
 
         >
           {/* illustrationrelated */}

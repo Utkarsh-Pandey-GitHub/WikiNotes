@@ -1,6 +1,7 @@
 import { NextFunction, Response, Request } from 'express';
 import Model from './schema'
 
+
 const findLoggedInUser = async(req: Request, res: Response, next: NextFunction) => {
     const activeEmail = req.body.email;
     // res.json(ActiveUser)
@@ -22,20 +23,17 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     
         })
         console.log("request reached controller successfullly ansd now creating the user")
-        // res.json(newUser)
+        res.send(newUser)
         await newUser.save()
     }
-    res.send("user already exists")
+    res.send({
+        msg:"user already exists",
+        active:ActiveUser?._id
+    })
 
 
 }
 
-// {
-//     '{"pathRoot":"/me","id":"user_2YaA1cn0IuN3BNTlWKeztTdDlOq","externalId":null,"username":"utkarsh","emailAddresses":[{"pathRoot":"/me/email_addresses","emailAddress":"theutkarshmail@gmail.com","linkedTo":': {
-//         '{"pathRoot":"","id":"idn_2YaA095zUiXPszggEVqcKdizfaH","type":"oauth_google"},{"pathRoot":"","id":"idn_2ZXxeOr8tn15py64QtrHAc5HAaO","type":"oauth_google"}': [[Object]]
-//     }
-// }
-//experimental
 const readAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     const data = await Model.User.find()
     console.log("request reached READ ALL controller successfullly ansd now READING ALL the users");
@@ -49,13 +47,17 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
 
     const labela = req.body?.label;
     const descriptiona = req.body?.description;
-    // const authora=req.body.author;
+    const authora=req.body?.author;
     const newPost = new Model.Post({
         label: labela,
         description: descriptiona,
+        author:authora
 
     })
     console.log("request reached controller successfullly ansd now creating the post");
+    await Model.User.updateOne(
+        {_id:authora},
+        {$push:{articles:newPost}})
     await newPost.save();
 }
 const readAllPosts = async (req: Request, res: Response, next: NextFunction) => {
@@ -66,4 +68,18 @@ const readAllPosts = async (req: Request, res: Response, next: NextFunction) => 
     res.json(data)
 }
 
-export default { createUser, readAllUsers, createPost, readAllPosts }
+const deletePost = async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.body?.pid
+    console.log("request reached delete controller",req.body);
+    
+    const u=req.body?.uid
+    await Model.Post.deleteOne(
+        {_id:id})
+    await Model.User.updateOne(
+      {_id:u},
+      {$pull:{articles:{_id:id}}}
+    )
+    res.send("post is deleted removed linkage from user")
+      
+}
+export default { createUser, readAllUsers, createPost, readAllPosts,deletePost }
