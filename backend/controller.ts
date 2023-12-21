@@ -67,7 +67,22 @@ const readAllPosts = async (req: Request, res: Response, next: NextFunction) => 
 
     res.json(data)
 }
+const readMyPosts = async (req: Request, res: Response, next: NextFunction) => {
+    console.log("request reached READ ALL controller successfullly ansd now READING MY  POST");
+    const data = await Model.Post.find({author:req.params.uid})
+    console.log('reached the controller');
 
+    res.json(data)
+}
+const updatePost =  async (req: Request, res: Response, next: NextFunction) => {
+    const p = req.body
+    console.log(req.body)
+    
+    await Model.Post.updateOne({_id:p._id},p)
+    console.log("post updated");
+    
+    res.send("done")
+}
 const deletePost = async (req: Request, res: Response, next: NextFunction) => {
     const id = req.body?.pid
     console.log("request reached delete controller",req.body);
@@ -82,4 +97,4 @@ const deletePost = async (req: Request, res: Response, next: NextFunction) => {
     res.send("post is deleted removed linkage from user")
       
 }
-export default { createUser, readAllUsers, createPost, readAllPosts,deletePost }
+export default { createUser, readAllUsers, createPost, readAllPosts,readMyPosts,updatePost,deletePost }

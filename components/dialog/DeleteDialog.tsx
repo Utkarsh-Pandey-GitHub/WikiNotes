@@ -10,7 +10,8 @@ interface CardProps {
   dark?: boolean;
   viz?: boolean;
 }
-const DeleteDialog: React.FC<CardProps> = ({ id, userId, dark, viz }) => {
+const DeleteDialog: React.FC<CardProps> = ({ id, userId, dark, viz }
+  ) => {
   const [viza, setViza] = useState(1)
   interface ID {
     pid: any,

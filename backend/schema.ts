@@ -30,8 +30,6 @@ const postSchema = new Schema<post>({
         ref: 'User',
         required: false
     }
-
-
 })
 const userSchema = new Schema<user>({
     name: {
