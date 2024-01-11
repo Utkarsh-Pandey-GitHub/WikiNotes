@@ -45,7 +45,7 @@ const DeleteDialog: React.FC<CardProps> = ({ id, userId, dark, viz }
       });
   }
   return (!(viz ^ viza) ?
-    <div className='h-44 w-96 bg-slate-700 z-10 absolute rounded-3xl left-1/3 top-1/3 bg-opacity-50'>
+    <div className='h-44 w-96 bg-slate-700 z-10 relative rounded-3xl left-1/3 top-1/3 bg-opacity-50'>
       {id}
       <div className='text-white bold text-4xl float-right'  >
         <Image src={delet} height={25} width={25} alt='bin' onClick={() => { setViza(prevviza => !prevviza) }} />

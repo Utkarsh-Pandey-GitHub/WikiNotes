@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react'
 
 interface CardProps {
@@ -19,9 +20,9 @@ const UserCard: React.FC<CardProps> = ({ user, dark }) => {
       {/* <div className='border border-black italic'>
         {user?.email}
       </div> */}
-      <button class="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-3xl">
+      <Link href={"/chat"}><button class="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-3xl">
         Chat
-      </button>
+      </button></Link>
 
     </div>
   )

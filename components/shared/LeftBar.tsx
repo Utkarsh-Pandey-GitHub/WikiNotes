@@ -3,12 +3,7 @@ import '../../app/globals.css'
 import nb from '../../public/noteboy.png'
 import Image from 'next/image'
 
-function LeftBar({
-  mode
-}: {
-  mode: boolean
-}
-) {
+function LeftBar() {
 
   function handleDropdown(id: any) {
     const element = document.getElementById(id)
@@ -27,7 +22,7 @@ function LeftBar({
 
       </button>
       <div className='leftslide' id='leftslideBtn'>
-        <div className={`lg:grid lg:gap-2 lg:grid-flow-row lg:grid-cols-1 bg-opacity-0 border-r-slate-700 border-r-2 pt-52 px-2  hidden h-screen leftslide  ${mode && "text-white"}`}
+        <div className={`lg:grid lg:gap-2 lg:grid-flow-row lg:grid-cols-1 bg-opacity-0 border-r-slate-700 border-r-2 pt-52 px-2  hidden h-screen leftslide `}
 
         >
           {/* illustrationrelated */}

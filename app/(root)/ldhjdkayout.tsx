@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import '../globals.css'
 import { ClerkProvider, RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
 import { MyContextProvider, useMyContext } from '@/components/Context'
+import { MyUserContextProvider } from '@/components/UserContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,17 +17,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  
+
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className}` }>
+        <body className={`${inter.className}`}>
           <SignedIn>
 
-            <MyContextProvider>
-
-              {children}
-            </MyContextProvider>
+            {children}
 
 
           </SignedIn>

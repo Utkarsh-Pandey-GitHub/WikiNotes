@@ -20,20 +20,20 @@ export default function RootLayout({
 }) {
   
   return (
-    
+
+    <ClerkProvider>
       <html lang="en">
-        <body className={`${ubuntu.className}` }>
-          
-
-            <MyContextProvider>
-
-              {children}
-            </MyContextProvider>
-
-
+        <body className={`${ubuntu.className}`}>
+          <SignedIn>
+            {children}
+          </SignedIn>
+          <SignedOut>
+            <RedirectToSignIn />
+          </SignedOut>
         </body>
       </html>
-    
+    </ClerkProvider> 
 
   )
 }
+

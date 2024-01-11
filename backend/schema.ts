@@ -4,6 +4,7 @@ import mongoose, { Schema, Document } from 'mongoose'
 interface post extends Document {
     label: String,
     description?: String,
+    link?:String,
     author: mongoose.Types.ObjectId
 }
 interface user extends Document {
@@ -24,6 +25,9 @@ const postSchema = new Schema<post>({
     description: {
         type: String,
 
+    },
+    link:{
+        type:String
     },
     author: {
         type: mongoose.Schema.Types.ObjectId,

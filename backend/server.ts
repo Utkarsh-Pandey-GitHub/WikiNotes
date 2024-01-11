@@ -1,9 +1,11 @@
 import express, { Request, Response,NextFunction, Application } from 'express'
-import { Server } from 'http'
+
 import router from './routes'
 import main from './connection'
 import cors from 'cors'
+import {Server} from 'socket.io'
 import bodyParser from 'body-parser'
+import { createServer } from 'http'
 
 main()
 .then(()=>{
@@ -20,12 +22,36 @@ app.use(cors())
 app.use(express.urlencoded({ extended: true }));
 app.use('/routes',router)
 
+const httpServer = createServer(app);
+const io = new Server(httpServer, { /* options */ 
+    cors:{
+        origin:["http://localhost:5500","http://localhost:3000"]
+    },
+    
+});
 
 
 
 
+io.on("connection", (socket) => {
+  console.log('user connected with socket id',socket.id);
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+  socket.on('chat message', (msg,user) => {
+    io.emit('chat message', msg,socket.id,user.username);
+    console.log('message: ' + msg);
+  });
+});
 
-const server: Server = app.listen(3001, (): void => {
+
+
+
+app.listen(3001, (): void => {
     console.log('initializing...');
 
+})
+httpServer.listen(3002,()=>{
+  console.log("yellow!");
+  
 })
