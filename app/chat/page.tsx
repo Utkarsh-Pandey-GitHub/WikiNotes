@@ -1,3 +1,7 @@
+/**
+ * This is the page component for the chat feature.
+ * It handles sending and receiving messages, displaying posts, and user interactions.
+ */
 "use client"
 
 import PostCard from '@/components/cards/PostCard';
@@ -44,7 +48,7 @@ const page: React.FC = () => {
         new_ele_lbl.textContent = `you `
         new_ele.textContent = `${data}`
         const usr_lbl_cls = ['float-right', 'clear-both', 'mx-2', 'text-bold', 'italic', "mb-0", "pb-0"]
-        const usr_cls = ['bg-purple-700', 'rounded-bl-2xl', 'rounded-tr-2xl', "lg:w-1/5", "md:w-1/3", "sm:w-1/2", "w-3/4", "text-white", "p-2", "m-2", "float-right", "clear-both", "mt-0", "drag"]
+        const usr_cls = ['bg-blue-700', 'rounded-bl-2xl', 'rounded-tr-2xl', "lg:w-1/5", "md:w-1/3", "sm:w-1/2", "w-3/4", "text-white", "p-2", "m-2", "float-right", "clear-both", "mt-0", "drag"]
         new_ele_lbl.classList.add(...usr_lbl_cls)
         new_ele.classList.add(...usr_cls)
 
@@ -69,7 +73,8 @@ const page: React.FC = () => {
       })
       u.current?.appendChild(new_ele_lbl);
       u.current?.appendChild(new_ele);
-      setLenchild(u.current?.children.length)
+      const newlen=u.current?.children.length
+      setLenchild(newlen as number)
 
 
 
@@ -96,25 +101,33 @@ const page: React.FC = () => {
 
       })
     }
+    /**
+     * Fetches the user's post data from the server based on the provided user ID.
+     * @param {string} userid - The user ID used to fetch the post data.
+     */
     if (userid) {
-
-      // const web_poll_post = setInterval(() => {
-      const url = `http://localhost:3001/routes/read-post/${encodeURIComponent(userid)}`
+      const url = `http://localhost:3001/routes/read-post/${encodeURIComponent(userid)}`;
       console.log(userid);
 
       fetch(url, {
         method: 'GET'
-      }).then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      }).then(data => setMypost(data))
-        .catch(error => console.error(error))
-      // }, 600000)
-      // setIntervalId(web_poll_post)
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => setMypost(data))
+        .catch(error => console.error(error));
     }
 
+    /**
+     * Adds event listeners to the elements with class 'post_container' and updates the form state based on the dragged element's content.
+     * If the dragged element's content includes 'label:', 'link:', and 'description:', it extracts the label, link, and description values and updates the form state.
+     * If the dragged element's content does not include 'label:', 'link:', and 'description:', it sets the label as an empty string, the link as an empty string, and the description as the dragged element's text content.
+     * @param e - The dragover event object.
+     */
     Array.from(document.getElementsByClassName('post_container')).forEach(element => {
 
       element.addEventListener('dragover', (e: any) => {
@@ -172,8 +185,7 @@ const page: React.FC = () => {
   
   return (
     <div>
-      {/* <Image src={chatimg} alt='' className='absolute left-1/4'/> */}
-      
+    
 
       <Form form={form} author={userid}  setForm={setForm}/>
       
@@ -208,7 +220,7 @@ const page: React.FC = () => {
             <textarea id="input" className='border border-black col-span-3 rounded-xl' ref={i}
               onChange={(e: any) => setInput(e.target.value)} value={input}>
             </textarea>
-            <button id='btn' ref={b} className='mt-2 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg  px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 text-lg col-span-1' onClick={handleFromhidden}>Send</button>
+            <button id='btn' ref={b} className='mt-2 focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900 text-lg col-span-1' onClick={handleFromhidden}>Send</button>
 
           </form>
         </div>

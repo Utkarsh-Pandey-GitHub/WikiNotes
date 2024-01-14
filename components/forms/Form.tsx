@@ -1,4 +1,6 @@
+import Image from 'next/image';
 import React, { useState } from 'react'
+import newnote from '../../public/newnote.gif'
 
 interface FormProps {
     form?: any;
@@ -6,18 +8,20 @@ interface FormProps {
     setForm?: any;
 }
 
-function Form({ form,author,setForm }: FormProps) {
-    
-    
+function Form({ form,author,setForm }: FormProps) {    
     
     return (
-        <div>{(!form.hidden)?<form action="http://localhost:3001/routes/new-post" method='POST' id='form1' className={`flex  justify-center absolute bg-slate-200 z-50 rounded-3xl `} style={{
+        <div>{(!form.hidden)?<form action="http://localhost:3001/routes/new-post" method='POST' id='form1' className={`flex  justify-end absolute bg-slate-200 z-50 rounded-3xl `} style={{
                 height: '55vh',
                 width: '55vw',
                 left: '20vw',
                 top: '20vh'
             }}>
+                <div className='text-8xl my-32 ml-16 '>
+                    Write a new note!
+                </div>
                 <ul className='mx-5 grid grid-cols-1 w-2/3 '>
+                <Image src={newnote} alt='' height={400} width={400} className='absolute -left-32 -top-32 '/>
 
                     <li className='col-span-1 '>
 
@@ -46,7 +50,7 @@ function Form({ form,author,setForm }: FormProps) {
                         <input type="text" defaultValue={`${author}`} id='author' name='author' className='border border-yellow-700 rounded-3xl mx-2 px-2 py-1 w-full' />
                    </li>
                     <button type="submit" className={`bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 border-b-4 border-blue-500 hover:border-blue-500 rounded-3xl `}>submit</button>
-                    <button type="submit" className={`bg-red-700 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 border-b-4 border-blue-500 hover:border-blue-500 rounded-3xl `} onClick={() => setForm({...Form,hidden:true})}>cancel</button>
+                    <button type="submit" className={`bg-red-700 hover:bg-red-400 text-white font-bold py-2 px-4 my-2 border-b-4 border-red-500 hover:border-red-500 rounded-3xl `} onClick={() => setForm({...Form,hidden:true})}>cancel</button>
 
                 </ul>
             </form>:''}
