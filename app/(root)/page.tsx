@@ -5,14 +5,14 @@ import axios from 'axios'
 
 import LeftBar from '@/components/shared/LeftBar'
 import RightBar from '@/components/shared/RightBar'
-
+import chatimg from '../../public/chat1.gif'
 
 import { useEffect, useRef, useState } from 'react'
 
 import BottomBar from '@/components/shared/BottomBar'
-
+import createNote from '../../public/createNote.gif'
 import Link from 'next/link'
-import { useUser } from '@clerk/nextjs'
+import { SignOutButton, UserButton, useUser } from '@clerk/nextjs'
 import UserCard from '@/components/cards/UserCard'
 import PostCard from '@/components/cards/PostCard'
 import { useCurrUser } from '@/components/UserContext'
@@ -22,13 +22,13 @@ import { useCurrUser } from '@/components/UserContext'
 
 export default function Home() {
 
-  
+
   const [us, setUs] = useState([])
   const [pos, setPos] = useState([])
   const [mypos, setMyPos] = useState([])
-  const [currUser, setcurrUser] = useState<any|undefined>()
+  const [currUser, setcurrUser] = useState<any | undefined>()
   const { isSignedIn, user, isLoaded } = useUser();
-  const [userid, setuserid] = useState<any|undefined>()
+  const [userid, setuserid] = useState<any | undefined>()
   const allRead = useRef(null)
   const myRead = useRef(null)
 
@@ -36,7 +36,7 @@ export default function Home() {
     name: String
   }
 
-  
+
 
   const read_user = () => {
     fetch(`http://localhost:3001/routes/read-user`, {
@@ -52,17 +52,17 @@ export default function Home() {
         console.log(data)
       })
       .catch(error => console.error(error))
-      toggleVisibility("experimental_users")
-    }
+    toggleVisibility("experimental_users")
+  }
 
-    
-    
-    
-    const read_my_post = (e:any) => {
-      
-      const url = `http://localhost:3001/routes/read-post/${encodeURIComponent(userid)}`
+
+
+
+  const read_my_post = (e: any) => {
+
+    const url = `http://localhost:3001/routes/read-post/${encodeURIComponent(userid)}`
     console.log(userid);
-    
+
     fetch(url, {
       method: 'GET'
     }).then(response => {
@@ -71,20 +71,20 @@ export default function Home() {
       }
       return response.json();
     }).then(data => setMyPos(data))
-    .catch(error => console.error(error))
-    
+      .catch(error => console.error(error))
+
     const ele = document.getElementById('experimental_post')
     if (!ele?.classList.contains('hidden')) {
-      
+
       ele?.classList.add('hidden')
       ele?.classList.remove('flex')
     }
     toggleVisibility("experimental_post_my")
   }
-  
-  
-  
-  const read_post = (e:any) => {
+
+
+
+  const read_post = (e: any) => {
     fetch(`http://localhost:3001/routes/read-posts`, {
       method: 'GET'
     }).then(response => {
@@ -93,10 +93,10 @@ export default function Home() {
       }
       return response.json();
     }).then(data => setPos(data))
-    .catch(error => console.error(error))
+      .catch(error => console.error(error))
     console.log('clicked');
-    
-    
+
+
     const ele = document.getElementById('experimental_post_my')
     if (!ele?.classList.contains('hidden')) {
       ele?.classList.add('hidden')
@@ -105,7 +105,7 @@ export default function Home() {
     toggleVisibility("experimental_post")
   }
 
-  
+
   function toggleVisibility(id: string) {
     const ele = document.getElementById(id)
     if (ele?.classList.contains('hidden')) {
@@ -115,34 +115,37 @@ export default function Home() {
     else {
       ele?.classList.add('hidden')
       ele?.classList.remove('flex')
-      
+
     }
   }
 
   const heading = "WikiNotes"
-  
-  
+
+
   const usercontext = useCurrUser()
   useEffect(() => {
-    if (isSignedIn&&user) {
+    if (isSignedIn && user) {
       console.log(user);
-      axios.post('http://localhost:3001/routes/new-user', user).then((res) => { 
+      axios.post('http://localhost:3001/routes/new-user', user).then((res) => {
         setuserid(res.data.active)
         usercontext?.setUser(res.data.active)
       })
     }
-    
-    
-    
+
+
+
   }, [user])
-  
-  
+
+
   return (
     <>
-
+      <div className='flex absolute right-3 top-3 gap-1'>
+        <UserButton />
+        <SignOutButton />
+      </div>
       <div className={`grid grid-cols-11  `}  >
 
-        <LeftBar  />
+        <div></div>
 
         <div className='lg:col-span-9 col-span-11'>
           <div className='flex  justify-center '>
@@ -178,16 +181,23 @@ export default function Home() {
                 onClick={read_my_post}
               >MY POSTS</button>
 
-              <button className='bg-blue-700 md:w-1/6 p-2 rounded-3xl text-white active:bg-blue-600 focus:bg-blue-700 focus:font-extrabold'
+              <button className='bg-red-700 md:w-1/6 p-2 rounded-3xl text-white active:bg-red-600 focus:bg-red-700 focus:font-extrabold'
                 onClick={read_user}
               >Find Friends</button>
-              
+
 
             </div>
 
 
-            <form action="http://localhost:3001/routes/new-post" method='POST' id='form1' className='hidden  justify-center'>
+            <form action="http://localhost:3001/routes/new-post" method='POST' id='form1' className='hidden  justify-center '>
               <ul className='mx-5 grid grid-cols-1 w-2/3 '>
+                <div className='sm:flex '>
+
+                  <Image src={createNote} height={50} width={300} alt='' />
+                  <div className='my-10 italic text-3xl md:block hidden'>
+                    "Learning gives creativity, creativity leads to thinking, thinking provides knowledge, and knowledge makes you great."
+                  </div>
+                </div>
                 <li className='col-span-1 '>
 
                   <label htmlFor="label" className={""}>label</label><br />
@@ -216,24 +226,40 @@ export default function Home() {
                 <button type="submit" className={`bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 border-b-4 border-blue-500 hover:border-blue-500 rounded-3xl `}>submit</button>
               </ul>
             </form>
-            <div className={`  flex  flex-wrap items-baseline`} id='experimental_post' ref={allRead}>{(pos.map((data) => {
-              return <><PostCard post={data} key={data} mypost={false} main={true}/></>
+            <div className={`  flex   h-1/3 gap-1 flex-wrap flex-col`} id='experimental_post' ref={allRead}>{(pos.map((data, index) => {
+              return <><PostCard post={data} key={data} mypost={false} main={true} /></>
 
             }))}
             </div>
-            <div className={`   flex  flex-wrap items-baseline`} id='experimental_post_my'>{(mypos.map((data) => {
-              return <><PostCard post={data} mypost={true} key={data} main={true}/></>
+            <div className={`flex flex-wrap h-1/3 flex-col`} id='experimental_post_my'>{(mypos.map((data) => {
+              return <><PostCard post={data} mypost={true} key={data} main={true} /></>
 
             }))}
             </div>
-            <div className={`   grid  grid-flow-row md:grid-cols-4 sm:grid-cols-2  grid-cols-1  gap-5`} id='experimental_users' ref={myRead}>{(us.map((data) => {
-              return <><UserCard user={data}/></>
+            <div className='grid grid-rows-2' id='experimental_users'>
 
-            }))}
+              <div>
+
+                <Image src={chatimg} alt='' className='m-0 float-left' />
+                <div className='italic hidden lg:block text-3xl mt-80'>
+                  WkikiNotes is a platform where you can share your knowledge with others and learn from others. The live-Chat feature allows you to interact with other users and share your thoughts.
+                </div>
+              </div>
+              <div className={`   grid  grid-flow-row md:grid-cols-4 sm:grid-cols-2  grid-cols-1  gap-5`}  ref={myRead}>
+
+                <div className='text-5xl absolute '>
+                  Users
+                </div>
+
+                {(us.map((data) => {
+                  return <><UserCard user={data} /></>
+
+                }))}
+              </div>
             </div>
           </div>
         </div>
-        <RightBar />
+        <div></div>
         <div className='col-span-11'>
 
           <BottomBar />

@@ -12,7 +12,7 @@ interface CardProps {
 }
 const DeleteDialog: React.FC<CardProps> = ({ id, userId, dark, viz }
   ) => {
-  const [viza, setViza] = useState(1)
+  const [viza, setViza] = useState<boolean>(true)
   interface ID {
     pid: any,
     uid: any
@@ -24,7 +24,7 @@ const DeleteDialog: React.FC<CardProps> = ({ id, userId, dark, viz }
   function deletepost() {
     console.log(id);
 
-
+    setViza(prevviza => !prevviza)
     interface MyRequestBody {
       pid: string|any,
       uid: string|any
@@ -44,8 +44,8 @@ const DeleteDialog: React.FC<CardProps> = ({ id, userId, dark, viz }
         console.error('Error:', error.message);
       });
   }
-  return (!(viz ^ viza) ?
-    <div className='h-44 w-96 bg-slate-700 z-10 relative rounded-3xl left-1/3 top-1/3 bg-opacity-50'>
+  return (!(viz !== viza) ?
+    <div className='h-44 w-96 bg-slate-500 z-10  rounded-3xl   absolute'>
       {id}
       <div className='text-white bold text-4xl float-right'  >
         <Image src={delet} height={25} width={25} alt='bin' onClick={() => { setViza(prevviza => !prevviza) }} />

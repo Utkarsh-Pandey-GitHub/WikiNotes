@@ -15,9 +15,10 @@ interface CardProps {
   dark?: boolean;
   mypost?: boolean;
   main?: boolean
+  sendmsg?:any|undefined
 }
 
-const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main }) => {
+const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main,sendmsg }) => {
   const words = post?.description.split(' ');
   const [truncatedText, setTruncatedText] = useState(words.slice(0, 30).join(' '))
 
@@ -66,20 +67,18 @@ const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main }) => {
   useEffect(() => {
     if (post.link) {
 
-      // try {
-      //   const response =  axios.get(`https://api.linkpreview.net/?key=${main?'7d3be28919787b9e545b1e1b4b4957df':'6d14c0b1203a5514b979355461fde9ba'}&q=${post.link}`).then((res) => setThumbnail(res.data.image));
-      // } catch (error) {
-      //   console.error('Error fetching thumbnail:', error);
-      // }
+      try {
+        const response =  axios.get(`https://api.linkpreview.net/?key=${main?'7d3be28919787b9e545b1e1b4b4957df':'6d14c0b1203a5514b979355461fde9ba'}&q=${post.link}`).then((res) => setThumbnail(res.data.image));
+      } catch (error) {
+        console.error('Error fetching thumbnail:', error);
+      }
     }
   }, [post.link]);
 
   return (edit ?
-    <div className={`${dark && "text-white bg-slate-600"}  h-2/3 flex flex-col  text-center   bg-opacity-0 rounded-2xl  border border-black my-1 w-full ${main && "sm:w-1/2 md:w-1/3 lg:w-1/4"} bg-slate-600`}>
-      <div>
-
-      </div>
-      {(post.link&&thumbnail)&&<img src={thumbnail} alt='' className='h-1/4 w-full rounded-2xl' width={30} height={30}/>}
+    <div className={`${dark && "text-white bg-slate-600"}    flex flex-col  text-center   bg-opacity-0 rounded-2xl  border border-black mb-1 w-full ${main && "sm:w-1/2 md:w-1/3 lg:w-1/4"} `}>
+      
+      {(post.link&&thumbnail)&&<img src={thumbnail} alt='' className='h-1/3 w-full rounded-2xl' width={30} height={30}/>}
       <div className=' font-bold text-lg'>
         {post?.label}
       </div>
@@ -88,7 +87,7 @@ const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main }) => {
         <a href={post?.link} className='text-blue-800 break-words'>{post?.link}</a>
 
       </div>}
-      <div className=' border-black italic h-full '>
+      <div className=' border-black italic h-auto break-words'>
         {truncatedText}{words.length > 30 && truncatedText.split().length !== 30 ? <span onClick={toggleWords}>...</span> : ""}
       </div>
       <div className='px-10 flex justify-evenly' >
@@ -96,7 +95,14 @@ const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main }) => {
           {mypost && <Image src={edit_img} height={25} width={25} alt='edit' onClick={() => { setEdit(prevedit => !prevedit) }} />}
         </span>
         <span className=''>
-          {mypost && <Image src={sendMessage} height={25} width={25} alt='edit'  />}
+          {mypost && <Image src={sendMessage} height={25} width={25} alt='send'  
+          onClick={()=>{
+            sendmsg(
+              `label:${post.label}
+              \n\nlink:${post.link?post.link:'no link'}
+              \n\ndescription:${post.description}`
+            )
+          }}/>}
         </span>
         <span className=''>
 
@@ -110,7 +116,7 @@ const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main }) => {
         <UpdateDialog id={post._id} post={post} userId={post.author} dark={dark} viz={vize} />
       </div>
     </div> :
-    <div className={`${dark && "text-white bg-slate-600"}   text-center   bg-opacity-0 rounded-2xl h-2/3 border border-black my-5 `}>
+    <div className={`${dark && "text-white bg-slate-600"}   text-center   bg-opacity-0 rounded-2xl  border border-black my-5 `}>
 
       <div className=' font-bold '>
         <input type="text" defaultValue={post.label} name='label' id='label' className={`px-2 rounded-3xl text-center ${dark && "text-white bg-black"}`} onChange={handleEdit} /><br />
