@@ -43,7 +43,7 @@ const page: React.FC = () => {
   }
   const WS_URL = 'https://wikinotes-backend.onrender.com:3002'
   useEffect(() => {
-    const socket = io(WS_URL);
+    const socket = io('http://localhost:3002');
     console.log(user?.username);
     const hi = "hi"
     socket.on('chat message', (data, id, username) => {

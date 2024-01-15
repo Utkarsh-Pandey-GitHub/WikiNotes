@@ -16,15 +16,15 @@ main()
     console.log(err);
 
   })
-const app: Application = express()
-app.use(express.json())
-app.use(cors({
-  origin: '*'
-}));
-
-app.use(express.urlencoded({ extended: true }));
-app.use('/routes', router)
-
+  const app: Application = express()
+  app.use(express.json())
+  app.use(cors({
+    origin: '*'
+  }));
+  
+  app.use(express.urlencoded({ extended: true }));
+  app.use('/routes', router)
+  
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
@@ -54,7 +54,7 @@ app.listen(port, (): void => {
   console.log('initializing...');
 
 })
-httpServer.listen(port2, () => {
+httpServer.listen(3003, () => {
   console.log("yellow!");
 
 })
