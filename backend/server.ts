@@ -48,12 +48,13 @@ io.on("connection", (socket) => {
 
 
 const port = process.env.PORT || 3001
+const port2 = process.env.PORT || 3002
 
 app.listen(port, (): void => {
   console.log('initializing...');
 
 })
-httpServer.listen(3002, () => {
+httpServer.listen(port2, () => {
   console.log("yellow!");
 
 })
