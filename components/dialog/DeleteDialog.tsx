@@ -10,8 +10,12 @@ interface CardProps {
   dark?: boolean;
   viz?: boolean;
 }
+
+const baseURL = process.env.NODE_ENV === 'production'
+  ? 'https://depwkinotes.vercel.app'
+  : 'http://localhost:3001';
 const DeleteDialog: React.FC<CardProps> = ({ id, userId, dark, viz }
-  ) => {
+) => {
   const [viza, setViza] = useState<boolean>(true)
   interface ID {
     pid: any,
@@ -26,15 +30,15 @@ const DeleteDialog: React.FC<CardProps> = ({ id, userId, dark, viz }
 
     setViza(prevviza => !prevviza)
     interface MyRequestBody {
-      pid: string|any,
-      uid: string|any
+      pid: string | any,
+      uid: string | any
     }
     const requestBody: MyRequestBody = {
       pid: id,
-      uid:userId
+      uid: userId
     };
 
-    axios.post<MyRequestBody, AxiosResponse<any>>('http://localhost:3001/routes/delete-post', requestBody)
+    axios.post<MyRequestBody, AxiosResponse<any>>(`${baseURL}/routes/delete-post`, requestBody)
       .then((response: AxiosResponse<any>) => {
         // Handle the successful response here
         console.log('Response:', response.data);

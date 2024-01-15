@@ -13,6 +13,10 @@ import chatimg from '../../public/chat1.gif'
 import Image from 'next/image';
 import Form from '@/components/forms/Form';
 
+const baseURL = process.env.NODE_ENV === 'production'
+  ? 'https://depwkinotes.vercel.app'
+  : 'http://localhost:3001';
+
 const page: React.FC = () => {
   const [messages, setMessages] = useState<any>("")
 
@@ -35,7 +39,7 @@ const page: React.FC = () => {
   const [hidden, setHidden] = useState<boolean>(true)
   const handleFromhidden = () => {
     setHidden(!hidden)
-    console.log('hidden',hidden);
+    console.log('hidden', hidden);
   }
   useEffect(() => {
     const socket = io("http://localhost:3002");
@@ -73,7 +77,7 @@ const page: React.FC = () => {
       })
       u.current?.appendChild(new_ele_lbl);
       u.current?.appendChild(new_ele);
-      const newlen=u.current?.children.length
+      const newlen = u.current?.children.length
       setLenchild(newlen as number)
 
 
@@ -96,7 +100,7 @@ const page: React.FC = () => {
   useEffect(() => {
     if (user) {
       console.log(user);
-      axios.post('http://localhost:3001/routes/new-user', user).then((res) => {
+      axios.post(`${baseURL}/routes/new-user`, user).then((res) => {
         setuserid(res.data.active)
 
       })
@@ -106,7 +110,7 @@ const page: React.FC = () => {
      * @param {string} userid - The user ID used to fetch the post data.
      */
     if (userid) {
-      const url = `http://localhost:3001/routes/read-post/${encodeURIComponent(userid)}`;
+      const url = `${baseURL}/routes/read-post/${encodeURIComponent(userid)}`;
       console.log(userid);
 
       fetch(url, {
@@ -137,20 +141,20 @@ const page: React.FC = () => {
             && draggedEle?.textContent?.includes('label:')
             && draggedEle?.textContent?.includes('link:')
             && draggedEle?.textContent?.includes('description:')) {
-            
-              const labelArr = draggedEle?.textContent?.split('label:')
-              const linkArr = labelArr[1]?.split('link:')
-              const descArr = linkArr[1]?.split('description:')
-              const label = linkArr[0]
-              const link = descArr[0]
-              const description = descArr[1]
-              setForm({
-                ...form,
-                label: label,
-                link: link,
-                description: description,
-                hidden: false
-              })
+
+            const labelArr = draggedEle?.textContent?.split('label:')
+            const linkArr = labelArr[1]?.split('link:')
+            const descArr = linkArr[1]?.split('description:')
+            const label = linkArr[0]
+            const link = descArr[0]
+            const description = descArr[1]
+            setForm({
+              ...form,
+              label: label,
+              link: link,
+              description: description,
+              hidden: false
+            })
           }
           else {
             setForm({
@@ -161,11 +165,11 @@ const page: React.FC = () => {
               hidden: false
             })
           }
-          
-          
+
+
         }
-         console.log(hidden);
-         
+        console.log(hidden);
+
         console.log('dragover');
 
 
@@ -182,13 +186,13 @@ const page: React.FC = () => {
     u.current?.children[u.current?.children.length - 1]?.scrollIntoView({ behavior: "smooth" })
 
   }, [lenchild])
-  
+
   return (
     <div>
-    
 
-      <Form form={form} author={userid}  setForm={setForm}/>
-      
+
+      <Form form={form} author={userid} setForm={setForm} />
+
       <div className='md:grid grid-cols-7 m-5  '>
 
         <div className='md:col-span-2 hidden md:block border mb-24 border-slate-700 h-full fixed overflow-auto rounded-3xl' style={{

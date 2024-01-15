@@ -18,7 +18,9 @@ import PostCard from '@/components/cards/PostCard'
 import { useCurrUser } from '@/components/UserContext'
 
 
-
+const baseURL = process.env.NODE_ENV === 'production'
+  ? 'https://depwkinotes.vercel.app'
+  : 'http://localhost:3001';
 
 export default function Home() {
 
@@ -39,7 +41,7 @@ export default function Home() {
 
 
   const read_user = () => {
-    fetch(`http://localhost:3001/routes/read-user`, {
+    fetch(`${baseURL}/routes/read-user`, {
       method: 'GET'
     }).then(response => {
       if (!response.ok) {
@@ -60,7 +62,7 @@ export default function Home() {
 
   const read_my_post = (e: any) => {
 
-    const url = `http://localhost:3001/routes/read-post/${encodeURIComponent(userid)}`
+    const url = `${baseURL}/routes/read-post/${encodeURIComponent(userid)}`
     console.log(userid);
 
     fetch(url, {
@@ -85,7 +87,7 @@ export default function Home() {
 
 
   const read_post = (e: any) => {
-    fetch(`http://localhost:3001/routes/read-posts`, {
+    fetch(`${baseURL}/routes/read-posts`, {
       method: 'GET'
     }).then(response => {
       if (!response.ok) {
@@ -126,7 +128,7 @@ export default function Home() {
   useEffect(() => {
     if (isSignedIn && user) {
       console.log(user);
-      axios.post('http://localhost:3001/routes/new-user', user).then((res) => {
+      axios.post(`${baseURL}/routes/new-user`, user).then((res) => {
         setuserid(res.data.active)
         usercontext?.setUser(res.data.active)
       })
@@ -189,7 +191,7 @@ export default function Home() {
             </div>
 
 
-            <form action="http://localhost:3001/routes/new-post" method='POST' id='form1' className='hidden  justify-center '>
+            <form action="${baseURL}/routes/new-post" method='POST' id='form1' className='hidden  justify-center '>
               <ul className='mx-5 grid grid-cols-1 w-2/3 '>
                 <div className='sm:flex '>
 
@@ -245,7 +247,7 @@ export default function Home() {
                   WkikiNotes is a platform where you can share your knowledge with others and learn from others. The live-Chat feature allows you to interact with other users and share your thoughts.
                 </div>
               </div>
-              <div className={`   grid  grid-flow-row md:grid-cols-4 sm:grid-cols-2  grid-cols-1  gap-5`}  ref={myRead}>
+              <div className={`   grid  grid-flow-row md:grid-cols-4 sm:grid-cols-2  grid-cols-1  gap-5`} ref={myRead}>
 
                 <div className='text-5xl absolute '>
                   Users

@@ -8,52 +8,57 @@ interface FormProps {
     setForm?: any;
 }
 
-function Form({ form,author,setForm }: FormProps) {    
-    
+
+const baseURL = process.env.NODE_ENV === 'production'
+    ? 'https://depwkinotes.vercel.app'
+    : 'http://localhost:3001';
+
+function Form({ form, author, setForm }: FormProps) {
+
     return (
-        <div>{(!form.hidden)?<form action="http://localhost:3001/routes/new-post" method='POST' id='form1' className={`flex  justify-end absolute bg-slate-200 z-50 rounded-3xl `} style={{
-                height: '55vh',
-                width: '55vw',
-                left: '20vw',
-                top: '20vh'
-            }}>
-                <div className='text-8xl my-32 ml-16 '>
-                    Write a new note!
-                </div>
-                <ul className='mx-5 grid grid-cols-1 w-2/3 '>
-                <Image src={newnote} alt='' height={400} width={400} className='absolute -left-32 -top-32 '/>
+        <div>{(!form.hidden) ? <form action={`${baseURL}/routes/new-post`} method='POST' id='form1' className={`flex  justify-end absolute bg-slate-200 z-50 rounded-3xl `} style={{
+            height: '55vh',
+            width: '55vw',
+            left: '20vw',
+            top: '20vh'
+        }}>
+            <div className='text-8xl my-32 ml-16 '>
+                Write a new note!
+            </div>
+            <ul className='mx-5 grid grid-cols-1 w-2/3 '>
+                <Image src={newnote} alt='' height={400} width={400} className='absolute -left-32 -top-32 ' />
 
-                    <li className='col-span-1 '>
+                <li className='col-span-1 '>
 
-                        <label htmlFor="label" className={"bold"}>label</label><br />
-                        <input type="text" id='label' name='label' className='border border-red-700 rounded-3xl mx-2 px-2 py-1  w-full' defaultValue={form.label} />
+                    <label htmlFor="label" className={"bold"}>label</label><br />
+                    <input type="text" id='label' name='label' className='border border-red-700 rounded-3xl mx-2 px-2 py-1  w-full' defaultValue={form.label} />
 
-                    </li>
-                    <li className='col-span-1 '>
+                </li>
+                <li className='col-span-1 '>
 
-                        <label htmlFor="link" className={"bold"}>link</label><br />
-                        <input type="text" id='link' name='link' className='border border-red-700 rounded-3xl mx-2 px-2 py-1  w-full' defaultValue={form.link} />
+                    <label htmlFor="link" className={"bold"}>link</label><br />
+                    <input type="text" id='link' name='link' className='border border-red-700 rounded-3xl mx-2 px-2 py-1  w-full' defaultValue={form.link} />
 
-                    </li>
-                    <li className='col-span-1'>
+                </li>
+                <li className='col-span-1'>
 
-                        <label htmlFor="description" className={"bold"}>description</label><br />
-                        <textarea name="description" id="description" rows={10}
-                            className='border border-blue-700 rounded-3xl mx-2 px-2 py-1 w-full'
-                            value={form.description}
-                        >
-                            
-                        </textarea>
-                    </li>
-                    <li className='hidden'>
+                    <label htmlFor="description" className={"bold"}>description</label><br />
+                    <textarea name="description" id="description" rows={10}
+                        className='border border-blue-700 rounded-3xl mx-2 px-2 py-1 w-full'
+                        value={form.description}
+                    >
 
-                        <input type="text" defaultValue={`${author}`} id='author' name='author' className='border border-yellow-700 rounded-3xl mx-2 px-2 py-1 w-full' />
-                   </li>
-                    <button type="submit" className={`bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 border-b-4 border-blue-500 hover:border-blue-500 rounded-3xl `}>submit</button>
-                    <button type="submit" className={`bg-red-700 hover:bg-red-400 text-white font-bold py-2 px-4 my-2 border-b-4 border-red-500 hover:border-red-500 rounded-3xl `} onClick={() => setForm({...Form,hidden:true})}>cancel</button>
+                    </textarea>
+                </li>
+                <li className='hidden'>
 
-                </ul>
-            </form>:''}
+                    <input type="text" defaultValue={`${author}`} id='author' name='author' className='border border-yellow-700 rounded-3xl mx-2 px-2 py-1 w-full' />
+                </li>
+                <button type="submit" className={`bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 border-b-4 border-blue-500 hover:border-blue-500 rounded-3xl `}>submit</button>
+                <button type="submit" className={`bg-red-700 hover:bg-red-400 text-white font-bold py-2 px-4 my-2 border-b-4 border-red-500 hover:border-red-500 rounded-3xl `} onClick={() => setForm({ ...Form, hidden: true })}>cancel</button>
+
+            </ul>
+        </form> : ''}
         </div>
     )
 }
