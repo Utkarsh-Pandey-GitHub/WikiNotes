@@ -14,7 +14,7 @@ import Image from 'next/image';
 import Form from '@/components/forms/Form';
 
 const baseURL = process.env.NODE_ENV === 'production'
-  ? 'https://depwikinotes.vercel.app'
+  ? 'https://wikinotes-backend.onrender.com'
   : 'http://localhost:3001';
 
 const page: React.FC = () => {

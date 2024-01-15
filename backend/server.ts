@@ -19,17 +19,17 @@ main()
 const app: Application = express()
 app.use(express.json())
 app.use(cors({
-  origin: ["http://localhost:5500", "http://localhost:3000"," https://depwikinotes-oebn0yrat-utkarsh-pandey-githubs-projects.vercel.app ","https://depwikinotes.vercel.app","https://wiki-notes-new.vercel.app"]
+  origin: ["http://localhost:5500", "http://localhost:3000", " https://depwikinotes-oebn0yrat-utkarsh-pandey-githubs-projects.vercel.app ", "https://wikinotes-backend.onrender.com", "https://wiki-notes-new.vercel.app"]
 }))
 app.use(express.urlencoded({ extended: true }));
 app.use('/routes', router)
 
 const httpServer = createServer(app);
-const io = new Server(httpServer, { 
-  cors:{
-  origin: ["http://localhost:5500", "http://localhost:3000"," https://depwikinotes-oebn0yrat-utkarsh-pandey-githubs-projects.vercel.app ","https://depwikinotes.vercel.app","https://wiki-notes-new.vercel.app"]
-},
-    
+const io = new Server(httpServer, {
+  cors: {
+    origin: ["http://localhost:5500", "http://localhost:3000", " https://depwikinotes-oebn0yrat-utkarsh-pandey-githubs-projects.vercel.app ", "https://wikinotes-backend.onrender.com", "https://wiki-notes-new.vercel.app"]
+  },
+
 });
 
 
