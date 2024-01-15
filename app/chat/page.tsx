@@ -41,9 +41,9 @@ const page: React.FC = () => {
     setHidden(!hidden)
     console.log('hidden', hidden);
   }
-  const WS_URL = 'https://wikinotes-backend.onrender.com:3002'
+  const WS_URL = 'https://wikinotes-backend-socket.onrender.com'
   useEffect(() => {
-    const socket = io('http://localhost:3002');
+    const socket = io(WS_URL?WS_URL:'http://localhost:3002' );
     console.log(user?.username);
     const hi = "hi"
     socket.on('chat message', (data, id, username) => {
