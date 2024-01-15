@@ -18,7 +18,7 @@ interface CardProps {
   sendmsg?: any | undefined
 }
 const baseURL = process.env.NODE_ENV === 'production'
-  ? 'https://depwkinotes.vercel.app'
+  ? 'https://depwikinotes.vercel.app'
   : 'http://localhost:3001';
 
 const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main, sendmsg }) => {

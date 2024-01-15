@@ -10,7 +10,7 @@ interface FormProps {
 
 
 const baseURL = process.env.NODE_ENV === 'production'
-    ? 'https://depwkinotes.vercel.app'
+    ? 'https://depwikinotes.vercel.app'
     : 'http://localhost:3001';
 
 function Form({ form, author, setForm }: FormProps) {

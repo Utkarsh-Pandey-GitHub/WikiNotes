@@ -19,7 +19,7 @@ import { useCurrUser } from '@/components/UserContext'
 
 
 const baseURL = process.env.NODE_ENV === 'production'
-  ? 'https://depwkinotes.vercel.app'
+  ? 'https://depwikinotes.vercel.app'
   : 'http://localhost:3001';
 
 export default function Home() {

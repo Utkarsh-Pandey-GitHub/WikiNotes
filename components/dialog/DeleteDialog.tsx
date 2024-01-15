@@ -12,7 +12,7 @@ interface CardProps {
 }
 
 const baseURL = process.env.NODE_ENV === 'production'
-  ? 'https://depwkinotes.vercel.app'
+  ? 'https://depwikinotes.vercel.app'
   : 'http://localhost:3001';
 const DeleteDialog: React.FC<CardProps> = ({ id, userId, dark, viz }
 ) => {
