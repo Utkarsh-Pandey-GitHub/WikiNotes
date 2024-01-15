@@ -8,12 +8,12 @@ interface CardProps {
   viz?: boolean;
 }
 const UpdateDialog: React.FC<CardProps> = ({ id,post, userId, dark, viz }) => {
-  const [viza, setViza] = useState(1)
+  const [viza, setViza] = useState(true)
   const [posti, setPosti] = useState(post)
   // function handleChange(e){
   //   // setPost(...post,e.target.name:e.target.value)
   // }
-  return (!(viz ^ viza) &&
+  return (!(viz === undefined || viz !== viza) &&
     <div className='h-96 w-96 bg-blue-600 text-black z-50 relative top-20 flex justify-center flex-col'>
       <div>
 
