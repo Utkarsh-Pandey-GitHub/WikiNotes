@@ -25,7 +25,7 @@ app.use('/routes', router)
 const httpServer = createServer(app);
 const io = new Server(httpServer, { 
   cors:{
-  origin: ["http://localhost:5500", "http://localhost:3000"]
+  origin: ["http://localhost:5500", "http://localhost:3000"," https://depwikinotes-oebn0yrat-utkarsh-pandey-githubs-projects.vercel.app ","https://depwikinotes.vercel.app"]
 },
     
 });
