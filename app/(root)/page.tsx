@@ -189,7 +189,7 @@ export default function Home() {
             </div>
 
 
-            <form action="${baseURL}/routes/new-post" method='POST' id='form1' className='hidden  justify-center '>
+            <form action={`${baseURL}/routes/new-post`} method='POST' id='form1' className='hidden  justify-center '>
               <ul className='mx-5 grid grid-cols-1 w-2/3 '>
                 <div className='sm:flex '>
 
