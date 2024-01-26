@@ -9,18 +9,27 @@ import { useUser } from '@clerk/nextjs';
 import axios from 'axios';
 import React, { ChangeEventHandler, useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client'
-import chatimg from '../../public/chat1.gif'
-import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation'
+
 import Form from '@/components/forms/Form';
 
 const baseURL = process.env.NODE_ENV === 'production'
   ? 'https://wikinotes-backend.onrender.com'
   : 'http://localhost:3001';
 
-const page: React.FC = () => {
+const page: React.FC = ({
+  params
+}: {
+  params: { reciever: string }
+}) => {
   const [messages, setMessages] = useState<any>("")
 
   const { user } = useUser();
+  // const searchParams = useSearchParams()
+  // const reciever =  searchParams.get('reciever')
+  // const objReciever = JSON.parse(params.reciever)
+  // console.log("fkfkfkfkfkfkfk",searchParams);
 
   const b = useRef<HTMLButtonElement>(null)
   const u = useRef<HTMLUListElement>(null)
@@ -43,7 +52,10 @@ const page: React.FC = () => {
   }
   const WS_URL = 'https://wikinotes-backend-socket.onrender.com'
   useEffect(() => {
-    const socket = io(WS_URL?WS_URL:'http://localhost:3002' );
+    const socket = io('http://localhost:3003');
+
+
+
     console.log(user?.username);
     const hi = "hi"
     socket.on('chat message', (data, id, username) => {
@@ -101,10 +113,26 @@ const page: React.FC = () => {
   useEffect(() => {
     if (user) {
       console.log(user);
+      console.log(params.reciever);
+      
       axios.post(`${baseURL}/routes/new-user`, user).then((res) => {
         setuserid(res.data.active)
 
-      })
+      }).then(() => {
+        fetch(`${baseURL}/routes/chat/chk`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            sender: userid,
+            reciever: params.reciever
+          })
+        }).then((res) => {
+          console.log(res);
+        }).catch((err) => { console.log(err); })
+      }).catch((err) => { console.log(err); })
+
     }
     /**
      * Fetches the user's post data from the server based on the provided user ID.
@@ -215,7 +243,7 @@ const page: React.FC = () => {
             }
           }>
 
-          <div>user name is {user?.username}</div>
+          <div>sender name is {user?.username} and receiver is {params.reciever}</div>
           <ul id="messages" ref={u} className=''></ul>
 
 

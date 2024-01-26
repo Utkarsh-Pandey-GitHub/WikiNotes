@@ -3,15 +3,13 @@ import Image from 'next/image'
 import noteboy from '../../public/notemaking.gif'
 import axios from 'axios'
 
-import LeftBar from '@/components/shared/LeftBar'
-import RightBar from '@/components/shared/RightBar'
 import chatimg from '../../public/chat1.gif'
 
 import { useEffect, useRef, useState } from 'react'
 
 import BottomBar from '@/components/shared/BottomBar'
 import createNote from '../../public/createNote.gif'
-import Link from 'next/link'
+
 import { SignOutButton, UserButton, useUser } from '@clerk/nextjs'
 import UserCard from '@/components/cards/UserCard'
 import PostCard from '@/components/cards/PostCard'
@@ -108,14 +106,27 @@ export default function Home() {
 
   function toggleVisibility(id: string) {
     const ele = document.getElementById(id)
-    if (ele?.classList.contains('hidden')) {
-      ele.classList.remove('hidden')
-      ele.classList.add('flex')
+    if (id === 'experimental_post_my' || id === 'experimental_post') {
+      if (ele?.classList.contains('hidden')) {
+        ele.classList.remove('hidden')
+        ele.classList.add('flex')
+      }
+      else {
+        ele?.classList.add('hidden')
+        ele?.classList.remove('flex')
+
+      }
     }
     else {
-      ele?.classList.add('hidden')
-      ele?.classList.remove('flex')
+      if (ele?.classList.contains('hidden')) {
+        ele.classList.remove('hidden')
+        ele.classList.add('grid')
+      }
+      else {
+        ele?.classList.add('hidden')
+        ele?.classList.remove('grid')
 
+      }
     }
   }
 
@@ -236,7 +247,7 @@ export default function Home() {
 
             }))}
             </div>
-            <div className='grid grid-rows-2' id='experimental_users'>
+            <div className=' grid-rows-2 hidden' id='experimental_users'>
 
               <div>
 

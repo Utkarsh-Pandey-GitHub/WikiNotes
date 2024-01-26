@@ -98,4 +98,36 @@ const deletePost = async (req: Request, res: Response, next: NextFunction) => {
     res.send("post is deleted removed linkage from user")
 
 }
-export default { createUser, readAllUsers, createPost, readAllPosts, readMyPosts, updatePost, deletePost }
+
+//chat operations
+//create chat
+//read chat
+// chat = {members:[],messages:[]}
+// chat_msg = {message:"",sender:"",receiver:""}
+
+const newChat = async (req: Request, res: Response, next: NextFunction) => {
+    //check if chat exists
+    console.log("\nrequest reached new chat controller", req.body);
+
+    const { sender, receiver } = req.body;
+    const chat = await Model.Chat.findOne({
+        $or: [
+            { members: [sender, receiver] },
+            { members: [receiver, sender] }
+        ]
+    })
+    //if not create chat
+    if (!chat) {
+        const newChat = new Model.Chat({
+            members: [sender, receiver],
+            messages: []
+        })
+        await newChat.save()
+        res.send(newChat)
+    }
+
+    res.send(chat)
+
+}
+
+export default { createUser, readAllUsers, createPost, readAllPosts, readMyPosts, updatePost, deletePost, newChat }

@@ -12,11 +12,21 @@ const io = new Server(httpServer, {
 
 io.on("connection", (socket) => {
   console.log('user connected with socket id', socket.id);
+  // fetch previous messages
+  
+  
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
   socket.on('chat message', (msg, user) => {
     io.emit('chat message', msg, socket.id, user.username);
+    // save this message to chat
+    const message = {
+      message: msg,
+      user: user.username,
+      socketId: socket.id
+    }
+    
     console.log('message: ' + msg);
   });
 });

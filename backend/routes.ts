@@ -19,5 +19,7 @@ router.get("/read-post/:uid", async (req: Request, res: Response, next: NextFunc
 router.post("/update-post",controller.updatePost)
 router.post("/delete-post",controller.deletePost)
 
+router.post("/chat/chk",controller.newChat)
+
 
 export default router

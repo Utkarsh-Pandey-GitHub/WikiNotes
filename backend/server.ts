@@ -36,7 +36,7 @@ const io = new Server(httpServer, {
 
 
 io.on("connection", (socket) => {
-  console.log('user connected with socket id', socket.id);
+  console.log('user connected with through 3003 socket id', socket.id);
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
@@ -48,13 +48,13 @@ io.on("connection", (socket) => {
 
 
 const port = process.env.PORT || 3001
-const port2 = process.env.PORT || 3002
+// const port2 = process.env.PORT || 3002
 
 app.listen(port, (): void => {
-  console.log('initializing...');
+  console.log('express server is running on port 3001');
 
 })
 httpServer.listen(3003, () => {
-  console.log("yellow!");
+  console.log("http-server is running on port 3003");
 
 })
