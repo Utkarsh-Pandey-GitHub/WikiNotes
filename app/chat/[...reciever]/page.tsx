@@ -23,20 +23,17 @@ const page: React.FC = ({
 }: {
   params: { reciever: string }
 }) => {
-  const [messages, setMessages] = useState<any>("")
+  const [messages, setMessages] = useState<any>([])
 
   const { user } = useUser();
-  // const searchParams = useSearchParams()
-  // const reciever =  searchParams.get('reciever')
-  // const objReciever = JSON.parse(params.reciever)
-  // console.log("fkfkfkfkfkfkfk",searchParams);
-
   const b = useRef<HTMLButtonElement>(null)
   const u = useRef<HTMLUListElement>(null)
   const i = useRef<HTMLTextAreaElement>(null)
   const allRead = useRef<HTMLDivElement>(null)
   const [mypost, setMypost] = useState([])
-  const [userid, setuserid] = useState<any | undefined>()
+  const [userid, setUserid] = useState<any | undefined>()
+  const [receiverid, setReceiverid] = useState<any | undefined>(params.reciever[0])
+  const [chatid, setChatid] = useState<any | undefined>()
   const [lenchild, setLenchild] = useState(0)
   const [input, setInput] = useState('')
   const [form, setForm] = useState({
@@ -54,14 +51,18 @@ const page: React.FC = ({
   useEffect(() => {
     const socket = io('http://localhost:3003');
 
-
+    socket.emit('fetch_prev_msgs', chatid,user)
 
     console.log(user?.username);
     const hi = "hi"
-    socket.on('chat message', (data, id, username) => {
+    socket.on('chat message', (senderid, data, id, username, receiverid,chatId) => {
+      
+      console.log("dkdork",userid);
+      
+      
       const new_ele = document.createElement('li')
       const new_ele_lbl = document.createElement('li')
-      if (socket.id == id) {
+      if (userid == senderid) {
         new_ele_lbl.textContent = `you `
         new_ele.textContent = `${data}`
         const usr_lbl_cls = ['float-right', 'clear-both', 'mx-2', 'text-bold', 'italic', "mb-0", "pb-0"]
@@ -88,7 +89,7 @@ const page: React.FC = ({
         new_ele.classList.remove('dragged')
         console.log('dragend');
       })
-      u.current?.appendChild(new_ele_lbl);
+      // u.current?.appendChild(new_ele_lbl);
       u.current?.appendChild(new_ele);
       const newlen = u.current?.children.length
       setLenchild(newlen as number)
@@ -99,7 +100,11 @@ const page: React.FC = ({
     })
     b.current?.addEventListener('click', (e: any) => {
       e.preventDefault()
-      socket.emit('chat message', i.current?.value, user)
+      if(userid&&receiverid&&chatid){
+        console.log('chatid:::',chatid);
+        
+        socket.emit('chat message', userid, i.current?.value, user, receiverid,chatid)
+      }
 
     })
 
@@ -107,30 +112,39 @@ const page: React.FC = ({
     return () => {
       socket.disconnect()
     }
-  }, [user])
+  }, [user,userid,chatid])
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (user) {
       console.log(user);
       console.log(params.reciever);
-      
+
       axios.post(`${baseURL}/routes/new-user`, user).then((res) => {
-        setuserid(res.data.active)
+        setUserid(res.data.active)
 
       }).then(() => {
-        fetch(`${baseURL}/routes/chat/chk`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            sender: userid,
-            reciever: params.reciever
+        if (userid && receiverid) {
+
+          fetch(`${baseURL}/routes/chat/chk`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              sender: userid,
+              receiver: receiverid
+            })
+          }).then((res) => {
+            
+            return res.json()
           })
-        }).then((res) => {
-          console.log(res);
-        }).catch((err) => { console.log(err); })
+          .then((data) => {
+            console.log(data);
+            setChatid(data.id)
+          } )
+          .catch((err) => { console.log(err); })
+        }
       }).catch((err) => { console.log(err); })
 
     }
@@ -243,7 +257,7 @@ const page: React.FC = ({
             }
           }>
 
-          <div>sender name is {user?.username} and receiver is {params.reciever}</div>
+          <div>sender name is {user?.username} and receiver is {params.reciever} and chat id is {chatid}</div>
           <ul id="messages" ref={u} className=''></ul>
 
 

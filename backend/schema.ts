@@ -96,7 +96,8 @@ const chatSchema = new Schema<chat>({
     members: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'User',
-        required: true
+        required: true,
+        nullable: false
     },
     messages: {
         type: [chat_msgSchema],

@@ -16,15 +16,15 @@ main()
     console.log(err);
 
   })
-  const app: Application = express()
-  app.use(express.json())
-  app.use(cors({
-    origin: '*'
-  }));
-  
-  app.use(express.urlencoded({ extended: true }));
-  app.use('/routes', router)
-  
+const app: Application = express()
+app.use(express.json())
+app.use(cors({
+  origin: '*'
+}));
+
+app.use(express.urlencoded({ extended: true }));
+app.use('/routes', router)
+
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
@@ -33,15 +33,62 @@ const io = new Server(httpServer, {
 });
 
 
-
+const baseURL = 'http://localhost:3001'
 
 io.on("connection", (socket) => {
   console.log('user connected with through 3003 socket id', socket.id);
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
-  socket.on('chat message', (msg, user) => {
-    io.emit('chat message', msg, socket.id, user.username);
+  socket.on('fetch_prev_msgs', (chatId,user) => {
+    (async () => {
+      try {
+        const response = await fetch(`${baseURL}/routes/chat/fetch`,{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({chatId:chatId})
+        })
+
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        console.log(data);
+
+        data.messages.forEach((msg:any) => {
+          socket.emit('chat message', msg.sender, msg.message, socket.id, user.username, msg.receiver, chatId);
+        })
+        
+      } catch (error) {
+        console.log(error);
+      }
+
+    })()
+  })
+  socket.on('chat message', (senderid, msg, user, receiverid, chatId) => {
+    io.emit('chat message', senderid, msg, socket.id, user.username, receiverid, chatId);
+
+    fetch(`${baseURL}/routes/chat/chat_msg`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        sender: senderid,
+        receiver: receiverid,
+        message: msg,
+        chatid: chatId
+      })
+    }).then((res) => {
+      console.log(res);
+    }).catch((err) => {
+      console.log(err);
+    })
     console.log('message: ' + msg);
   });
 });

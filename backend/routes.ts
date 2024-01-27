@@ -20,6 +20,8 @@ router.post("/update-post",controller.updatePost)
 router.post("/delete-post",controller.deletePost)
 
 router.post("/chat/chk",controller.newChat)
+router.post("/chat/chat_msg",controller.handleMsg)
+router.post("/chat/fetch",controller.fetchChat)
 
 
 export default router

@@ -59,6 +59,7 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
         { _id: authora },
         { $push: { articles: newPost } })
     await newPost.save();
+    res.send("post is created and linked to user")
 
 }
 const readAllPosts = async (req: Request, res: Response, next: NextFunction) => {
@@ -123,11 +124,51 @@ const newChat = async (req: Request, res: Response, next: NextFunction) => {
             messages: []
         })
         await newChat.save()
-        res.send(newChat)
+        res.json({id:newChat._id})
+    }
+    else{
+        res.json({id:chat?._id})
     }
 
-    res.send(chat)
+    
 
 }
 
-export default { createUser, readAllUsers, createPost, readAllPosts, readMyPosts, updatePost, deletePost, newChat }
+const handleMsg = async (req: Request, res: Response, next: NextFunction) => {
+    console.log("\nrequest reached handle msg controller", req.body);
+    const { sender, message, receiver ,chatid} = req.body;
+
+    
+    const newMsg = new Model.Chat_msg({
+        message: message,
+        sender: sender,
+        receiver: receiver
+    
+    })
+    await newMsg.save()
+    await Model.Chat.updateOne(
+        { _id: chatid },
+        { $push: { messages: newMsg } })
+    res.send('chat saved')
+}
+
+const fetchChat = async (req: Request, res: Response, next: NextFunction) => {
+    console.log("\nrequest reached fetch chat controller", req.body);
+    const { chatId } = req.body
+    
+    
+    if (chatId) {
+        
+        const chat = await Model.Chat.findOne({ _id: chatId })
+        
+        
+        res.json({messages:chat?.messages })
+    }
+    else{
+        res.send('no chat found')
+    }
+}
+
+
+
+export default { createUser, readAllUsers, createPost, readAllPosts, readMyPosts, updatePost, deletePost, newChat, handleMsg, fetchChat}
