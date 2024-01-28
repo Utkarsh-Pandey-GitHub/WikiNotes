@@ -4,9 +4,10 @@ import React from 'react'
 
 interface CardProps {
   user?: {
+    _id?: string; // Add the _id property
     name: string;
     email: string;
-    imageUrl: string; // Add the imageUrl property
+    imageUrl: string;
   };
   dark?: boolean;
 }
