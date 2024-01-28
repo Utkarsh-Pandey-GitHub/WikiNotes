@@ -18,7 +18,10 @@ const baseURL = process.env.NODE_ENV === 'production'
   ? 'https://wikinotes-backend.onrender.com'
   : 'http://localhost:3001';
 
-const page: React.FC = ({
+interface Props {
+  params: { reciever: string }
+}
+const page: React.FC<Props> = ({
   params
 }: {
   params: { reciever: string }
