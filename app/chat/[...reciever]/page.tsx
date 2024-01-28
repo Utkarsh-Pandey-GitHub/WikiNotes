@@ -52,7 +52,7 @@ const page: React.FC<Props> = ({
   }
   const WS_URL = 'https://wikinotes-backend-socket.onrender.com'
   useEffect(() => {
-    const socket = io('http://localhost:3003');
+    const socket = io(WS_URL?WS_URL:'http://localhost:3003');
 
     socket.emit('fetch_prev_msgs', chatid,user)
 
