@@ -33,7 +33,9 @@ const io = new Server(httpServer, {
 });
 
 
-const baseURL = 'http://localhost:3001'
+const baseURL = process.env.NODE_ENV === 'production'
+  ? 'https://wikinotes-backend.onrender.com'
+  : 'http://localhost:3001';
 
 io.on("connection", (socket) => {
   console.log('user connected with through 3003 socket id', socket.id);
@@ -63,6 +65,7 @@ io.on("connection", (socket) => {
         data.messages.forEach((msg:any) => {
           socket.emit('chat message', msg.sender, msg.message, socket.id, user.username, msg.receiver, chatId);
         })
+        socket.join(chatId);
         
       } catch (error) {
         console.log(error);
@@ -71,7 +74,7 @@ io.on("connection", (socket) => {
     })()
   })
   socket.on('chat message', (senderid, msg, user, receiverid, chatId) => {
-    io.emit('chat message', senderid, msg, socket.id, user.username, receiverid, chatId);
+    io.to(chatId).emit('chat message', senderid, msg, socket.id, user.username, receiverid, chatId);
 
     fetch(`${baseURL}/routes/chat/chat_msg`, {
       method: 'POST',
