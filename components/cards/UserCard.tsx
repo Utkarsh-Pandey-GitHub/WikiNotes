@@ -24,7 +24,7 @@ const UserCard: React.FC<CardProps> = ({ user, dark }) => {
       {/* <div className='border border-black italic'>
         {user?.email}
       </div> */}
-      <Link href={`/chat/${user._id}`}><button className="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-3xl">
+      <Link href={`/chat/${user?._id}`}><button className="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-3xl">
         Chat
       </button></Link>
 
