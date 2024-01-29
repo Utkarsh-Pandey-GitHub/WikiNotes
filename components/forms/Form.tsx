@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import React, { useState } from 'react'
 import newnote from '../../public/newnote.gif'
+import axios from 'axios';
 
 interface FormProps {
     form?: any;
@@ -15,8 +16,29 @@ const baseURL = process.env.NODE_ENV === 'production'
 
 function Form({ form, author, setForm }: FormProps) {
 
+    function handleSubmition(e: any) {
+        // e.preventDefault()
+        const form = document.getElementById('form1') as HTMLFormElement
+        const formData = new FormData(form)
+        const data = Object.fromEntries(formData)
+        console.log(data);
+        axios.post(`${baseURL}/routes/new-post`, data)
+            .then(res => {
+                console.log(res);
+                setForm({ ...form, hidden: true })
+                return res
+            })
+            .then(res => {
+                console.log(res);
+                
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
     return (
-        <div>{(!form.hidden) ? <form action={`${baseURL}/routes/new-post`} method='POST' id='form1' className={`flex  justify-end absolute bg-slate-200 z-50 rounded-3xl `} style={{
+        <div>{(!form.hidden) ? <form  id='form1' className={`flex  justify-end absolute bg-slate-200 z-50 rounded-3xl `} style={{
             height: '55vh',
             width: '55vw',
             left: '20vw',
@@ -55,7 +77,10 @@ function Form({ form, author, setForm }: FormProps) {
                     <input type="text" defaultValue={`${author}`} id='author' name='author' className='border border-yellow-700 rounded-3xl mx-2 px-2 py-1 w-full' />
                 </li>
                 <button type="submit" className={`bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 border-b-4 border-blue-500 hover:border-blue-500 rounded-3xl `}>submit</button>
-                <button type="submit" className={`bg-red-700 hover:bg-red-400 text-white font-bold py-2 px-4 my-2 border-b-4 border-red-500 hover:border-red-500 rounded-3xl `} onClick={() => setForm({ ...Form, hidden: true })}>cancel</button>
+                <button type="submit" className={`bg-red-700 hover:bg-red-400 text-white font-bold py-2 px-4 my-2 border-b-4 border-red-500 hover:border-red-500 rounded-3xl `} onClick={(e) => {
+                    setForm({ ...Form, hidden: true })
+                    handleSubmition(e)
+                    }}>cancel</button>
 
             </ul>
         </form> : ''}
