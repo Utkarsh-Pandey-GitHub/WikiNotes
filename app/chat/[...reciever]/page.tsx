@@ -52,7 +52,8 @@ const page: React.FC<Props> = ({
   }
   const WS_URL = 'https://wikinotes-backend-socket.onrender.com'
   useEffect(() => {
-    const socket = io(WS_URL?WS_URL:'http://localhost:3003');
+    const socket = io(WS_URL?WS_URL:'http://localhost:3003');////////////////////addd the real url here
+
 
     socket.emit('fetch_prev_msgs', chatid,user)
 
@@ -69,7 +70,7 @@ const page: React.FC<Props> = ({
         new_ele_lbl.textContent = `you `
         new_ele.textContent = `${data}`
         const usr_lbl_cls = ['float-right', 'clear-both', 'mx-2', 'text-bold', 'italic', "mb-0", "pb-0"]
-        const usr_cls = ['bg-blue-700', 'rounded-bl-2xl', 'rounded-tr-2xl', "lg:w-1/5", "md:w-1/3", "sm:w-1/2", "w-3/4", "text-white", "p-2", "m-2", "float-right", "clear-both", "mt-0", "drag"]
+        const usr_cls = ['bg-blue-700', 'rounded-bl-2xl', 'rounded-tr-2xl', "lg:w-1/5", "md:w-1/3", "sm:w-1/2", "w-3/4", "text-white", "p-2", "m-2", "float-right", "clear-both", "mt-0", "drag","shadow-lg"]
         new_ele_lbl.classList.add(...usr_lbl_cls)
         new_ele.classList.add(...usr_cls)
 
@@ -78,7 +79,7 @@ const page: React.FC<Props> = ({
         new_ele_lbl.textContent = `${username} `
         new_ele.textContent = `${data}`
         const usr_lbl_cls = ['float-left', 'clear-both', 'mx-2', 'text-bold', 'italic', "mb-0", "pb-0"]
-        const usr_cls = ['bg-slate-700', 'rounded-tl-2xl', 'rounded-br-2xl', "lg:w-1/5", "md:w-1/3", "sm:w-1/2", "w-3/4", "text-white", "p-2", "m-2", "float-left", "clear-both", "mt-0", "drag"]
+        const usr_cls = ['bg-slate-700', 'rounded-tl-2xl', 'rounded-br-2xl', "lg:w-1/5", "md:w-1/3", "sm:w-1/2", "w-3/4", "text-white", "p-2", "m-2", "float-left", "clear-both", "mt-0", "drag","shadow-lg"]
         new_ele_lbl.classList.add(...usr_lbl_cls)
         new_ele.classList.add(...usr_cls)
 
@@ -270,7 +271,7 @@ const page: React.FC<Props> = ({
             <textarea id="input" className='border border-black col-span-3 rounded-xl' ref={i}
               onChange={(e: any) => setInput(e.target.value)} value={input}>
             </textarea>
-            <button id='btn' ref={b} className='mt-2 focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900 text-lg col-span-1' onClick={handleFromhidden}>Send</button>
+            <button id='btn' ref={b} className='mt-2 focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900 text-lg col-span-1 shadow-2xl' onClick={handleFromhidden}>Send</button>
 
           </form>
         </div>

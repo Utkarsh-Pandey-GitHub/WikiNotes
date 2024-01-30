@@ -3,9 +3,16 @@ import Model from './schema'
 
 
 
-const findLoggedInUser = async (req: Request, res: Response, next: NextFunction) => {
-    const activeEmail = req.body.email;
-    // res.json(ActiveUser)
+const getUser = async (req: Request, res: Response, next: NextFunction) => {
+    const userid = req.body
+    console.log("request reached getuser controller successfullly ansd now getting the user",req.body);
+    const user = await Model.User.findOne({ _id: userid.id })
+    if (user) {
+        res.send(user)
+    }
+    else {
+        res.send("user not found")
+    }
 }
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
 
@@ -59,7 +66,7 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
         { _id: authora },
         { $push: { articles: newPost } })
     await newPost.save();
-    res.send("post is created and linked to user")
+    
 
 }
 const readAllPosts = async (req: Request, res: Response, next: NextFunction) => {
@@ -171,4 +178,4 @@ const fetchChat = async (req: Request, res: Response, next: NextFunction) => {
 
 
 
-export default { createUser, readAllUsers, createPost, readAllPosts, readMyPosts, updatePost, deletePost, newChat, handleMsg, fetchChat}
+export default { getUser,createUser, readAllUsers, createPost, readAllPosts, readMyPosts, updatePost, deletePost, newChat, handleMsg, fetchChat}

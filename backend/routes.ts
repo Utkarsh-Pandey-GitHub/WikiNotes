@@ -5,6 +5,7 @@ const router  = express.Router()
 
 router.post("/new-user",controller.createUser)
 router.get("/read-user",controller.readAllUsers)
+router.post("/getuser",controller.getUser)
 router.post("/new-post",controller.createPost)
 router.get("/read-posts",controller.readAllPosts)
 router.get("/read-post/:uid", async (req: Request, res: Response, next: NextFunction) => {

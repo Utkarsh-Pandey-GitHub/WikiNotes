@@ -5,6 +5,7 @@ import './globals.css'
 import { ClerkProvider, RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
 import { MyContextProvider, useMyContext } from '@/components/Context'
 import Head from 'next/head'
+import { use, useState } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 const ubuntu = Ubuntu({weight:"300",subsets: ['latin']})
@@ -27,12 +28,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   
+  
   return (
 
     <ClerkProvider>
       <html lang="en">
         
-        <body className={`${ubuntu.className}`}>
+        <body className={`${ubuntu.className} `}>
           <SignedIn>
             {children}
           </SignedIn>

@@ -24,11 +24,22 @@ export default function Home() {
   const [us, setUs] = useState([])
   const [pos, setPos] = useState([])
   const [mypos, setMyPos] = useState([])
-  const [currUser, setcurrUser] = useState<any | undefined>()
   const { isSignedIn, user, isLoaded } = useUser();
   const [userid, setuserid] = useState<any | undefined>()
   const allRead = useRef(null)
   const myRead = useRef(null)
+  const [newpost, setNewpost] = useState<any | undefined>({
+    label: '',
+    link: '',
+    description: '',
+    author: ''
+  })
+  const [visibility, setVisibility] = useState({
+    create_post: false,
+    all_posts: false,
+    my_posts: false,
+    all_users: false
+  })
 
   interface obj {
     name: String
@@ -50,7 +61,12 @@ export default function Home() {
         console.log(data)
       })
       .catch(error => console.error(error))
-    toggleVisibility("experimental_users")
+    setVisibility(prev => ({
+      create_post: false,
+      all_posts: false,
+      my_posts: false,
+      all_users: !prev.all_users
+    }))
   }
 
 
@@ -77,7 +93,12 @@ export default function Home() {
       ele?.classList.add('hidden')
       ele?.classList.remove('flex')
     }
-    toggleVisibility("experimental_post_my")
+    setVisibility(prev => ({
+      create_post: false,
+      all_posts: false,
+      my_posts: !prev.my_posts,
+      all_users: false
+    }))
   }
 
 
@@ -100,34 +121,24 @@ export default function Home() {
       ele?.classList.add('hidden')
       ele?.classList.remove('flex')
     }
-    toggleVisibility("experimental_post")
+    setVisibility(prev => ({
+      create_post: false,
+      all_posts: !prev.all_posts,
+      my_posts: false,
+      all_users: false
+    }))
   }
 
-
-  function toggleVisibility(id: string) {
-    const ele = document.getElementById(id)
-    if (id === 'experimental_post_my' || id === 'experimental_post') {
-      if (ele?.classList.contains('hidden')) {
-        ele.classList.remove('hidden')
-        ele.classList.add('flex')
-      }
-      else {
-        ele?.classList.add('hidden')
-        ele?.classList.remove('flex')
-
-      }
-    }
-    else {
-      if (ele?.classList.contains('hidden')) {
-        ele.classList.remove('hidden')
-        ele.classList.add('grid')
-      }
-      else {
-        ele?.classList.add('hidden')
-        ele?.classList.remove('grid')
-
-      }
-    }
+  function createPost(){
+    axios.post(`${baseURL}/routes/new-post`, newpost)
+    .then((res) => console.log(res.data))
+    .catch((err) => console.log(err))
+  }
+  function handleChange(e:any){
+    setNewpost((prev:any)=>({
+      ...prev,
+      [e.target.name]:e.target.value
+    }))
   }
 
   const heading = "WikiNotes"
@@ -139,6 +150,10 @@ export default function Home() {
       console.log(user);
       axios.post(`${baseURL}/routes/new-user`, user).then((res) => {
         setuserid(res.data.active)
+        setNewpost((prev:any)=>({
+          ...prev,
+          author:res.data.active
+        }))
         usercontext?.setUser(res.data.active)
       })
     }
@@ -159,12 +174,12 @@ export default function Home() {
         <div></div>
 
         <div className='lg:col-span-9 col-span-11'>
-          <div className='flex  justify-center '>
+          <div className='flex  justify-center  '>
 
             <Image
               src={noteboy}
               alt='noteboy'
-              className=' float-left hidden md:block'
+              className=' float-left hidden md:block '
               height={250}
               width={250}
             />
@@ -181,11 +196,18 @@ export default function Home() {
           </div>
           <div className=' md:m-10 m-10 clear-both grid grid-cols-1 '>
 
-            <div className='sm:flex sm:gap-4 sm:justify-evenly gap-4 grid grid-cols-1'>
-              <button className='bg-green-400 md:w-1/6 p-2 rounded-3xl text-white active:bg-green-600 focus:bg-green-700 focus:font-extrabold'
-                onClick={() => { toggleVisibility('form1') }}>CREATE</button>
+            <div className='sm:flex sm:gap-4 sm:justify-evenly gap-4 grid grid-cols-1 ' >
+              <button className='bg-green-400 md:w-1/6 p-2 rounded-3xl text-white active:bg-green-600 focus:bg-green-700 focus:font-extrabold '
+                onClick={() => {
+                  setVisibility(prev => ({
+                    create_post: !prev.create_post,
+                    all_posts: false,
+                    my_posts: false,
+                    all_users: false
+                  }))
+                }}>CREATE</button>
 
-              <button className='bg-blue-700 md:w-1/6 p-2 rounded-3xl text-white active:bg-blue-600 focus:bg-blue-700 focus:font-extrabold'
+              <button className='bg-blue-700 md:w-1/6 p-2 rounded-3xl text-white active:bg-blue-600 focus:bg-blue-700 focus:font-extrabold '
                 onClick={read_post}
               >READ POSTS</button>
               <button className='bg-yellow-400 md:w-1/6 p-2 rounded-3xl text-white active:bg-yellow-600 focus:bg-yellow-700 focus:font-extrabold'
@@ -200,11 +222,11 @@ export default function Home() {
             </div>
 
 
-            <form action={`${baseURL}/routes/new-post`} method='POST' id='form1' className='hidden  justify-center '>
+            {visibility.create_post && <div id='form1' className='flex  justify-center w-full '>
               <ul className='mx-5 grid grid-cols-1 w-2/3 '>
-                <div className='sm:flex '>
+                <div className='sm:flex  '>
 
-                  <Image src={createNote} height={50} width={300} alt='' />
+                  <Image src={createNote} height={50} width={300} alt='' className=''/>
                   <div className='my-10 italic text-3xl md:block hidden'>
                     "Learning gives creativity, creativity leads to thinking, thinking provides knowledge, and knowledge makes you great."
                   </div>
@@ -212,20 +234,24 @@ export default function Home() {
                 <li className='col-span-1 '>
 
                   <label htmlFor="label" className={""}>label</label><br />
-                  <input type="text" id='label' name='label' className='border border-red-700 rounded-3xl mx-2 px-2 py-1  w-full' />
+                  <input type="text" id='label' name='label' className='border border-red-700 rounded-3xl mx-2 px-2 py-1  w-full' 
+                  onChange={(e:any)=>(handleChange(e))}
+                  />
                 </li>
                 <li className='col-span-1 '>
 
                   <label htmlFor="link" className={""}>link</label><br />
-                  <input type="text" id='link' name='link' className='border border-red-700 rounded-3xl mx-2 px-2 py-1  w-full' />
+                  <input type="text" id='link' name='link' className='border border-red-700 rounded-3xl mx-2 px-2 py-1  w-full' 
+                  onChange={(e:any)=>(handleChange(e))}
+                  />
                 </li>
                 <li className='col-span-1'>
 
                   <label htmlFor="description" className={""}>description</label><br />
                   <textarea name="description" id="description" rows={10}
                     className='border border-blue-700 rounded-3xl mx-2 px-2 py-1 w-full'
+                    onChange={(e:any)=>(handleChange(e))}
                   >
-
                   </textarea>
                 </li>
                 <li className='hidden'>
@@ -234,40 +260,52 @@ export default function Home() {
                   <input type="text" defaultValue={`${userid}`} id='author' name='author' className='border border-yellow-700 rounded-3xl mx-2 px-2 py-1 w-full' />
                 </li>
 
-                <button type="submit" className={`bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 border-b-4 border-blue-500 hover:border-blue-500 rounded-3xl `}>submit</button>
+                <button type="submit" className={`bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 px-4 my-2 border-b-4 border-blue-500 hover:border-blue-500 rounded-3xl `} onClick={createPost}>submit</button>
               </ul>
-            </form>
-            <div className={`  flex   h-1/3 gap-1 flex-wrap flex-col`} id='experimental_post' ref={allRead}>{(pos.map((data, index) => {
-              return <><PostCard post={data} key={data} mypost={false} main={true} /></>
+            </div>}
 
-            }))}
-            </div>
-            <div className={`flex flex-wrap h-1/3 flex-col`} id='experimental_post_my'>{(mypos.map((data) => {
-              return <><PostCard post={data} mypost={true} key={data} main={true} /></>
 
-            }))}
-            </div>
-            <div className=' grid-rows-2 hidden' id='experimental_users'>
 
-              <div>
 
-                <Image src={chatimg} alt='' className='m-0 float-left' />
-                <div className='italic hidden lg:block text-3xl mt-80'>
-                  WkikiNotes is a platform where you can share your knowledge with others and learn from others. The live-Chat feature allows you to interact with other users and share your thoughts.
+            {visibility.all_posts &&
+              <div className={`  flex   h-auto flex-col items-center gap-5 mt-24`} id='experimental_post' ref={allRead}>{(pos.map((data, index) => {
+                return <><PostCard post={data} key={data} mypost={false} main={true} /></>
+
+              }))}
+              </div>}
+
+
+            {visibility.my_posts &&
+              <div className={`flex   h-auto flex-col items-center gap-5 mt-24`} id='experimental_post_my'>{(mypos.map((data) => {
+                return <><PostCard post={data} mypost={true} key={data} main={true} /></>
+
+              }))}
+              </div>}
+
+
+
+            {visibility.all_users &&
+              <div className=' grid grid-rows-2 ' id='experimental_users'>
+
+                <div>
+
+                  <Image src={chatimg} alt='' className='m-0 float-left' />
+                  <div className='italic  lg:block text-3xl mt-80'>
+                    WikiNotes is a platform where you can share your knowledge with others and learn from others. The live-Chat feature allows you to interact with other users and share your thoughts.
+                  </div>
                 </div>
-              </div>
-              <div className={`   grid  grid-flow-row md:grid-cols-4 sm:grid-cols-2  grid-cols-1  gap-5`} ref={myRead}>
+                <div className={`   grid  grid-flow-row md:grid-cols-4 sm:grid-cols-2  grid-cols-1  gap-5`} ref={myRead}>
 
-                <div className='text-5xl absolute '>
-                  Users
+                  <div className='text-5xl absolute '>
+                    Users
+                  </div>
+
+                  {(us.map((data) => {
+                    return <><UserCard user={data} /></>
+
+                  }))}
                 </div>
-
-                {(us.map((data) => {
-                  return <><UserCard user={data} /></>
-
-                }))}
-              </div>
-            </div>
+              </div>}
           </div>
         </div>
         <div></div>
