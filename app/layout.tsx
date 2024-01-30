@@ -13,13 +13,7 @@ const ubuntu = Ubuntu({weight:"300",subsets: ['latin']})
 export const metadata: Metadata = {
   title: 'wikinotes',
   description: 'Make notes and share them with your friends',
-  openGraph: {
-    images:[{
-      url:'/thumbnail.png',
-      width:800,
-      height:600,
-    }]
-  }
+  
 }
 
 export default function RootLayout({
