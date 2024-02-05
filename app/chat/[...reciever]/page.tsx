@@ -82,7 +82,7 @@ const page: React.FC<Props> = ({
     reload()
   })
   useEffect(() => {
-    const socket = io('http://localhost:3003');////////////////////addd the real url here
+    const socket = io(WS_URL?WS_URL:'http://localhost:3003');////////////////////addd the real url here
 
 
     socket.emit('fetch_prev_msgs', chatid, user)
