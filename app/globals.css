@@ -12,3 +12,13 @@
         transform:translateX(0);
     }
 }
+.msg_box{
+    width:90%;
+}
+@media (min-width: 768px) {
+    .msg_box{
+
+        width: 69%;
+    }
+    
+}

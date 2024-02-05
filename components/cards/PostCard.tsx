@@ -94,21 +94,27 @@ const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main, sendmsg }) =>
 
 
   }, [post])
-
+  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
+  const date:any|undefined = new Date(post.date_Created).toLocaleString();
   return (
     
+
     <div className='flex  justify-center  border border-black   max-h-fit shadow-xl m-2 rounded-md' style={{ width: main ? "40%" : "100%" }}>
-            {chatToggle&&<Link href={`/chat/${post.author}`}><button className="float-left absolute   bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-3xl" style={{
-              left: "30vw",
-            }}>
-              Chat
-            </button></Link>}
+      {chatToggle && <Link href={`/chat/${post.author}`}><button className="float-left absolute   bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-3xl" style={{
+        left: "30vw",
+      }}>
+        Chat
+      </button></Link>}
       {edit ?
         <div className={`m-2 ${dark && "text-white bg-slate-600"}    flex flex-col  text-center   bg-opacity-0 rounded-2xl   mb-1 w-full ${main && ""} p-1`}>
           <div className='font-bold text-lg mb-7 shadow-sm'>
-            <Image src={author ? author.imageUrl : noteboy} alt="" className='w-12 h-12 rounded-full float-left mr-1 ' width={120} height={12} onClick={()=>setChatToggle(prev=>!prev)}/>
-            <div className='text-left ' onClick={()=>setChatToggle(prev=>!prev)}>
+            <Image src={author ? author.imageUrl : noteboy} alt="" className='w-12 h-12 rounded-full float-left mr-1 ' width={120} height={12} onClick={() => setChatToggle(prev => !prev)} />
+            <div className='text-left ' onClick={() => setChatToggle(prev => !prev)}>
               {author?.username}
+              <p className='text-slate-400 text-sm'>
+
+                {post.date_Created? date: ""}
+              </p>
             </div>
           </div>
           <div className=' font-bold text-base text-left '>

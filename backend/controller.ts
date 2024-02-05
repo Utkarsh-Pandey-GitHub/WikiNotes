@@ -5,7 +5,7 @@ import Model from './schema'
 
 const getUser = async (req: Request, res: Response, next: NextFunction) => {
     const userid = req.body
-    console.log("request reached getuser controller successfullly ansd now getting the user",req.body);
+    console.log("request reached getuser controller successfullly ansd now getting the user", req.body);
     const user = await Model.User.findOne({ _id: userid.id })
     if (user) {
         res.send(user)
@@ -61,12 +61,12 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
     const newPost = new Model.Post({
         ...req.body
     })
-    console.log("request reached controller successfullly ansd now creating the post");
+    console.log("request reached controller successfullly ansd now creating the post", req.body);
     await Model.User.updateOne(
         { _id: authora },
         { $push: { articles: newPost } })
     await newPost.save();
-    
+
 
 }
 const readAllPosts = async (req: Request, res: Response, next: NextFunction) => {
@@ -131,26 +131,26 @@ const newChat = async (req: Request, res: Response, next: NextFunction) => {
             messages: []
         })
         await newChat.save()
-        res.json({id:newChat._id})
+        res.json({ id: newChat._id })
     }
-    else{
-        res.json({id:chat?._id})
+    else {
+        res.json({ id: chat?._id })
     }
 
-    
+
 
 }
 
 const handleMsg = async (req: Request, res: Response, next: NextFunction) => {
     console.log("\nrequest reached handle msg controller", req.body);
-    const { sender, message, receiver ,chatid} = req.body;
+    const { sender, message, receiver, chatid } = req.body;
 
-    
+
     const newMsg = new Model.Chat_msg({
         message: message,
         sender: sender,
         receiver: receiver
-    
+
     })
     await newMsg.save()
     await Model.Chat.updateOne(
@@ -162,20 +162,20 @@ const handleMsg = async (req: Request, res: Response, next: NextFunction) => {
 const fetchChat = async (req: Request, res: Response, next: NextFunction) => {
     console.log("\nrequest reached fetch chat controller", req.body);
     const { chatId } = req.body
-    
-    
+
+
     if (chatId) {
-        
+
         const chat = await Model.Chat.findOne({ _id: chatId })
-        
-        
-        res.json({messages:chat?.messages })
+
+
+        res.json({ messages: chat?.messages })
     }
-    else{
+    else {
         res.send('no chat found')
     }
 }
 
 
 
-export default { getUser,createUser, readAllUsers, createPost, readAllPosts, readMyPosts, updatePost, deletePost, newChat, handleMsg, fetchChat}
+export default { getUser, createUser, readAllUsers, createPost, readAllPosts, readMyPosts, updatePost, deletePost, newChat, handleMsg, fetchChat }

@@ -5,7 +5,8 @@ interface post extends Document {
     label: String,
     description?: String,
     link?: String,
-    author: mongoose.Types.ObjectId
+    author: mongoose.Types.ObjectId,
+    date_Created?: String | Date
 }
 interface user extends Document {
     name: String,
@@ -42,6 +43,11 @@ const postSchema = new Schema<post>({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: false
+    },
+    date_Created: {
+        type: Date,
+        default: Date.now(),
+        required:true
     }
 })
 const userSchema = new Schema<user>({
@@ -58,10 +64,7 @@ const userSchema = new Schema<user>({
         lowercase: true,
         required: true,
         unique: true,
-        // validate: {
-        //     validator: validator.isEmail,
-        //     message: 'Invalid email format',
-        // }
+        
     },
     imageUrl: {
         type: String

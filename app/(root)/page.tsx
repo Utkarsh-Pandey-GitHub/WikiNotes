@@ -14,6 +14,7 @@ import { SignOutButton, UserButton, useUser } from '@clerk/nextjs'
 import UserCard from '@/components/cards/UserCard'
 import PostCard from '@/components/cards/PostCard'
 import { useCurrUser } from '@/components/UserContext'
+import loader from '../../public/loader.svg'
 
 
 const baseURL = process.env.NODE_ENV === 'production'
@@ -21,9 +22,9 @@ const baseURL = process.env.NODE_ENV === 'production'
   : 'http://localhost:3001';
 
 export default function Home() {
-  const [us, setUs] = useState([])
-  const [pos, setPos] = useState([])
-  const [mypos, setMyPos] = useState([])
+  const [us, setUs] = useState<any | undefined>()
+  const [pos, setPos] = useState<any | undefined>()
+  const [mypos, setMyPos] = useState<any | undefined>()
   const { isSignedIn, user, isLoaded } = useUser();
   const [userid, setuserid] = useState<any | undefined>()
   const allRead = useRef(null)
@@ -36,7 +37,7 @@ export default function Home() {
   })
   const [visibility, setVisibility] = useState({
     create_post: false,
-    all_posts: false,
+    all_posts: true,
     my_posts: false,
     all_users: false
   })
@@ -129,15 +130,15 @@ export default function Home() {
     }))
   }
 
-  function createPost(){
+  function createPost() {
     axios.post(`${baseURL}/routes/new-post`, newpost)
-    .then((res) => console.log(res.data))
-    .catch((err) => console.log(err))
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err))
   }
-  function handleChange(e:any){
-    setNewpost((prev:any)=>({
+  function handleChange(e: any) {
+    setNewpost((prev: any) => ({
       ...prev,
-      [e.target.name]:e.target.value
+      [e.target.name]: e.target.value
     }))
   }
 
@@ -150,13 +151,14 @@ export default function Home() {
       console.log(user);
       axios.post(`${baseURL}/routes/new-user`, user).then((res) => {
         setuserid(res.data.active)
-        setNewpost((prev:any)=>({
+        setNewpost((prev: any) => ({
           ...prev,
-          author:res.data.active
+          author: res.data.active
         }))
         usercontext?.setUser(res.data.active)
       })
     }
+    read_post('')
 
 
 
@@ -226,7 +228,7 @@ export default function Home() {
               <ul className='mx-5 grid grid-cols-1 w-2/3 '>
                 <div className='sm:flex  '>
 
-                  <Image src={createNote} height={50} width={300} alt='' className=''/>
+                  <Image src={createNote} height={50} width={300} alt='' className='' />
                   <div className='my-10 italic text-3xl md:block hidden'>
                     "Learning gives creativity, creativity leads to thinking, thinking provides knowledge, and knowledge makes you great."
                   </div>
@@ -234,15 +236,15 @@ export default function Home() {
                 <li className='col-span-1 '>
 
                   <label htmlFor="label" className={""}>label</label><br />
-                  <input type="text" id='label' name='label' className='border border-red-700 rounded-3xl mx-2 px-2 py-1  w-full' 
-                  onChange={(e:any)=>(handleChange(e))}
+                  <input type="text" id='label' name='label' className='border border-red-700 rounded-3xl mx-2 px-2 py-1  w-full'
+                    onChange={(e: any) => (handleChange(e))}
                   />
                 </li>
                 <li className='col-span-1 '>
 
                   <label htmlFor="link" className={""}>link</label><br />
-                  <input type="text" id='link' name='link' className='border border-red-700 rounded-3xl mx-2 px-2 py-1  w-full' 
-                  onChange={(e:any)=>(handleChange(e))}
+                  <input type="text" id='link' name='link' className='border border-red-700 rounded-3xl mx-2 px-2 py-1  w-full'
+                    onChange={(e: any) => (handleChange(e))}
                   />
                 </li>
                 <li className='col-span-1'>
@@ -250,7 +252,7 @@ export default function Home() {
                   <label htmlFor="description" className={""}>description</label><br />
                   <textarea name="description" id="description" rows={10}
                     className='border border-blue-700 rounded-3xl mx-2 px-2 py-1 w-full'
-                    onChange={(e:any)=>(handleChange(e))}
+                    onChange={(e: any) => (handleChange(e))}
                   >
                   </textarea>
                 </li>
@@ -268,18 +270,28 @@ export default function Home() {
 
 
             {visibility.all_posts &&
-              <div className={`  flex   h-auto flex-col items-center gap-5 mt-24`} id='experimental_post' ref={allRead}>{(pos.map((data, index) => {
-                return <><PostCard post={data} key={data} mypost={false} main={true} /></>
+              <div className={`  flex   h-auto flex-col-reverse items-center gap-5 mt-24`} id='experimental_post' ref={allRead}>{pos ? (pos.map((data: any, index: any) => {
+                return <><PostCard post={data} key={index} mypost={false} main={true} /></>
 
-              }))}
-              </div>}
+              })) :
+                <div>
+                  <Image src={loader} alt='loading..' height={45} width={45} className='flex justify-center' />
+                </div>
+              }
+              </div>
+            }
 
 
             {visibility.my_posts &&
-              <div className={`flex   h-auto flex-col items-center gap-5 mt-24`} id='experimental_post_my'>{(mypos.map((data) => {
-                return <><PostCard post={data} mypost={true} key={data} main={true} /></>
+              <div className={`flex   h-auto flex-col-reverse items-center gap-5 mt-24`} id='experimental_post_my'>{mypos ? (mypos.map((data:any,index:any) => {
+                return <><PostCard post={data} mypost={true} key={index} main={true} /></>
 
-              }))}
+              }))
+                :
+                <div>
+                  <Image src={loader} alt='loading..' height={45} width={45} className='flex justify-center' />
+                </div>
+              }
               </div>}
 
 
@@ -300,10 +312,15 @@ export default function Home() {
                     Users
                   </div>
 
-                  {(us.map((data) => {
-                    return <><UserCard user={data} /></>
+                  {us ? (us.map((data:any, index:any) => {
+                    return <><UserCard user={data} key={index}/></>
 
-                  }))}
+                  }))
+                    :
+                    <div>
+                      <Image src={loader} alt='loading..' height={45} width={45} className='flex justify-center' />
+                    </div>
+                  }
                 </div>
               </div>}
           </div>
