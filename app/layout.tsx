@@ -10,6 +10,7 @@ import { use, useState } from 'react'
 const inter = Inter({ subsets: ['latin'] })
 const ubuntu = Ubuntu({weight:"300",subsets: ['latin']})
 
+
 export const metadata: Metadata = {
   title: 'wikinotes',
   description: 'Make notes and share them with your friends',
@@ -28,7 +29,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         
-        <body className={`${ubuntu.className} `}>
+        <body className={`${ubuntu.className} bg-slate-400 bg-opacity-10`}>
           <SignedIn>
             {children}
           </SignedIn>

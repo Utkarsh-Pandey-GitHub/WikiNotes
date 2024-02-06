@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import delet from '../../public/delete.svg'
+import delet from '../../public/delete.png'
 import Image from 'next/image';
 // import axios from 'axios';
 import axios, { AxiosResponse, AxiosError } from 'axios';

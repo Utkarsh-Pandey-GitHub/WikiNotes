@@ -1,8 +1,8 @@
 "use client"
 import Image from 'next/image';
 import React, { use, useEffect, useState } from 'react'
-import delet from '../../public/delete.svg'
-import edit_img from '../../public/edit.svg'
+import delet from '../../public/delete.png'
+import edit_img from '../../public/edit.png'
 import submit_img from '../../public/tick.png'
 import DeleteDialog from '../dialog/DeleteDialog';
 import UpdateDialog from '../dialog/UpdateDialog';
@@ -99,7 +99,7 @@ const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main, sendmsg }) =>
   return (
     
 
-    <div className='flex  justify-center  border border-black   max-h-fit shadow-xl m-2 rounded-md' style={{ width: main ? "40%" : "100%" }}>
+    <div className='flex  justify-center  border border-black   max-h-fit shadow-xl m-2 rounded-md bg-slate-50' style={{ width:  "100%" }}>
       {chatToggle && <Link href={`/chat/${post.author}`}><button className="float-left absolute   bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-3xl" style={{
         left: "30vw",
       }}>
@@ -134,10 +134,10 @@ const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main, sendmsg }) =>
           </div>
           <div className='px-10 flex justify-evenly' >
             <span className=''>
-              {mypost && <Image src={edit_img} height={25} width={25} alt='edit' onClick={() => { setEdit(prevedit => !prevedit) }} />}
+              {mypost && <Image src={edit_img} height={35} width={35} alt='edit' onClick={() => { setEdit(prevedit => !prevedit) }} />}
             </span>
             <span className=''>
-              {mypost && <Image src={sendMessage} height={25} width={25} alt='send'
+              {!main && mypost && <Image src={sendMessage} height={35} width={35} alt='send'
                 onClick={() => {
                   sendmsg(
                     `label:${post.label}
@@ -148,7 +148,7 @@ const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main, sendmsg }) =>
             </span>
             <span className=''>
 
-              {mypost && <Image src={delet} height={25} width={25} alt='bin' onClick={() => { setViz(prevviz => !prevviz) }} />}
+              {mypost && <Image src={delet} height={35} width={35} alt='bin' onClick={() => { setViz(prevviz => !prevviz) }} />}
             </span>
           </div>
           <div>

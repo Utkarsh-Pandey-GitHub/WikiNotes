@@ -22,3 +22,9 @@
     }
     
 }
+.heading{
+    background: #5A27CF;
+background: linear-gradient(to right, #5A27CF 0%, #CF34A6 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}

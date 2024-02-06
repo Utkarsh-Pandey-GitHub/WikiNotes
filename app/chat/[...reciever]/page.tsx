@@ -58,6 +58,9 @@ const page: React.FC<Props> = ({
     console.log('hidden', hidden);
   }
   const WS_URL = 'https://wikinotes-backend-socket.onrender.com'
+  const wsbaseURL = process.env.NODE_ENV === 'production'
+  ? WS_URL
+  : 'http://localhost:3003';
   const reload=()=>{
     if (userid) {
       const url = `${baseURL}/routes/read-post/${encodeURIComponent(userid)}`;
@@ -82,7 +85,7 @@ const page: React.FC<Props> = ({
     reload()
   })
   useEffect(() => {
-    const socket = io(WS_URL?WS_URL:'http://localhost:3003');////////////////////addd the real url here
+    const socket = io(wsbaseURL);////////////////////addd the real url here
 
 
     socket.emit('fetch_prev_msgs', chatid, user)

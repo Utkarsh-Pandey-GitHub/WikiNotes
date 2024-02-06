@@ -15,6 +15,10 @@ import UserCard from '@/components/cards/UserCard'
 import PostCard from '@/components/cards/PostCard'
 import { useCurrUser } from '@/components/UserContext'
 import loader from '../../public/loader.svg'
+import create from '../../public/create.png'
+import readpost from '../../public/readpost.png'
+import mypost from '../../public/mypost.png'
+import users from '../../public/users.png'
 
 
 const baseURL = process.env.NODE_ENV === 'production'
@@ -167,7 +171,7 @@ export default function Home() {
 
   return (
     <>
-      <div className='flex absolute right-3 top-3 gap-1'>
+      <div className=' absolute right-3 top-3 gap-1 sm:flex hidden'>
         <UserButton />
         <SignOutButton />
       </div>
@@ -178,15 +182,9 @@ export default function Home() {
         <div className='lg:col-span-9 col-span-11'>
           <div className='flex  justify-center  '>
 
-            <Image
-              src={noteboy}
-              alt='noteboy'
-              className=' float-left hidden md:block '
-              height={250}
-              width={250}
-            />
+            
 
-            <div className={`flex justify-center md:text-9xl text-5xl `} style={{
+            <div className={`flex justify-center md:text-9xl text-5xl heading `} style={{
               fontFamily: 'Homemade Apple',
               fontWeight: '400',
               wordWrap: 'break-word',
@@ -199,7 +197,7 @@ export default function Home() {
           <div className=' md:m-10 m-10 clear-both grid grid-cols-1 '>
 
             <div className='sm:flex sm:gap-4 sm:justify-evenly gap-4 grid grid-cols-1 ' >
-              <button className='bg-green-400 md:w-1/6 p-2 rounded-3xl text-white active:bg-green-600 focus:bg-green-700 focus:font-extrabold '
+              <button className='flex items-center flex-col '
                 onClick={() => {
                   setVisibility(prev => ({
                     create_post: !prev.create_post,
@@ -207,18 +205,44 @@ export default function Home() {
                     my_posts: false,
                     all_users: false
                   }))
-                }}>CREATE</button>
+                }}>
+                <Image src={create} alt='' height={50} width={50} className='' />
+                <div className='shadow-sm shadow-fuchsia-300'>
 
-              <button className='bg-blue-700 md:w-1/6 p-2 rounded-3xl text-white active:bg-blue-600 focus:bg-blue-700 focus:font-extrabold '
+                  CREATE
+                </div>
+
+              </button>
+              {/* 
+bg-green-400 p-2 rounded-3xl text-white active:bg-green-600 focus:bg-green-700 focus:font-extrabold
+bg-blue-700 md:w-1/6 p-2 rounded-3xl text-white active:bg-blue-600 focus:bg-blue-700 focus:font-extrabold
+bg-yellow-400 md:w-1/6 p-2 rounded-3xl text-white active:bg-yellow-600 focus:bg-yellow-700 focus:font-extrabold
+bg-red-700 md:w-1/6 p-2 rounded-3xl text-white active:bg-red-600 focus:bg-red-700 focus:font-extrabold
+*/}
+              <button className='flex items-center flex-col '
                 onClick={read_post}
-              >READ POSTS</button>
-              <button className='bg-yellow-400 md:w-1/6 p-2 rounded-3xl text-white active:bg-yellow-600 focus:bg-yellow-700 focus:font-extrabold'
+              >
+                <Image src={readpost} alt='' height={50} width={50} className='' />
+                <div className='shadow-fuchsia-300 shadow-sm'>
+                  READ POSTS
+                </div>
+              </button>
+              <button className='flex items-center flex-col'
                 onClick={read_my_post}
-              >MY POSTS</button>
+              >
+                <Image src={mypost} alt='' height={50} width={50} className='' />
+                <div className='shadow-fuchsia-300 shadow-sm'>
+                  MEIN POSTS
+                </div>
+              </button>
 
-              <button className='bg-red-700 md:w-1/6 p-2 rounded-3xl text-white active:bg-red-600 focus:bg-red-700 focus:font-extrabold'
+              <button className='flex items-center flex-col'
                 onClick={read_user}
-              >Find Friends</button>
+              ><Image src={users} alt='' height={50} width={50} className='' />
+                <div className='shadow-fuchsia-300 shadow-sm'>
+                  Find Friends
+                </div>
+              </button>
 
 
             </div>
@@ -270,12 +294,13 @@ export default function Home() {
 
 
             {visibility.all_posts &&
-              <div className={`  flex   h-auto flex-col-reverse items-center gap-5 mt-24`} id='experimental_post' ref={allRead}>{pos ? (pos.map((data: any, index: any) => {
+              <div className={`  flex   h-auto flex-col-reverse items-center gap-5 mt-24 lg:w-1/3 lg:mx-auto w-full`} id='experimental_post ' ref={allRead}>{pos ? (pos.map((data: any, index: any) => {
                 return <><PostCard post={data} key={index} mypost={false} main={true} /></>
 
               })) :
                 <div>
                   <Image src={loader} alt='loading..' height={45} width={45} className='flex justify-center' />
+                  <div className='text-slate-500 italic flex justify-center'>Just a minute...the notes are being loaded 🙂</div>
                 </div>
               }
               </div>
@@ -283,13 +308,14 @@ export default function Home() {
 
 
             {visibility.my_posts &&
-              <div className={`flex   h-auto flex-col-reverse items-center gap-5 mt-24`} id='experimental_post_my'>{mypos ? (mypos.map((data:any,index:any) => {
+              <div className={`flex   h-auto flex-col-reverse items-center gap-5 mt-24 lg:w-1/3 lg:mx-auto w-full`} id='experimental_post_my'>{mypos ? (mypos.map((data: any, index: any) => {
                 return <><PostCard post={data} mypost={true} key={index} main={true} /></>
 
               }))
                 :
                 <div>
                   <Image src={loader} alt='loading..' height={45} width={45} className='flex justify-center' />
+                  <div className='text-slate-500 italic flex justify-center'>Just a minute...the notes are being loaded 🙂</div>
                 </div>
               }
               </div>}
@@ -312,13 +338,14 @@ export default function Home() {
                     Users
                   </div>
 
-                  {us ? (us.map((data:any, index:any) => {
-                    return <><UserCard user={data} key={index}/></>
+                  {us ? (us.map((data: any, index: any) => {
+                    return <><UserCard user={data} key={index} /></>
 
                   }))
                     :
                     <div>
                       <Image src={loader} alt='loading..' height={45} width={45} className='flex justify-center' />
+                      <div className='text-slate-500 italic flex justify-center'>Just a minute...the notes are being loaded. 🙂</div>
                     </div>
                   }
                 </div>
