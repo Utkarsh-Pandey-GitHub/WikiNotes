@@ -20,7 +20,7 @@ export default function RootLayout({
 
     
       <html lang="en">
-        <body className={`${ubuntu.className}`}>
+        <body className={`${ubuntu.className} bg-black`}>
           
             {children}
         </body>

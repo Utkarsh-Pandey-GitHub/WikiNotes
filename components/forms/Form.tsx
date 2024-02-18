@@ -36,26 +36,32 @@ function Form({ form, author, setForm ,reload}: FormProps) {
         console.log(newpost);
         
         setForm({...form,hidden:true})
-        axios.post(`${baseURL}/routes/new-post`, form)
-            .then(res => {
-                console.log(res);
-                // setForm({ ...form, hidden: true })
-                res.data
-            })
-            .then(res => {
-                console.log(res);
-                document.dispatchEvent(reload)
-                
-
-            })
-            .catch(err => {
-                console.log(err);
-            })
+        if (form.label === '' || form.description === '') {
+            alert('Please fill in the label and description')
+            return
+        }
+        else{
+            
+            axios.post(`${baseURL}/routes/new-post`, form)
+                .then(res => {
+                    console.log(res);
+                    // setForm({ ...form, hidden: true })
+                    res.data
+                })
+                .then(res => {
+                    console.log(res);
+                    document.dispatchEvent(reload)
+    
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
     }
 
     return (
-        <div>{(!form.hidden) ?
-            <form id='form1' className={`flex  justify-end absolute bg-slate-200 z-50 rounded-3xl `} style={{
+        <div>{(!form.hidden) &&
+            <form id='form1'  className={`flex  justify-end absolute bg-slate-200 z-50 rounded-3xl `} style={{
                 height: '55vh',
                 width: '55vw',
                 left: '20vw',
@@ -72,6 +78,7 @@ function Form({ form, author, setForm ,reload}: FormProps) {
                         <label htmlFor="label" className={"bold"}>label</label><br />
                         <input type="text" id='label' name='label' className='border border-red-700 rounded-3xl mx-2 px-2 py-1  w-full' defaultValue={form.label} 
                         onChange={e=>handleChange(e)}
+                        required
                         />
 
                     </li>
@@ -89,6 +96,7 @@ function Form({ form, author, setForm ,reload}: FormProps) {
                         <textarea name="description" id="description" rows={10}
                             className='border border-blue-700 rounded-3xl mx-2 px-2 py-1 w-full'
                             onChange={e=>handleChange(e)}
+                            required
                         >
                             {form.description}
                         </textarea>
@@ -103,14 +111,14 @@ function Form({ form, author, setForm ,reload}: FormProps) {
                             handleSubmition(e)
                         }}
                     >submit</button>
-                    <button type="submit" className={`bg-red-700 hover:bg-red-400 text-white font-bold py-2 px-4 my-2 border-b-4 border-red-500 hover:border-red-500 rounded-3xl `}
+                    <button  className={`bg-red-700 hover:bg-red-400 text-white font-bold py-2 px-4 my-2 border-b-4 border-red-500 hover:border-red-500 rounded-3xl `}
                         onClick={(e) => {
 
                             setForm({...form,hidden:true})
                         }}>cancel</button>
 
                 </ul>
-            </form> : ''}
+            </form> }
         </div>
     )
 }

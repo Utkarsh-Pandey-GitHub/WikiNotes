@@ -96,13 +96,17 @@ const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main, sendmsg }) =>
   }, [post])
   const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
   const date:any|undefined = new Date(post.date_Created).toLocaleString();
+  const handleSeS = () => {
+    window.sessionStorage.setItem(`${post?.author}`, author?JSON.stringify(author):"no user" as string) 
+    
+  }
   return (
     
 
     <div className='flex  justify-center  border border-black   max-h-fit shadow-xl m-2 rounded-md bg-slate-50' style={{ width:  "100%" }}>
       {chatToggle && <Link href={`/chat/${post.author}`}><button className="float-left absolute   bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-3xl" style={{
         left: "30vw",
-      }}>
+      }} onClick={handleSeS}>
         Chat
       </button></Link>}
       {edit ?

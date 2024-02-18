@@ -170,19 +170,20 @@ export default function Home() {
 
 
   return (
-    <>
+    <div className=''>
+      
       <div className=' absolute right-3 top-3 gap-1 sm:flex hidden'>
         <UserButton />
         <SignOutButton />
       </div>
       <div className={`grid grid-cols-11  `}  >
+      
+        
 
-        <div></div>
-
-        <div className='lg:col-span-9 col-span-11'>
+        <div className=' col-span-11'>
           <div className='flex  justify-center  '>
 
-            
+
 
             <div className={`flex justify-center md:text-9xl text-5xl heading `} style={{
               fontFamily: 'Homemade Apple',
@@ -194,57 +195,53 @@ export default function Home() {
             </div>
 
           </div>
-          <div className=' md:m-10 m-10 clear-both grid grid-cols-1 '>
+          <div className='  m-10 clear-both grid grid-cols-1 ' id='head'>
+            <div className=' w-full'>
+              <div className='sm:flex sm:gap-4 sm:justify-evenly gap-4 grid grid-cols-1  ' >
+                <button className='flex items-center flex-col '
+                  onClick={() => {
+                    setVisibility(prev => ({
+                      create_post: !prev.create_post,
+                      all_posts: false,
+                      my_posts: false,
+                      all_users: false
+                    }))
+                  }}>
+                  <Image src={create} alt='' height={50} width={50} className='' />
+                  <div className='shadow-sm shadow-fuchsia-300'>
 
-            <div className='sm:flex sm:gap-4 sm:justify-evenly gap-4 grid grid-cols-1 ' >
-              <button className='flex items-center flex-col '
-                onClick={() => {
-                  setVisibility(prev => ({
-                    create_post: !prev.create_post,
-                    all_posts: false,
-                    my_posts: false,
-                    all_users: false
-                  }))
-                }}>
-                <Image src={create} alt='' height={50} width={50} className='' />
-                <div className='shadow-sm shadow-fuchsia-300'>
+                    CREATE
+                  </div>
 
-                  CREATE
-                </div>
+                </button>
+                
+                <button className='flex items-center flex-col '
+                  onClick={read_post}
+                >
+                  <Image src={readpost} alt='' height={50} width={50} className='' />
+                  <div className='shadow-fuchsia-300 shadow-sm'>
+                    READ POSTS
+                  </div>
+                </button>
+                <button className='flex items-center flex-col'
+                  onClick={read_my_post}
+                >
+                  <Image src={mypost} alt='' height={50} width={50} className='' />
+                  <div className='shadow-fuchsia-300 shadow-sm'>
+                    MEIN POSTS
+                  </div>
+                </button>
 
-              </button>
-              {/* 
-bg-green-400 p-2 rounded-3xl text-white active:bg-green-600 focus:bg-green-700 focus:font-extrabold
-bg-blue-700 md:w-1/6 p-2 rounded-3xl text-white active:bg-blue-600 focus:bg-blue-700 focus:font-extrabold
-bg-yellow-400 md:w-1/6 p-2 rounded-3xl text-white active:bg-yellow-600 focus:bg-yellow-700 focus:font-extrabold
-bg-red-700 md:w-1/6 p-2 rounded-3xl text-white active:bg-red-600 focus:bg-red-700 focus:font-extrabold
-*/}
-              <button className='flex items-center flex-col '
-                onClick={read_post}
-              >
-                <Image src={readpost} alt='' height={50} width={50} className='' />
-                <div className='shadow-fuchsia-300 shadow-sm'>
-                  READ POSTS
-                </div>
-              </button>
-              <button className='flex items-center flex-col'
-                onClick={read_my_post}
-              >
-                <Image src={mypost} alt='' height={50} width={50} className='' />
-                <div className='shadow-fuchsia-300 shadow-sm'>
-                  MEIN POSTS
-                </div>
-              </button>
-
-              <button className='flex items-center flex-col'
-                onClick={read_user}
-              ><Image src={users} alt='' height={50} width={50} className='' />
-                <div className='shadow-fuchsia-300 shadow-sm'>
-                  Find Friends
-                </div>
-              </button>
+                <button className='flex items-center flex-col'
+                  onClick={read_user}
+                ><Image src={users} alt='' height={50} width={50} className='' />
+                  <div className='shadow-fuchsia-300 shadow-sm'>
+                    Find Friends
+                  </div>
+                </button>
 
 
+              </div>
             </div>
 
 
@@ -358,6 +355,6 @@ bg-red-700 md:w-1/6 p-2 rounded-3xl text-white active:bg-red-600 focus:bg-red-70
           <BottomBar />
         </div>
       </div>
-    </>
+    </div>
   )
 }

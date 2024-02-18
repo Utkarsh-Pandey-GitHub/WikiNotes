@@ -13,6 +13,9 @@ interface CardProps {
 }
 
 const UserCard: React.FC<CardProps> = ({ user, dark }) => {
+  const handleSeS = () => {
+    sessionStorage.setItem(`${user?._id}`, user?JSON.stringify(user):"no user" as string)
+  }
   const strUser = JSON.stringify(user)
   return (
     <div className={`${dark && "text-white bg-slate-600 my-4"}   text-center col-span-1  bg-opacity-0 rounded-2xl`}>
@@ -25,7 +28,8 @@ const UserCard: React.FC<CardProps> = ({ user, dark }) => {
       {/* <div className='border border-black italic'>
         {user?.email}
       </div> */}
-      <Link href={`/chat/${user?._id}`}><button className="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-3xl">
+      <Link href={`/chat/${user?._id}`}><button className="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-3xl" 
+      onClick={handleSeS}>
         Chat
       </button></Link>
 
