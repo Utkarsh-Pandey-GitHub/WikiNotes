@@ -97,6 +97,10 @@ const PostCard: React.FC<CardProps> = ({ post, dark=true, mypost, main, sendmsg 
   }, [post])
   const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
   const date:any|undefined = new Date(post.date_Created).toLocaleString();
+  const handleSeS = () => {
+    window.sessionStorage.setItem(`${post?.author}`, author?JSON.stringify(author):"no user" as string) 
+    
+  }
   return (
     
 

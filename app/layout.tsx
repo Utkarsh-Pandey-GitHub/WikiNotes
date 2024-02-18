@@ -29,7 +29,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         
-        <body className={`${ubuntu.className} bg-slate-400 bg-opacity-10`}>
+        <body className={`${ubuntu.className}`}>
           <SignedIn>
             {children}
           </SignedIn>

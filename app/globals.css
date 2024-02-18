@@ -12,13 +12,36 @@
         transform:translateX(0);
     }
 }
+
+::-webkit-scrollbar {
+  @apply w-2;
+}
+::-webkit-scrollbar-track {
+  @apply bg-gray-200 rounded-md;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-500 rounded-md;
+}
 .msg_box{
     /* width:100%; */
 }
+.recName{
+    width: 100%;
+    
+    
+    
+    
+}
+
 @media (min-width: 768px) {
     .msg_box{
 
         /* width: 69%; */
+    }
+    .recName{
+        width: 69vw;
+        
     }
     
 }
