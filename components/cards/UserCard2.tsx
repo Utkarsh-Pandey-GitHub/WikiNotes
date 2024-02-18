@@ -9,6 +9,7 @@ interface CardProps {
         name: string;
         email: string;
         imageUrl: string;
+        articles?: any[]; // Add the articles property
     };
     dark?: boolean;
 }
@@ -27,7 +28,9 @@ const UserCard: React.FC<CardProps> = ({ user, dark }) => {
                     {user?.name}
                 </div>
                 <div className='mx-5 text-slate-400 text-sm'>
-                    wrote {user?.articles?.length} notes
+                    wrote {
+                        user?.articles?.length // Add a conditional check and default value of 0
+                    } notes
                 </div>
             </div>
             {/* <div className='border border-black italic'>
