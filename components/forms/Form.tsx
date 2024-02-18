@@ -34,9 +34,14 @@ function Form({ form, author, setForm ,reload}: FormProps) {
     function handleSubmition(e: any) {
         e.preventDefault()
         console.log(newpost);
-        
-        setForm({...form,hidden:true})
-        axios.post(`${baseURL}/routes/new-post`, form)
+        if(form.label === '' ){
+            alert('please fill label field')
+            
+        }
+        else{
+
+            setForm({...form,hidden:true})
+            axios.post(`${baseURL}/routes/new-post`, form)
             .then(res => {
                 console.log(res);
                 // setForm({ ...form, hidden: true })
@@ -46,13 +51,14 @@ function Form({ form, author, setForm ,reload}: FormProps) {
                 console.log(res);
                 document.dispatchEvent(reload)
                 
-
+                
             })
             .catch(err => {
                 console.log(err);
             })
+        }
     }
-
+        
     return (
         <div>{(!form.hidden) ?
             <form id='form1' className={`flex  justify-end absolute bg-slate-200 z-50 rounded-3xl `} style={{

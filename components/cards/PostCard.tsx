@@ -10,12 +10,13 @@ import sendMessage from '../../public/sendMessage.png';
 import axios from 'axios';
 import noteboy from '../../public/notemaking.gif';
 import Link from 'next/link';
+import { getCookie,setCookie,deleteCookie } from '../../app/lib/cookiemaker'
 
 
 
 interface CardProps {
   post?: any; // Optional prop
-  dark?: boolean;
+  dark?: boolean
   mypost?: boolean;
   main?: boolean
   sendmsg?: any | undefined
@@ -24,7 +25,7 @@ const baseURL = process.env.NODE_ENV === 'production'
   ? 'https://wikinotes-backend.onrender.com'
   : 'http://localhost:3001';
 
-const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main, sendmsg }) => {
+const PostCard: React.FC<CardProps> = ({ post, dark=true, mypost, main, sendmsg }) => {
   const words = post?.description.split(' ');
   const [truncatedText, setTruncatedText] = useState(words.slice(0, 30).join(' '))
 
@@ -99,17 +100,22 @@ const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main, sendmsg }) =>
   return (
     
 
-    <div className='flex  justify-center  border border-black   max-h-fit shadow-xl m-2 rounded-md bg-slate-50' style={{ width:  "100%" }}>
-      {chatToggle && <Link href={`/chat/${post.author}`}><button className="float-left absolute   bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-3xl" style={{
+    <div className={`flex  justify-center  border border-black   max-h-fit shadow-xl my-2 rounded-md ${dark &&!main? 'text-white bg-black' : 'text-black bg-white'} border border-slate-400`} style={{ width:  "100%" }}>
+      {main&&chatToggle && <Link href={`/chat/${post.author}`}><button className="float-left absolute   bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-3xl" 
+      style={{
         left: "30vw",
-      }}>
+      }}
+      onClick={async() => {
+        await setCookie(post.author,author)
+      }}
+      >
         Chat
       </button></Link>}
       {edit ?
-        <div className={`m-2 ${dark && "text-white bg-slate-600"}    flex flex-col  text-center   bg-opacity-0 rounded-2xl   mb-1 w-full ${main && ""} p-1`}>
+        <div className={`m-2 ${dark && !main? 'text-white bg-black' : 'text-black bg-white'}    flex flex-col  text-center   bg-opacity-0 rounded-2xl   mb-1 w-full ${main && ""} p-1`}>
           <div className='font-bold text-lg mb-7 shadow-sm'>
             <Image src={author ? author.imageUrl : noteboy} alt="" className='w-12 h-12 rounded-full float-left mr-1 ' width={120} height={12} onClick={() => setChatToggle(prev => !prev)} />
-            <div className='text-left ' onClick={() => setChatToggle(prev => !prev)}>
+            <div className={`text-left ${dark && !main? 'text-white bg-black' : 'text-black bg-white'}`} onClick={() => setChatToggle(prev => !prev)}>
               {author?.username}
               <p className='text-slate-400 text-sm'>
 
@@ -117,7 +123,7 @@ const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main, sendmsg }) =>
               </p>
             </div>
           </div>
-          <div className=' font-bold text-base text-left '>
+          <div className={` font-bold text-base text-left ${dark && !main? 'text-white bg-black' : 'text-black bg-white'} `}>
             {post?.label}
           </div>
 
@@ -129,7 +135,7 @@ const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main, sendmsg }) =>
               <p className=''>{post?.link}</p></a>
 
           </div>}
-          <div className='  italic h-auto break-words text-justify mt-3'>
+          <div className='  italic h-auto break-words text-justify mt-3 '>
             {truncatedText}{words.length > 30 && truncatedText.split().length !== 30 ? <span onClick={toggleWords}>...</span> : ""}
           </div>
           <div className='px-10 flex justify-evenly' >
@@ -159,16 +165,16 @@ const PostCard: React.FC<CardProps> = ({ post, dark, mypost, main, sendmsg }) =>
           </div>
         </div>
         :
-        <div className={`${dark && "text-white bg-slate-600"}   text-center   bg-opacity-0 rounded-2xl  border border-black my-5 w-full`}>
+        <div className={`${dark && !main ? 'text-white bg-black' : 'text-black bg-white'}   text-center   bg-opacity-0 rounded-2xl  border border-black my-5 w-full`}>
 
           <div className=' font-bold '>
-            <input type="text" defaultValue={post.label} name='label' id='label' className={`px-2 rounded-3xl text-center ${dark && "text-white bg-black"}`} onChange={handleEdit} /><br />
+            <input type="text" defaultValue={post.label} name='label' id='label' className={`px-2 rounded-3xl text-center ${dark && !main ? 'text-white bg-black' : 'text-black bg-white'}`} onChange={handleEdit} /><br />
           </div>
           {post.link && <div className=' text-blue-600'>
-            <input type="text" defaultValue={post.link} name='link' id='link' className={`px-2 rounded-3xl text-center  ${dark && "text-white bg-black"}`} onChange={handleEdit} /><br />
+            <input type="text" defaultValue={post.link} name='link' id='link' className={`px-2 rounded-3xl text-center  ${dark && !main ? 'text-white bg-black' : 'text-black bg-white'}`} onChange={handleEdit} /><br />
           </div>}
           <div className='border border-black italic h-auto'>
-            <textarea defaultValue={post.decription} name='description' id='description' rows={10} className={`w-full m-0 px-2 rounded-3xl ${dark && " bg-black"} text-justify text-black`} onChange={handleEdit}>
+            <textarea defaultValue={post.decription} name='description' id='description' rows={10} className={`w-full m-0 px-2 rounded-3xl ${dark && !main ? 'text-white bg-black' : 'text-black bg-white'} text-justify `} onChange={handleEdit}>
               {post.description}
             </textarea>
           </div>

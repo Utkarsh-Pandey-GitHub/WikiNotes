@@ -9,7 +9,6 @@ import { useEffect, useRef, useState } from 'react'
 
 import BottomBar from '@/components/shared/BottomBar'
 import createNote from '../../public/createNote.gif'
-
 import { SignOutButton, UserButton, useUser } from '@clerk/nextjs'
 import UserCard from '@/components/cards/UserCard'
 import PostCard from '@/components/cards/PostCard'

@@ -9,12 +9,14 @@ import { useUser } from '@clerk/nextjs';
 import axios from 'axios';
 import React, { ChangeEventHandler, useEffect, useId, useRef, useState } from 'react';
 import io from 'socket.io-client'
-import { useRouter } from 'next/navigation';
-import { useSearchParams } from 'next/navigation'
-import loader from '../../../public/loader.svg'
+import friends from '../../../public/friends.png'
+import readpost from '@/public/readpost.png'
+import { getCookie, setCookie, deleteCookie } from '../../lib/cookiemaker'
+
 
 import Form from '@/components/forms/Form';
 import Image from 'next/image';
+import UserCard from '@/components/cards/UserCard2';
 
 const baseURL = process.env.NODE_ENV === 'production'
   ? 'https://wikinotes-backend.onrender.com'
@@ -29,21 +31,28 @@ const page: React.FC<Props> = ({
   params: { reciever: string }
 }) => {
   const [messages, setMessages] = useState<any>([])
-
+  const [receiver, setReciver] = useState<any | undefined>()
   const { user } = useUser();
+  const [us, setUs] = useState<any | undefined>()
   const b = useRef<HTMLButtonElement>(null)
   const u = useRef<HTMLUListElement>(null)
   const i = useRef<HTMLTextAreaElement>(null)
+  const [users, setUsers] = useState<any>([])
   const post_area = useRef<HTMLDivElement>(null)
   const allRead = useRef<HTMLDivElement>(null)
+  const userRef = useRef<HTMLDivElement>(null)
+  const [visibilities, setVisibilities] = useState({
+    post: true,
+    user: false
+  })
   const [mypost, setMypost] = useState([])
   const [userid, setUserid] = useState<any | undefined>()
   const [receiverid, setReceiverid] = useState<any | undefined>(params.reciever[0])
   const [chatid, setChatid] = useState<any | undefined>()
   const [lenchild, setLenchild] = useState(0)
   const [input, setInput] = useState('')
-  
-  
+
+
   const [form, setForm] = useState({
     label: '',
     link: '',
@@ -51,7 +60,7 @@ const page: React.FC<Props> = ({
     hidden: true,
     author: ''
   })
-  const rel=new Event('rel')
+  const rel = new Event('rel')
   const [hidden, setHidden] = useState<boolean>(true)
   const handleFromhidden = () => {
     setHidden(!hidden)
@@ -59,9 +68,9 @@ const page: React.FC<Props> = ({
   }
   const WS_URL = 'https://wikinotes-backend-socket.onrender.com'
   const wsbaseURL = process.env.NODE_ENV === 'production'
-  ? WS_URL
-  : 'http://localhost:3003';
-  const reload=()=>{
+    ? WS_URL
+    : 'http://localhost:3003';
+  const reload = () => {
     if (userid) {
       const url = `${baseURL}/routes/read-post/${encodeURIComponent(userid)}`;
       console.log(userid);
@@ -81,9 +90,47 @@ const page: React.FC<Props> = ({
     }
 
   }
-  window.addEventListener('rel',()=>{
+
+  window.addEventListener('rel', () => {
     reload()
   })
+  const read_user = () => {
+    fetch(`${baseURL}/routes/read-user`, {
+      method: 'GET'
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+      .then(data => {
+        setUs(data);
+        console.log(data)
+      })
+      .catch(error => console.error(error))
+
+  }
+  const read_my_post = () => {
+    if (userid) {
+      const url = `${baseURL}/routes/read-post/${encodeURIComponent(userid)}`;
+      console.log(userid);
+
+
+      fetch(url, {
+        method: 'GET'
+      }).then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        console.log(response);
+
+        return response.json();
+      })
+        .then(data => setMypost(data))
+        .then(() => { console.log(users); })
+        .catch(error => console.error(error));
+    }
+  }
   useEffect(() => {
     const socket = io(wsbaseURL);////////////////////addd the real url here
 
@@ -247,9 +294,17 @@ const page: React.FC<Props> = ({
 
 
     })
+    const getC = async () => {
+      const rec: string | any = await getCookie(receiverid)
+      console.log("rec", rec);
+
+      setReciver(JSON.parse(rec.value))
+    }
+    getC()
 
     return () => {
       clearInterval(intervalId as NodeJS.Timeout)
+      // deleteCookie(receiverid)
     }
   }, [user, userid])
 
@@ -259,37 +314,54 @@ const page: React.FC<Props> = ({
     u.current?.children[u.current?.children.length - 1]?.scrollIntoView({ behavior: "smooth" })
 
   }, [lenchild])
-
+  let dark = true
+  let hw = 45
   return (
-    <div className=''>
+    <div className=' my-2'>
 
-      <Form form={form} author={userid} setForm={setForm} reload={rel}/>
+      <Form form={form} author={userid} setForm={setForm} reload={rel} />
+      <div className='grid grid-cols-7 border border-slate-50 h-10  mx-5 '>
+        <div className={`col-span-2 border-r border-r-slate-50 ${dark ? 'text-white bg-black' : 'text-black bg-white'}`}>
+          {visibilities.post && <div className=' text-2xl font-bold text-center'>YOUR POSTS</div>}
+          {visibilities.user && <div className='text-2xl font-bold text-center'>users</div>}
+        </div>
+        <div className={`col-span-5 ${dark ? 'text-white bg-black' : 'text-black bg-white'} flex`}>
+          <div className='rounded-full'>
 
-      <div className='md:grid grid-cols-7 m-5  '>
+            <img src={receiver?.imageUrl} alt="" height={hw} width={hw} className='rounded-full' />
+          </div>
+          {receiver?.username && <div className=' text-2xl font-bold text-center mx-3'>{receiver.username}</div>}
+        </div>
+      </div>
 
-        <div className='md:col-span-2 hidden md:block border mb-24 border-slate-700 h-full fixed overflow-auto rounded-3xl shadow-lg'
+      <div className='md:grid grid-cols-7 mx-5  border border-slate-50'>
+
+        <div className='md:col-span-2 hidden md:block border  border-slate-50 h-full  overflow-y-auto overflow-x-hidden rounded-3xl shadow-lg'
           ref={post_area}
           style={{
-            width: "27%",
-            height: "90vh",
+
+            height: "87vh",
           }}>
-          <div className={`flex  post_container flex-col-reverse`} id='experimental_post' ref={allRead}>
-            {mypost ? (mypost.map((data) => {
+          <div className={`flex  post_container flex-col-reverse `} id='experimental_post' ref={allRead}>
+            {(mypost && visibilities.post) && (mypost.map((data) => {
               return <><PostCard post={data} key={data} mypost={true} sendmsg={setInput} /></>
 
-            })) :
-              <div>
-                <Image src={loader} alt='loader' height={45} width={45} />
-              </div>
+            }))}
+          </div>
+          <div className={`  post_container flex-col-reverse   `} id='' ref={userRef}>
+            {(us && visibilities.user) && (us.map((data: any, index: any) => {
+              return <><UserCard user={data} key={index} /></>
+
+            }))
             }
           </div>
 
         </div>
-        <div className='col-span-2'></div>
-        <div className='col-span-5 border-slate-700 border  overflow-auto rounded-3xl overflow-x-hidden shadow-2xl'
+        {/* <div className='col-span-2 bg-slate-50 bg-opacity-10 '></div> */}
+        <div className='col-span-5 bg-slate-50 bg-opacity-10  overflow-auto rounded-3xl overflow-x-hidden shadow-2xl '
           style={
             {
-              height: "90vh",
+              height: "87vh",
             }
           }>
 
@@ -297,14 +369,27 @@ const page: React.FC<Props> = ({
           <ul id="messages" ref={u} className=''></ul>
 
 
-          <form id="form" action="" className='fixed bottom-2 right-4 grid grid-cols-4  col-span-7 msg_box' >
-            <textarea id="input" className='border border-black col-span-3  rounded-xl' ref={i}
-              onChange={(e: any) => setInput(e.target.value)} value={input}>
-            </textarea>
-            <button id='btn' ref={b} className={`mt-2 focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  px-5 py-2.5  mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900 text-lg col-span-1 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed`} disabled={chatid ? false : true} onClick={handleFromhidden}>Send</button>
-
-          </form>
         </div>
+      </div>
+      <div className='grid grid-cols-7  border-slate-50 h-10  mx-5 my-1'>
+        <div className='col-span-2 flex flex-row justify-evenly'>
+          <Image src={readpost} alt='loader' height={50} width={50} onClick={() => {
+            setVisibilities({ post: true, user: false })
+            read_my_post()
+          }} />
+          <Image src={friends} alt='loader' height={50} width={50} onClick={() => {
+            setVisibilities({ post: false, user: true })
+            read_user()
+          }} />
+        </div>
+        <form id="form" action="" className=' bottom-2 right-4 grid grid-cols-4  md:col-span-5 col-span-7 msg_box ' >
+          <textarea id="input" className='border border-black col-span-3  rounded-xl h-9' ref={i}
+            onChange={(e: any) => setInput(e.target.value)} value={input}>
+          </textarea>
+          <button id='btn' ref={b} className={`focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg    dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900 text-lg col-span-1 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed h-9`} disabled={chatid ? false : true} onClick={handleFromhidden}>Send</button>
+
+        </form>
+
       </div>
     </div>
   )

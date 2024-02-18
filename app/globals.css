@@ -13,12 +13,12 @@
     }
 }
 .msg_box{
-    width:90%;
+    /* width:100%; */
 }
 @media (min-width: 768px) {
     .msg_box{
 
-        width: 69%;
+        /* width: 69%; */
     }
     
 }
@@ -28,3 +28,15 @@ background: linear-gradient(to right, #5A27CF 0%, #CF34A6 100%);
 -webkit-background-clip: text;
 -webkit-text-fill-color: transparent;
 }
+
+::-webkit-scrollbar {
+    @apply w-2;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-200;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-500;
+  }
