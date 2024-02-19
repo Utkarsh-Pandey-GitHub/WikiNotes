@@ -12,11 +12,13 @@ import io from 'socket.io-client'
 import friends from '../../../public/friends.png'
 import readpost from '@/public/readpost.png'
 import { getCookie, setCookie, deleteCookie } from '../../lib/cookiemaker'
-
-
+import videoConf from '../../../public/videoConference.png'
+import videoConference from '../../../public/videoconferencing.gif'
+import attach from '../../../public/attachment.png'
 import Form from '@/components/forms/Form';
 import Image from 'next/image';
 import UserCard from '@/components/cards/UserCard2';
+import Link from 'next/link';
 
 const baseURL = process.env.NODE_ENV === 'production'
   ? 'https://wikinotes-backend.onrender.com'
@@ -43,7 +45,8 @@ const page: React.FC<Props> = ({
   const userRef = useRef<HTMLDivElement>(null)
   const [visibilities, setVisibilities] = useState({
     post: true,
-    user: false
+    user: false,
+    videoCall: false
   })
   const [mypost, setMypost] = useState([])
   const [userid, setUserid] = useState<any | undefined>()
@@ -321,11 +324,12 @@ const page: React.FC<Props> = ({
 
       <Form form={form} author={userid} setForm={setForm} reload={rel} />
       <div className='grid grid-cols-7 border border-slate-50 h-10  mx-5 '>
-        <div className={`col-span-2 border-r border-r-slate-50 ${dark ? 'text-white bg-black' : 'text-black bg-white'}`}>
+        <div className={`md:col-span-2 md:block hidden border-r border-r-slate-50 ${dark ? 'text-white bg-black' : 'text-black bg-white'}`}>
           {visibilities.post && <div className=' text-2xl font-bold text-center'>YOUR POSTS</div>}
-          {visibilities.user && <div className='text-2xl font-bold text-center'>users</div>}
+          {visibilities.user && <div className='text-2xl font-bold text-center'>USERS</div>}
+          {visibilities.videoCall && <div className='text-2xl font-bold text-center'>VIDEO CALL</div>}
         </div>
-        <div className={`col-span-5 ${dark ? 'text-white bg-black' : 'text-black bg-white'} flex`}>
+        <div className={`md:col-span-5 col-span-7 ${dark ? 'text-white bg-black' : 'text-black bg-white'} flex`}>
           <div className='rounded-full'>
 
             <img src={receiver?.imageUrl} alt="" height={hw} width={hw} className='rounded-full' />
@@ -355,6 +359,19 @@ const page: React.FC<Props> = ({
             }))
             }
           </div>
+          <div className=''>
+            {(visibilities.videoCall) && <div className={`bg-inherit text-inherit flex flex-col items-center `}>
+
+              <div className=' bg-slate-50 h-fit w-fit bg-opacity-25 rounded-full my-5 '>
+
+                <Image src={videoConference} alt='loader' height={200} width={200} className='rounded-full my-auto '></Image>
+              </div>
+              <Link href={`/videochat/${receiverid}`}>
+                <button type="button" className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 my-10 ">Start Video Chat</button>
+              </Link>
+
+            </div>}
+          </div>
 
         </div>
         {/* <div className='col-span-2 bg-slate-50 bg-opacity-10 '></div> */}
@@ -372,15 +389,23 @@ const page: React.FC<Props> = ({
         </div>
       </div>
       <div className='grid grid-cols-7  border-slate-50 h-10  mx-5 my-1'>
-        <div className='col-span-2 flex flex-row justify-evenly'>
+        <div className='md:col-span-2 col-span-7 flex flex-row justify-evenly'>
           <Image src={readpost} alt='loader' height={50} width={50} onClick={() => {
-            setVisibilities({ post: true, user: false })
+            setVisibilities(prev => ({ videoCall: false, user: false, post: true }))
             read_my_post()
           }} />
           <Image src={friends} alt='loader' height={50} width={50} onClick={() => {
-            setVisibilities({ post: false, user: true })
+            setVisibilities(prev => ({ post: false, videoCall: false, user: true }))
             read_user()
           }} />
+          <Image src={videoConf} alt='loader' height={50} width={50} onClick={() => {
+            setVisibilities(prev => ({ post: false, user: false, videoCall: true }))
+
+          }} />
+          <label htmlFor="attachFile">
+            <Image src={attach} alt='loader' height={50} width={50} />
+          </label>
+          <input type="file" id="attachFile" name='attachFile' className='hidden' />
         </div>
         <form id="form" action="" className=' bottom-2 right-4 grid grid-cols-4  md:col-span-5 col-span-7 msg_box ' >
           <textarea id="input" className='border border-black col-span-3  rounded-xl h-9' ref={i}

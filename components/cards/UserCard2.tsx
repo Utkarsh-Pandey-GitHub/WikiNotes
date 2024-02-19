@@ -21,7 +21,7 @@ const UserCard: React.FC<CardProps> = ({ user, dark }) => {
     return (
         <div className={`${dark && "text-white bg-slate-600 my-4"} text-white   col-span-1  bg-opacity-0 rounded-2xl border border-slate-50 clear-both rounded-l-full grid grid-cols-4 my-2`}>
             <div className='flex justify-center flex-col  col-span-1  '>
-                <Image src={user?.imageUrl as string} alt='image' height={100} width={100} className='rounded-full border border-white shadow-slate-700 shadow-lg  border-b-2' />
+                <Image src={user?.imageUrl as string} alt='image' height={70} width={70} className='rounded-full border border-white shadow-slate-700 shadow-lg  border-b-2' />
             </div>
             <div className='col-span-2 flex flex-col justify-start my-auto'>
                 <div className=' font-bold mx-5 '>
