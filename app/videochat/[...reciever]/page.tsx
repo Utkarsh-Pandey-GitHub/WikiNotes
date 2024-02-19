@@ -13,7 +13,7 @@ const page: React.FC<Props> = ({
 }: {
     params: { reciever: string }
 }) => {
-    const socket = useContext(SocketContext)
+    const socket:any = useContext(SocketContext)
     const emitmsg = () => {
     
         socket?.emit('vid', 'here is vid')
