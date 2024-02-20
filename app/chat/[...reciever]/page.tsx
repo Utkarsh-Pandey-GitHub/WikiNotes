@@ -19,6 +19,7 @@ import Form from '@/components/forms/Form';
 import Image from 'next/image';
 import UserCard from '@/components/cards/UserCard2';
 import Link from 'next/link';
+import home from '../../../public/home.png'
 
 const baseURL = process.env.NODE_ENV === 'production'
   ? 'https://wikinotes-backend.onrender.com'
@@ -406,6 +407,9 @@ const page: React.FC<Props> = ({
             <Image src={attach} alt='loader' height={50} width={50} />
           </label>
           <input type="file" id="attachFile" name='attachFile' className='hidden' />
+          <Link href={`/`}>
+            <Image src={home} alt='loader' height={50} width={50} />
+          </Link>
         </div>
         <form id="form" action="" className=' bottom-2 right-4 grid grid-cols-4  md:col-span-5 col-span-7 msg_box ' >
           <textarea id="input" className='border border-black col-span-3  rounded-xl h-9' ref={i}
