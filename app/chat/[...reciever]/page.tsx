@@ -20,6 +20,13 @@ import Image from 'next/image';
 import UserCard from '@/components/cards/UserCard2';
 import Link from 'next/link';
 import home from '../../../public/home.png'
+import PreviewModal from '@/components/PreviewModal';
+import { Input } from 'postcss';
+import { set } from 'mongoose';
+import airdrop from '../../../public/airdrop.png'
+import recieve from '../../../public/recieve.png'
+import chooseFiles from '../../../public/chooseFile.png'
+import sendFile from '../../../public/sendMessage.png'
 
 const baseURL = process.env.NODE_ENV === 'production'
   ? 'https://wikinotes-backend.onrender.com'
@@ -36,6 +43,7 @@ const page: React.FC<Props> = ({
   const [messages, setMessages] = useState<any>([])
   const [receiver, setReciver] = useState<any | undefined>()
   const { user } = useUser();
+  const sendInpBtnAd = useRef<HTMLButtonElement>(null)
   const [us, setUs] = useState<any | undefined>()
   const b = useRef<HTMLButtonElement>(null)
   const u = useRef<HTMLUListElement>(null)
@@ -44,10 +52,13 @@ const page: React.FC<Props> = ({
   const post_area = useRef<HTMLDivElement>(null)
   const allRead = useRef<HTMLDivElement>(null)
   const userRef = useRef<HTMLDivElement>(null)
+  const rec_blob = useRef<HTMLDivElement>(null)
+  const send_blob = useRef<HTMLInputElement>(null)
   const [visibilities, setVisibilities] = useState({
-    post: true,
+    post: false,
     user: false,
-    videoCall: false
+    videoCall: false,
+    attachPreview: false
   })
   const [mypost, setMypost] = useState([])
   const [userid, setUserid] = useState<any | undefined>()
@@ -55,7 +66,7 @@ const page: React.FC<Props> = ({
   const [chatid, setChatid] = useState<any | undefined>()
   const [lenchild, setLenchild] = useState(0)
   const [input, setInput] = useState('')
-
+  const [inputFileUrl, setInputFileUrl] = useState<any>([])
 
   const [form, setForm] = useState({
     label: '',
@@ -143,6 +154,28 @@ const page: React.FC<Props> = ({
 
     console.log(user?.username);
 
+    socket.on('blob message airdrop', (userid_rec, file, file_type, user, receiverid, chatid) => {
+      // file.forEach((file: any) => {
+      console.log("kuch to blob aya", file.constructor.name);
+
+      if (userid != userid_rec) {
+
+        console.log(typeof file);
+
+        const new_ele = document.createElement('iframe')
+        const classes = ["w-full", "h-80", "m-2", "rounded-lg", "shadow-lg"]
+        const FReader = new FileReader()
+        new_ele.classList.add(...classes)
+        const fileBlob = new Blob([file], { type: file_type })
+        FReader.onload = function (e: any) {
+          new_ele.src = e.target.result
+        }
+        FReader.readAsDataURL(fileBlob)
+        rec_blob?.current?.appendChild(new_ele)
+      }
+      // })
+    })
+
     socket.on('chat message', (senderid, data, id, username, receiverid, chatId) => {
 
       console.log("dkdork", userid);
@@ -197,11 +230,15 @@ const page: React.FC<Props> = ({
     })
 
 
+
+
     return () => {
       socket.disconnect()
+
     }
   }, [user, userid, chatid])
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+
 
   useEffect(() => {
     if (user) {
@@ -320,6 +357,41 @@ const page: React.FC<Props> = ({
   }, [lenchild])
   let dark = true
   let hw = 45
+  function handlevisibilitychange(e: any) {
+    setVisibilities(prev => ({ post: false, user: false, videoCall: false, attachPreview: false }))
+    setVisibilities(prev => ({ ...prev, [e.target.id]: true }))
+  }
+  function readTheFileAndMakeURL(e: any) {
+    const fileInputElement = document.getElementById('attachFile') as HTMLInputElement;
+    if (fileInputElement?.files) {
+      setInputFileUrl([])
+      const filesArray = Array.from(fileInputElement.files);
+
+      filesArray.forEach((file: any) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setInputFileUrl((prev: any) => [...prev, reader.result])
+        }
+        reader.readAsDataURL(file)
+      })
+    }
+    console.log(inputFileUrl);
+
+  }
+  function sendTheBlobFiles() {
+    const fileInputElement = document.getElementById('attachFile') as HTMLInputElement;
+
+    if (fileInputElement?.files) {
+      console.log('reached stbf');
+
+      const filesArray = Array.from(fileInputElement.files);
+      const socket = io(wsbaseURL);
+      filesArray.forEach((file: any) => {
+        socket.emit('blob message airdrop', userid, file, file.type, user, receiverid, chatid)
+      })
+    }
+  }
+
   return (
     <div className=' my-2'>
 
@@ -373,6 +445,46 @@ const page: React.FC<Props> = ({
 
             </div>}
           </div>
+          {(visibilities.attachPreview) && (<div className='border h-full w-full bg-inherit text-inherit'>
+            <div className={`${dark ? "bg-black text-white" : " text-black bg-white"} p-3 text-justify`}>
+              you can send this to anyone online to a room id of your choice and they can join the room to view and download the image or pdf file
+            </div>
+            {(inputFileUrl.map((file: any, index: any) => {
+              return <PreviewModal img_url={file} key={index} />
+            }))}
+            <div className='flex justify-around flex-wrap'>
+
+              <div className='flex flex-col justify-center items-center' >
+                <Image src={recieve} alt="image" width={50} height={50} />
+                <div className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ">recieve</div>
+              </div>
+              <div className='flex flex-col justify-center items-center' >
+                <Image src={airdrop} alt="image" width={50} height={50} />
+                <div className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ">Airdrop</div>
+              </div>
+              <div className='flex flex-col justify-center items-center'>
+                <label htmlFor="attachFile"  >
+                  <Image src={chooseFiles} alt="image" width={50} height={50} />
+                  <label htmlFor="attachFile"  >
+                    <div className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ">choose file</div>
+                  </label>
+                </label>
+              </div>
+              <div className='flex flex-col justify-center items-center' ref={sendInpBtnAd as any}>
+                <button type='button' onClick={sendTheBlobFiles}>
+
+                  <Image src={sendFile} alt="image" width={50} height={50} />
+                  <div className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  " >send</div>
+                </button>
+              </div>
+            </div>
+            <div className={`${dark ? "bg-black text-white" : " text-black bg-white"} m-5`}>
+              <div className="bg-slate-400 bg-opacity-20" ref={rec_blob}>
+
+                the files you recieve will be visible here
+              </div>
+            </div>
+          </div>)}
 
         </div>
         {/* <div className='col-span-2 bg-slate-50 bg-opacity-10 '></div> */}
@@ -391,22 +503,31 @@ const page: React.FC<Props> = ({
       </div>
       <div className='grid grid-cols-7  border-slate-50 h-10  mx-5 my-1'>
         <div className='md:col-span-2 col-span-7 flex flex-row justify-evenly'>
-          <Image src={readpost} alt='loader' height={50} width={50} onClick={() => {
-            setVisibilities(prev => ({ videoCall: false, user: false, post: true }))
+          <Image src={readpost} alt='loader' id='post' height={50} width={50} onClick={(e) => {
+            handlevisibilitychange(e)
             read_my_post()
           }} />
-          <Image src={friends} alt='loader' height={50} width={50} onClick={() => {
-            setVisibilities(prev => ({ post: false, videoCall: false, user: true }))
+          <Image src={friends} alt='loader' id='user' height={50} width={50} onClick={(e) => {
+            handlevisibilitychange(e)
             read_user()
           }} />
-          <Image src={videoConf} alt='loader' height={50} width={50} onClick={() => {
-            setVisibilities(prev => ({ post: false, user: false, videoCall: true }))
-
+          <Image src={videoConf} alt='loader' id='videoCall' height={50} width={50} onClick={(e) => {
+            handlevisibilitychange(e)
           }} />
-          <label htmlFor="attachFile">
-            <Image src={attach} alt='loader' height={50} width={50} />
+          <label htmlFor=""  >
+            <Image src={attach} alt='loader' height={50} width={50}
+              id="attachPreview"
+              onClick={(e) => {
+                handlevisibilitychange(e)
+              }}
+            />
           </label>
-          <input type="file" id="attachFile" name='attachFile' className='hidden' />
+          <input type="file" id="attachFile" name='attachFile' className='hidden'
+            multiple
+            ref={send_blob}
+            onChange={(e: any) => {
+              readTheFileAndMakeURL(e)
+            }} />
           <Link href={`/`}>
             <Image src={home} alt='loader' height={50} width={50} />
           </Link>
