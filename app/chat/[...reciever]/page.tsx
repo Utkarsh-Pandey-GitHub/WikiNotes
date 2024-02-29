@@ -153,7 +153,6 @@ const page: React.FC<Props> = ({
     socket.emit('fetch_prev_msgs', chatid, user)
 
     console.log(user?.username);
-
     socket.on('blob message airdrop', (userid_rec, file, file_type, user, receiverid, chatid) => {
       // file.forEach((file: any) => {
       console.log("kuch to blob aya", file.constructor.name);
