@@ -154,15 +154,12 @@ const page: React.FC<Props> = ({
 
     console.log(user?.username);
     socket.on('blob message airdrop', (userid_rec, file, file_type, user, receiverid, chatid) => {
-      // file.forEach((file: any) => {
-      console.log("kuch to blob aya", file.constructor.name);
-
       if (userid != userid_rec) {
 
         console.log(typeof file);
 
         const new_ele = document.createElement('iframe')
-        const classes = ["w-full", "h-80", "m-2", "rounded-lg", "shadow-lg"]
+        const classes = ["w-full", "h-80", "m-", "rounded-lg", "shadow-lg"]
         const FReader = new FileReader()
         new_ele.classList.add(...classes)
         const fileBlob = new Blob([file], { type: file_type })
@@ -172,6 +169,57 @@ const page: React.FC<Props> = ({
         FReader.readAsDataURL(fileBlob)
         rec_blob?.current?.appendChild(new_ele)
       }
+      else {
+        alert('file sent successfully')
+      }
+    })
+    socket.on('blob message send', (userid_rec, file, file_type, user, receiverid, chatid) => {
+      // file.forEach((file: any) => {
+      console.log("kuch to blob aya", file.constructor.name);
+
+      if (userid != userid_rec) {
+
+        console.log(typeof file);
+
+        const new_ele = document.createElement('iframe')
+        const classes = ["w-full", "h-80", "m-0", "rounded-lg", "shadow-lg"]
+        const FReader = new FileReader()
+        new_ele.classList.add(...classes)
+        const fileBlob = new Blob([file], { type: file_type })
+        FReader.onload = function (e: any) {
+          new_ele.src = e.target.result
+        }
+        FReader.readAsDataURL(fileBlob)
+        rec_blob?.current?.appendChild(new_ele)
+      }
+      if (userid == receiverid && chatid == chatid) {
+
+        const new_ele = document.createElement('iframe')
+        const classes = ['rounded-bl-2xl', 'rounded-tr-2xl', "text-white", "float-left", "clear-both", "mt-2", "drag", "shadow-lg", "w-1/2", "h-80",]
+        const FReader = new FileReader()
+        new_ele.classList.add(...classes)
+        const fileBlob = new Blob([file], { type: file_type })
+        FReader.onload = function (e: any) {
+          new_ele.src = e.target.result
+        }
+        FReader.readAsDataURL(fileBlob)
+        u?.current?.appendChild(new_ele)
+      }
+      if (userid == userid_rec && chatid == chatid) {
+
+        const new_ele = document.createElement('iframe')
+        const classes = ['rounded-bl-2xl', 'rounded-tr-2xl', "text-white", "float-right", "clear-both", "mt-2", "drag", "shadow-lg", "w-1/2", "h-80",]
+        const FReader = new FileReader()
+        new_ele.classList.add(...classes)
+        const fileBlob = new Blob([file], { type: file_type })
+        FReader.onload = function (e: any) {
+          new_ele.src = e.target.result
+        }
+        FReader.readAsDataURL(fileBlob)
+        u?.current?.appendChild(new_ele)
+      }
+      const newlen = u.current?.children.length
+      setLenchild(newlen as number)
       // })
     })
 
@@ -186,7 +234,7 @@ const page: React.FC<Props> = ({
         new_ele_lbl.textContent = `you `
         new_ele.textContent = `${data}`
         const usr_lbl_cls = ['float-right', 'clear-both', 'mx-2', 'text-bold', 'italic', "mb-0", "pb-0"]
-        const usr_cls = ['bg-blue-700', 'rounded-bl-2xl', 'rounded-tr-2xl', "lg:w-1/5", "md:w-1/3", "sm:w-1/2", "w-3/4", "text-white", "p-2", "m-2", "float-right", "clear-both", "mt-0", "drag", "shadow-lg"]
+        const usr_cls = ['bg-blue-700', 'rounded-bl-2xl', 'rounded-tr-2xl', "text-white", "p-2", "m-2", "float-right", "clear-both", "mt-0", "drag", "shadow-lg", "w-1/2", "h-fit"]
         new_ele_lbl.classList.add(...usr_lbl_cls)
         new_ele.classList.add(...usr_cls)
 
@@ -386,159 +434,179 @@ const page: React.FC<Props> = ({
       const filesArray = Array.from(fileInputElement.files);
       const socket = io(wsbaseURL);
       filesArray.forEach((file: any) => {
+        socket.emit('blob message send', userid, file, file.type, user, receiverid, chatid)
+        //
+      })
+    }
+  }
+  function airdropTheBlobFiles() {
+    const fileInputElement = document.getElementById('attachFile') as HTMLInputElement;
+    if (fileInputElement?.files) {
+      console.log('reached stbf airdrop');
+
+      const filesArray = Array.from(fileInputElement.files);
+      const socket = io(wsbaseURL);
+      filesArray.forEach((file: any) => {
         socket.emit('blob message airdrop', userid, file, file.type, user, receiverid, chatid)
+        //
       })
     }
   }
 
   return (
-    <div className=' my-2'>
+    <div className=' my-2 '>
 
       <Form form={form} author={userid} setForm={setForm} reload={rel} />
-      <div className='grid grid-cols-7 border border-slate-50 h-10  mx-5 '>
-        <div className={`md:col-span-2 md:block hidden border-r border-r-slate-50 ${dark ? 'text-white bg-black' : 'text-black bg-white'}`}>
-          {visibilities.post && <div className=' text-2xl font-bold text-center'>YOUR POSTS</div>}
-          {visibilities.user && <div className='text-2xl font-bold text-center'>USERS</div>}
-          {visibilities.videoCall && <div className='text-2xl font-bold text-center'>VIDEO CALL</div>}
-        </div>
-        <div className={`md:col-span-5 col-span-7 ${dark ? 'text-white bg-black' : 'text-black bg-white'} flex`}>
-          <div className='rounded-full'>
+      <div className='border border-slate-50 rounded-3xl mx-5 p-1'>
 
-            <img src={receiver?.imageUrl} alt="" height={hw} width={hw} className='rounded-full' />
+        <div className='grid grid-cols-7  h-10  m-1'>
+          <div className={`md:col-span-2 md:block hidden ${dark ? 'text-white bg-black' : 'text-black bg-white'}`}>
+            {visibilities.post && <div className=' text-2xl font-bold text-center'>YOUR POSTS</div>}
+            {visibilities.user && <div className='text-2xl font-bold text-center'>USERS</div>}
+            {visibilities.videoCall && <div className='text-2xl font-bold text-center'>VIDEO CALL</div>}
+            {visibilities.attachPreview && <div className='text-2xl font-bold text-center'>SHARE FILE</div>}
           </div>
-          {receiver?.username && <div className=' text-2xl font-bold text-center mx-3'>{receiver.username}</div>}
-        </div>
-      </div>
+          <div className={`md:col-span-5 col-span-7 ${dark ? 'text-white bg-black' : 'text-black bg-white'} flex`}>
+            <div className='rounded-full'>
 
-      <div className='md:grid grid-cols-7 mx-5  border border-slate-50'>
-
-        <div className='md:col-span-2 hidden md:block border  border-slate-50 h-full  overflow-y-auto overflow-x-hidden rounded-3xl shadow-lg'
-          ref={post_area}
-          style={{
-
-            height: "87vh",
-          }}>
-          <div className={`flex  post_container flex-col-reverse `} id='experimental_post' ref={allRead}>
-            {(mypost && visibilities.post) && (mypost.map((data) => {
-              return <><PostCard post={data} key={data} mypost={true} sendmsg={setInput} /></>
-
-            }))}
-          </div>
-          <div className={`  post_container flex-col-reverse   `} id='' ref={userRef}>
-            {(us && visibilities.user) && (us.map((data: any, index: any) => {
-              return <><UserCard user={data} key={index} /></>
-
-            }))
-            }
-          </div>
-          <div className=''>
-            {(visibilities.videoCall) && <div className={`bg-inherit text-inherit flex flex-col items-center `}>
-
-              <div className=' bg-slate-50 h-fit w-fit bg-opacity-25 rounded-full my-5 '>
-
-                <Image src={videoConference} alt='loader' height={200} width={200} className='rounded-full my-auto '></Image>
-              </div>
-              <Link href={`/videochat/${receiverid}`}>
-                <button type="button" className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 my-10 ">Start Video Chat</button>
-              </Link>
-
-            </div>}
-          </div>
-          {(visibilities.attachPreview) && (<div className='border h-full w-full bg-inherit text-inherit'>
-            <div className={`${dark ? "bg-black text-white" : " text-black bg-white"} p-3 text-justify`}>
-              you can send this to anyone online to a room id of your choice and they can join the room to view and download the image or pdf file
+              <img src={receiver?.imageUrl} alt="" height={hw} width={hw} className='rounded-full' />
             </div>
-            {(inputFileUrl.map((file: any, index: any) => {
-              return <PreviewModal img_url={file} key={index} />
-            }))}
-            <div className='flex justify-around flex-wrap'>
-
-              <div className='flex flex-col justify-center items-center' >
-                <Image src={recieve} alt="image" width={50} height={50} />
-                <div className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ">recieve</div>
-              </div>
-              <div className='flex flex-col justify-center items-center' >
-                <Image src={airdrop} alt="image" width={50} height={50} />
-                <div className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ">Airdrop</div>
-              </div>
-              <div className='flex flex-col justify-center items-center'>
-                <label htmlFor="attachFile"  >
-                  <Image src={chooseFiles} alt="image" width={50} height={50} />
-                  <label htmlFor="attachFile"  >
-                    <div className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ">choose file</div>
-                  </label>
-                </label>
-              </div>
-              <div className='flex flex-col justify-center items-center' ref={sendInpBtnAd as any}>
-                <button type='button' onClick={sendTheBlobFiles}>
-
-                  <Image src={sendFile} alt="image" width={50} height={50} />
-                  <div className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  " >send</div>
-                </button>
-              </div>
-            </div>
-            <div className={`${dark ? "bg-black text-white" : " text-black bg-white"} m-5`}>
-              <div className="bg-slate-400 bg-opacity-20" ref={rec_blob}>
-
-                the files you recieve will be visible here
-              </div>
-            </div>
-          </div>)}
-
+            {receiver?.username && <div className=' text-2xl font-bold text-center mx-3'>{receiver.username}</div>}
+          </div>
         </div>
-        {/* <div className='col-span-2 bg-slate-50 bg-opacity-10 '></div> */}
-        <div className='col-span-5 bg-slate-50 bg-opacity-10  overflow-auto rounded-3xl overflow-x-hidden shadow-2xl '
-          style={
-            {
+
+        <div className='md:grid grid-cols-7 mx-5  border border-slate-50 rounded-3xl'>
+
+          <div className='md:col-span-2 hidden md:block border  border-slate-50 h-full  overflow-y-auto overflow-x-hidden rounded-3xl shadow-lg '
+            ref={post_area}
+            style={{
+
               height: "87vh",
-            }
-          }>
+            }}>
+            <div className={`flex  post_container flex-col-reverse `} id='experimental_post' ref={allRead}>
+              {(mypost && visibilities.post) && (mypost.map((data) => {
+                return <><PostCard post={data} key={data} mypost={true} sendmsg={setInput} /></>
+
+              }))}
+            </div>
+            <div className={`  post_container flex-col-reverse   `} id='' ref={userRef}>
+              {(us && visibilities.user) && (us.map((data: any, index: any) => {
+                return <><UserCard user={data} key={index} /></>
+
+              }))
+              }
+            </div>
+            <div className=''>
+              {(visibilities.videoCall) && <div className={`bg-inherit text-inherit flex flex-col items-center `}>
+
+                <div className=' bg-slate-50 h-fit w-fit bg-opacity-25 rounded-full my-5 '>
+
+                  <Image src={videoConference} alt='loader' height={200} width={200} className='rounded-full my-auto '></Image>
+                </div>
+                <Link href={`/videochat/`}>
+                  <button type="button" className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 my-10 ">Start Video Chat</button>
+                </Link>
+
+              </div>}
+            </div>
+            {(visibilities.attachPreview) && (<div className='border h-full w-full bg-inherit text-inherit'>
+              <div className={`${dark ? "bg-black text-white" : " text-black bg-white"} p-3 text-justify`}>
+                you can send this to anyone online to a room id of your choice and they can join the room to view and download the image or pdf file
+              </div>
+              {(inputFileUrl.map((file: any, index: any) => {
+                return <PreviewModal img_url={file} key={index} />
+              }))}
+              <div className='flex justify-around flex-wrap'>
+
+                <div className='flex flex-col justify-center items-center' >
+                  <Image src={recieve} alt="image" width={50} height={50} />
+                  <div className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ">recieve</div>
+                </div>
+                <div className='flex flex-col justify-center items-center'
+                  onClick={airdropTheBlobFiles}
+                >
+                  <Image src={airdrop} alt="image" width={50} height={50} />
+                  <div className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ">Airdrop</div>
+                </div>
+                <div className='flex flex-col justify-center items-center'>
+                  <label htmlFor="attachFile"  >
+                    <Image src={chooseFiles} alt="image" width={50} height={50} />
+                    <label htmlFor="attachFile"  >
+                      <div className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ">choose file</div>
+                    </label>
+                  </label>
+                </div>
+                <div className='flex flex-col justify-center items-center' ref={sendInpBtnAd as any}>
+                  <button type='button' onClick={sendTheBlobFiles}>
+
+                    <Image src={sendFile} alt="image" width={50} height={50} />
+                    <div className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  " >send</div>
+                  </button>
+                </div>
+              </div>
+              <div className={`${dark ? "bg-black text-white" : " text-black bg-white"} m-5`}>
+                <div className="bg-slate-400 bg-opacity-20" ref={rec_blob}>
+
+                  the files you recieve will be visible here
+                </div>
+              </div>
+            </div>)}
+
+          </div>
+          {/* <div className='col-span-2 bg-slate-50 bg-opacity-10 '></div> */}
+          <div className='col-span-5 bg-slate-50 bg-opacity-10  overflow-auto rounded-3xl overflow-x-hidden shadow-2xl '
+            style={
+              {
+                height: "87vh",
+              }
+            }>
 
 
-          <ul id="messages" ref={u} className=''></ul>
+            <ul id="messages" ref={u} className=''></ul>
 
 
+          </div>
         </div>
-      </div>
-      <div className='grid grid-cols-7  border-slate-50 h-10  mx-5 my-1'>
-        <div className='md:col-span-2 col-span-7 flex flex-row justify-evenly'>
-          <Image src={readpost} alt='loader' id='post' height={50} width={50} onClick={(e) => {
-            handlevisibilitychange(e)
-            read_my_post()
-          }} />
-          <Image src={friends} alt='loader' id='user' height={50} width={50} onClick={(e) => {
-            handlevisibilitychange(e)
-            read_user()
-          }} />
-          <Image src={videoConf} alt='loader' id='videoCall' height={50} width={50} onClick={(e) => {
-            handlevisibilitychange(e)
-          }} />
-          <label htmlFor=""  >
-            <Image src={attach} alt='loader' height={50} width={50}
-              id="attachPreview"
-              onClick={(e) => {
-                handlevisibilitychange(e)
-              }}
-            />
-          </label>
-          <input type="file" id="attachFile" name='attachFile' className='hidden'
-            multiple
-            ref={send_blob}
-            onChange={(e: any) => {
-              readTheFileAndMakeURL(e)
+        <div className='grid grid-cols-7  border-slate-50 h-10  mx-5 my-1'>
+          <div className='md:col-span-2 col-span-7 flex flex-row justify-evenly'>
+            <Image src={readpost} alt='loader' id='post' height={50} width={50} onClick={(e) => {
+              handlevisibilitychange(e)
+              read_my_post()
             }} />
-          <Link href={`/`}>
-            <Image src={home} alt='loader' height={50} width={50} />
-          </Link>
+            <Image src={friends} alt='loader' id='user' height={50} width={50} onClick={(e) => {
+              handlevisibilitychange(e)
+              read_user()
+            }} />
+            <Image src={videoConf} alt='loader' id='videoCall' height={50} width={50} onClick={(e) => {
+              handlevisibilitychange(e)
+            }} />
+            <label htmlFor=""  >
+              <Image src={attach} alt='loader' height={50} width={50}
+                id="attachPreview"
+                onClick={(e) => {
+                  handlevisibilitychange(e)
+                }}
+              />
+            </label>
+            <input type="file" id="attachFile" name='attachFile' className='hidden'
+              multiple
+              ref={send_blob}
+              onChange={(e: any) => {
+                readTheFileAndMakeURL(e)
+              }} />
+            <Link href={`/`}>
+              <Image src={home} alt='loader' height={50} width={50} />
+            </Link>
+          </div>
+          <form id="form" action="" className=' bottom-2 right-4 grid grid-cols-4  md:col-span-5 col-span-7 msg_box ' >
+            <textarea id="input" className='border border-black col-span-3  rounded-xl h-9' ref={i}
+              onChange={(e: any) => setInput(e.target.value)} value={input}>
+            </textarea>
+            <button id='btn' ref={b} className={`focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg    dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900 text-lg col-span-1 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed h-9`} disabled={chatid ? false : true} onClick={handleFromhidden}>Send</button>
+
+          </form>
+
         </div>
-        <form id="form" action="" className=' bottom-2 right-4 grid grid-cols-4  md:col-span-5 col-span-7 msg_box ' >
-          <textarea id="input" className='border border-black col-span-3  rounded-xl h-9' ref={i}
-            onChange={(e: any) => setInput(e.target.value)} value={input}>
-          </textarea>
-          <button id='btn' ref={b} className={`focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg    dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900 text-lg col-span-1 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed h-9`} disabled={chatid ? false : true} onClick={handleFromhidden}>Send</button>
-
-        </form>
-
       </div>
     </div>
   )

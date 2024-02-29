@@ -19,8 +19,12 @@ io.on("connection", (socket) => {
     console.log('user disconnected');
   });
   socket.on('blob message airdrop', (userid, file, file_type, user, receiverid, chatid)=>{
-    console.log('file recieved on server');
+    console.log('file recieved on airdrop server');
     socket.broadcast.emit('blob message airdrop', userid, file,file_type, user, receiverid, chatid);
+  })
+  socket.on('blob message send', (userid, file, file_type, user, receiverid, chatid)=>{
+    console.log('file recieved on server');
+    socket.broadcast.emit('blob message send', userid, file,file_type, user, receiverid, chatid);
   })
   socket.on('fetch_prev_msgs', (chatId,user) => {
     (async () => {

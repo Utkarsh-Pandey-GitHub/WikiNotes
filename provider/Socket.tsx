@@ -16,6 +16,8 @@ export const useSocket = () => {
 }
 export function SocketProvider({children}: {children: React.ReactNode}) {
     const Socket=useMemo(() => {
+      
+      
         return io(baseURL)
     }, [])
   return (

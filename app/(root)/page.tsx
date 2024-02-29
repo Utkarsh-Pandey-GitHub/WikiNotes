@@ -18,6 +18,7 @@ import create from '../../public/create.png'
 import readpost from '../../public/readpost.png'
 import mypost from '../../public/mypost.png'
 import users from '../../public/users.png'
+import tip from '../../public/tip.svg'
 
 
 const baseURL = process.env.NODE_ENV === 'production'
@@ -170,14 +171,14 @@ export default function Home() {
 
   return (
     <div className=''>
-      
+
       <div className=' absolute right-3 top-3 gap-1 sm:flex hidden'>
         <UserButton />
         <SignOutButton />
       </div>
-      <div className={`grid grid-cols-11  `}  >
-      
-        
+      <div className={`grid grid-cols-11  clear-both`}  >
+
+
 
         <div className=' col-span-11'>
           <div className='flex  justify-center  '>
@@ -191,6 +192,11 @@ export default function Home() {
 
             }}>
               {heading}
+            </div>
+            <br />
+
+            <div className='col-snap-11'>
+
             </div>
 
           </div>
@@ -213,7 +219,7 @@ export default function Home() {
                   </div>
 
                 </button>
-                
+
                 <button className='flex items-center flex-col '
                   onClick={read_post}
                 >
@@ -243,6 +249,34 @@ export default function Home() {
               </div>
             </div>
 
+
+
+
+            <div className='text-gray-500 w-1/5  h-fit bg-slate-200 p-2 rounded-xl fixed top-1/2' id='tip'>
+              <Image src={tip} alt='' className='float-left' />
+              <div className='float-right text-red-700 cursor-default' onClick={()=>{
+                const ele = document.getElementById('tip')
+                ele?.classList.add('hidden')
+              }}>
+                X
+              </div>
+              <div className='my-auto text-gray-700 text-xl'>
+                Tips
+              </div>
+              <div className='clear-both'>
+
+                1. Click on author image to chat with the author of the post
+                <br />
+                <br />
+                2. Click on mein posts to read the your posts
+                <br />
+                <br />
+                3. Find other users by clicking on find friends
+                <br />
+
+              </div>
+
+            </div>
 
             {visibility.create_post && <div id='form1' className='flex  justify-center w-full '>
               <ul className='mx-5 grid grid-cols-1 w-2/3 '>

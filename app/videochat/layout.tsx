@@ -1,10 +1,10 @@
-import {SocketProvider} from '@/app/provider/Socket'
+import { SocketProvider } from '../../provider/Socket'
 import type { Metadata } from 'next'
 import { Inter, Ubuntu } from 'next/font/google'
 
 
 const inter = Inter({ subsets: ['latin'] })
-const ubuntu = Ubuntu({weight:"300",subsets: ['latin']})
+const ubuntu = Ubuntu({ weight: "300", subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Video Chat',
@@ -16,18 +16,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  
+
   return (
 
-    
-      <html lang="en">
-        <body className={`${ubuntu.className} bg-black`}>
-          <SocketProvider>
-            {children}
-          </SocketProvider>
-        </body>
-      </html>
-    
+
+    <html lang="en">
+      <body className={`${ubuntu.className} bg-black`}>
+        <SocketProvider>
+          {children}
+        </SocketProvider>
+      </body>
+    </html>
+
 
   )
 }
