@@ -5,6 +5,11 @@ interface post extends Document {
     label: String,
     description?: String,
     link?: String,
+    file?: {
+        data: Buffer,
+        contentType: String
+    
+    },
     author: mongoose.Types.ObjectId,
     date_Created?: String | Date
 }

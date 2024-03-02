@@ -11,6 +11,7 @@ import axios from 'axios';
 import noteboy from '../../public/notemaking.gif';
 import Link from 'next/link';
 import { getCookie,setCookie,deleteCookie } from '../../app/lib/cookiemaker'
+import { log } from 'console';
 
 
 
@@ -92,6 +93,8 @@ const PostCard: React.FC<CardProps> = ({ post, dark=true, mypost, main, sendmsg 
         })
         .catch((err) => console.log(err))
     }
+    
+    
 
 
   }, [post])
@@ -104,7 +107,7 @@ const PostCard: React.FC<CardProps> = ({ post, dark=true, mypost, main, sendmsg 
   return (
     
 
-    <div className={`flex  justify-center  border border-black   max-h-fit shadow-xl my-2 rounded-md ${dark &&!main? 'text-white bg-black' : 'text-black bg-white'} border border-slate-400`} style={{ width:  "100%" }}>
+    <div className={`flex  justify-center  border border-black   max-h-fit shadow-xl mb-4 rounded-md ${dark &&!main? 'text-white bg-black' : 'text-black bg-white'} border border-slate-400`} style={{ width:  "100%" }}>
       {main&&chatToggle && <Link href={`/chat/${post.author}`}><button className="float-left absolute   bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-3xl" 
       style={{
         left: "30vw",
@@ -139,6 +142,7 @@ const PostCard: React.FC<CardProps> = ({ post, dark=true, mypost, main, sendmsg 
               <p className=''>{post?.link}</p></a>
 
           </div>}
+          
           <div className='  italic h-auto break-words text-justify mt-3 '>
             {truncatedText}{words.length > 30 && truncatedText.split().length !== 30 ? <span onClick={toggleWords}>...</span> : ""}
           </div>

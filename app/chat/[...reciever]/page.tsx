@@ -27,6 +27,7 @@ import airdrop from '../../../public/airdrop.png'
 import recieve from '../../../public/recieve.png'
 import chooseFiles from '../../../public/chooseFile.png'
 import sendFile from '../../../public/sendMessage.png'
+import multitask from '../../../public/multitasking.gif'
 
 const baseURL = process.env.NODE_ENV === 'production'
   ? 'https://wikinotes-backend.onrender.com'
@@ -58,7 +59,8 @@ const page: React.FC<Props> = ({
     post: false,
     user: false,
     videoCall: false,
-    attachPreview: false
+    attachPreview: false,
+    homeGuide:true
   })
   const [mypost, setMypost] = useState([])
   const [userid, setUserid] = useState<any | undefined>()
@@ -166,7 +168,7 @@ const page: React.FC<Props> = ({
         FReader.onload = function (e: any) {
           new_ele.src = e.target.result
         }
-        FReader.readAsDataURL(fileBlob)
+        FReader.readAsDataURL(fileBlob)// use this function the file has to be converted as a blob first
         rec_blob?.current?.appendChild(new_ele)
       }
       else {
@@ -234,7 +236,7 @@ const page: React.FC<Props> = ({
         new_ele_lbl.textContent = `you `
         new_ele.textContent = `${data}`
         const usr_lbl_cls = ['float-right', 'clear-both', 'mx-2', 'text-bold', 'italic', "mb-0", "pb-0"]
-        const usr_cls = ['bg-blue-700', 'rounded-bl-2xl', 'rounded-tr-2xl', "text-white", "p-2", "m-2", "float-right", "clear-both", "mt-0", "drag", "shadow-lg", "w-1/2", "h-fit"]
+        const usr_cls = ['bg-blue-700', 'rounded-bl-2xl', 'rounded-tr-2xl', "text-white", "p-2", "m-2", "float-right", "clear-both", "mt-0", "drag", "shadow-lg", "lg:w-1/5", "md:w-1/3", "sm:w-1/2", "w-3/4", "h-fit"]
         new_ele_lbl.classList.add(...usr_lbl_cls)
         new_ele.classList.add(...usr_cls)
 
@@ -405,7 +407,7 @@ const page: React.FC<Props> = ({
   let dark = true
   let hw = 45
   function handlevisibilitychange(e: any) {
-    setVisibilities(prev => ({ post: false, user: false, videoCall: false, attachPreview: false }))
+    setVisibilities(prev => ({ post: false, user: false, videoCall: false, attachPreview: false ,homeGuide:false}))
     setVisibilities(prev => ({ ...prev, [e.target.id]: true }))
   }
   function readTheFileAndMakeURL(e: any) {
@@ -475,7 +477,7 @@ const page: React.FC<Props> = ({
           </div>
         </div>
 
-        <div className='md:grid grid-cols-7 mx-5  border border-slate-50 rounded-3xl'>
+        <div className='md:grid grid-cols-7 mx-5  border border-slate-900 rounded-3xl'>
 
           <div className='md:col-span-2 hidden md:block border  border-slate-50 h-full  overflow-y-auto overflow-x-hidden rounded-3xl shadow-lg '
             ref={post_area}
@@ -483,6 +485,27 @@ const page: React.FC<Props> = ({
 
               height: "87vh",
             }}>
+            {visibilities.homeGuide&&
+            <div className='text-white lg:px-24 md:px-18 sm:px-12 px-5'>
+              <Image alt='' src={multitask} width={250} height={250}/>
+              Welcome to wikinotes chats!  You can chat here with any wikinotes user and send files .
+              <br />
+              <br />
+              1. To send  files first choose files then click on Send (pdf, jpg/png [size less than 1MB])
+              <br />
+              <br />
+              2. To airdrop files first choose files the clisk on airdrop to send it to everyone who is online and wants to recieve from you.
+              <br />
+              <br />
+              3. Click recieve to recieve airdrops from anyone or onyl specific person.
+              <br />
+              <br />
+              4. Drag and  drop any text msg here to create your own note 
+              <br />
+              <br />
+              5. Inject your notes as message
+
+            </div>}
             <div className={`flex  post_container flex-col-reverse `} id='experimental_post' ref={allRead}>
               {(mypost && visibilities.post) && (mypost.map((data) => {
                 return <><PostCard post={data} key={data} mypost={true} sendmsg={setInput} /></>
@@ -499,9 +522,9 @@ const page: React.FC<Props> = ({
             <div className=''>
               {(visibilities.videoCall) && <div className={`bg-inherit text-inherit flex flex-col items-center `}>
 
-                <div className=' bg-slate-50 h-fit w-fit bg-opacity-25 rounded-full my-5 '>
+                <div className='  '>
 
-                  <Image src={videoConference} alt='loader' height={200} width={200} className='rounded-full my-auto '></Image>
+                  <Image src={videoConference} alt='loader' height={200} width={350} className=''></Image>
                 </div>
                 <Link href={`/videochat/`}>
                   <button type="button" className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 my-10 ">Start Video Chat</button>

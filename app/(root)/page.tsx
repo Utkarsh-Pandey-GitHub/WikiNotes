@@ -8,7 +8,7 @@ import chatimg from '../../public/chat1.gif'
 import { useEffect, useRef, useState } from 'react'
 
 import BottomBar from '@/components/shared/BottomBar'
-import createNote from '../../public/createNote.gif'
+import createNote from '../../public/notegirl.png'
 import { SignOutButton, UserButton, useUser } from '@clerk/nextjs'
 import UserCard from '@/components/cards/UserCard'
 import PostCard from '@/components/cards/PostCard'
@@ -37,6 +37,7 @@ export default function Home() {
     label: '',
     link: '',
     description: '',
+    file: '',
     author: ''
   })
   const [visibility, setVisibility] = useState({
@@ -168,7 +169,22 @@ export default function Home() {
 
   }, [user])
 
+  function setPreview(e: any) {
+    handleChange(e)
+    const fr = new FileReader();
+    const file = e.target.files[0]; // Get the file from the event
 
+    fr.onload = () => {
+      if (fr.result) {
+        const element: any = document.getElementById('inputiframe');
+        if (element) {
+          element.src = fr.result;
+        }
+      }
+    };
+
+    fr.readAsDataURL(file); // Read the file, not a Blob
+  }
   return (
     <div className=''>
 
@@ -180,30 +196,31 @@ export default function Home() {
 
 
 
-        <div className=' col-span-11'>
-          <div className='flex  justify-center  '>
+        <div className=' col-span-11 bg-slate-100'>
+          <div className='fixed'>
 
-
-
-            <div className={`flex justify-center md:text-9xl text-5xl heading `} style={{
-              fontFamily: 'Homemade Apple',
-              fontWeight: '400',
-              wordWrap: 'break-word',
-
-            }}>
-              {heading}
-            </div>
-            <br />
-
-            <div className='col-snap-11'>
-
-            </div>
 
           </div>
-          <div className='  m-10 clear-both grid grid-cols-1 ' id='head'>
-            <div className=' w-full'>
-              <div className='sm:flex sm:gap-4 sm:justify-evenly gap-4 grid grid-cols-1  ' >
-                <button className='flex items-center flex-col '
+          <div className='  mb-10 clear-both grid grid-cols-1 ' id='head'>
+            <div className=' w-full md:fixed sm:bg-slate-800  sm:text-white'>
+              <div className='flex  justify-center  '>
+
+
+
+                <div className={`flex justify-center md:text-3xl text-3xl heading w-screen `} style={{
+                  fontFamily: 'Homemade Apple',
+                  fontWeight: '400',
+                  wordWrap: 'break-word',
+
+                }}>
+                  {heading}
+                </div>
+                <br />
+
+
+              </div>
+              <div className='sm:flex sm:gap-4 sm:justify-evenly gap-4 grid grid-cols-1  border-b border-b-slate-300 bg-inherit' >
+                <button className='flex items-center flex-col  '
                   onClick={() => {
                     setVisibility(prev => ({
                       create_post: !prev.create_post,
@@ -212,8 +229,8 @@ export default function Home() {
                       all_users: false
                     }))
                   }}>
-                  <Image src={create} alt='' height={50} width={50} className='' />
-                  <div className='shadow-sm shadow-fuchsia-300'>
+                  <Image src={create} alt='' height={35} width={35} className='' />
+                  <div className='text-sm'>
 
                     CREATE
                   </div>
@@ -223,29 +240,27 @@ export default function Home() {
                 <button className='flex items-center flex-col '
                   onClick={read_post}
                 >
-                  <Image src={readpost} alt='' height={50} width={50} className='' />
-                  <div className='shadow-fuchsia-300 shadow-sm'>
+                  <Image src={readpost} alt='' height={35} width={35} className='' />
+                  <div className='text-sm'>
                     READ POSTS
                   </div>
                 </button>
                 <button className='flex items-center flex-col'
                   onClick={read_my_post}
                 >
-                  <Image src={mypost} alt='' height={50} width={50} className='' />
-                  <div className='shadow-fuchsia-300 shadow-sm'>
+                  <Image src={mypost} alt='' height={35} width={35} className='' />
+                  <div className=' text-sm'>
                     MEIN POSTS
                   </div>
                 </button>
 
                 <button className='flex items-center flex-col'
                   onClick={read_user}
-                ><Image src={users} alt='' height={50} width={50} className='' />
-                  <div className='shadow-fuchsia-300 shadow-sm'>
+                ><Image src={users} alt='' height={35} width={35} className='' />
+                  <div className=''>
                     Find Friends
                   </div>
                 </button>
-
-
               </div>
             </div>
 
@@ -254,7 +269,7 @@ export default function Home() {
 
             <div className='text-gray-500 w-1/5  h-fit bg-slate-200 p-2 rounded-xl fixed top-1/2' id='tip'>
               <Image src={tip} alt='' className='float-left' />
-              <div className='float-right text-red-700 cursor-default' onClick={()=>{
+              <div className='float-right text-red-700 cursor-default font-bold' onClick={() => {
                 const ele = document.getElementById('tip')
                 ele?.classList.add('hidden')
               }}>
@@ -278,7 +293,7 @@ export default function Home() {
 
             </div>
 
-            {visibility.create_post && <div id='form1' className='flex  justify-center w-full '>
+            {visibility.create_post && <div id='form1' className='flex  justify-center w-full mt-44'>
               <ul className='mx-5 grid grid-cols-1 w-2/3 '>
                 <div className='sm:flex  '>
 
@@ -301,6 +316,7 @@ export default function Home() {
                     onChange={(e: any) => (handleChange(e))}
                   />
                 </li>
+                
                 <li className='col-span-1'>
 
                   <label htmlFor="description" className={""}>description</label><br />
@@ -324,7 +340,7 @@ export default function Home() {
 
 
             {visibility.all_posts &&
-              <div className={`  flex   h-auto flex-col-reverse items-center gap-5 mt-24 lg:w-1/3 lg:mx-auto w-full`} id='experimental_post ' ref={allRead}>{pos ? (pos.map((data: any, index: any) => {
+              <div className={`  flex   h-auto flex-col-reverse items-center gap-5 mt-32 lg:w-1/3 lg:mx-auto ml-5 mr-5 w-auto `} id='experimental_post ' ref={allRead}>{pos ? (pos.map((data: any, index: any) => {
                 return <><PostCard post={data} key={index} mypost={false} main={true} /></>
 
               })) :

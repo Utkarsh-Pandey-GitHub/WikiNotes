@@ -58,8 +58,12 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
     const link = req.body?.link;
 
     const authora = req.body?.author;
+    const file = req.body?.file
+    console.log("file",req.body.file);
+    
     const newPost = new Model.Post({
         ...req.body
+        
     })
     console.log("request reached controller successfullly ansd now creating the post", req.body);
     await Model.User.updateOne(

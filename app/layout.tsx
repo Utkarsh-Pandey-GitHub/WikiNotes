@@ -8,13 +8,13 @@ import Head from 'next/head'
 import { use, useState } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
-const ubuntu = Ubuntu({weight:"300",subsets: ['latin']})
+const ubuntu = Ubuntu({ weight: "300", subsets: ['latin'] })
 
 
 export const metadata: Metadata = {
   title: 'wikinotes',
   description: 'Make notes and share them with your friends',
-  
+
 }
 
 export default function RootLayout({
@@ -22,14 +22,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  
-  
+
+
   return (
 
     <ClerkProvider>
       <html lang="en">
-        
-        <body className={`${ubuntu.className} `}>
+
+        <body className={`${ubuntu.className} bg-slate-100 bg-opacity-60`}>
           <SignedIn>
             {children}
           </SignedIn>
@@ -38,7 +38,7 @@ export default function RootLayout({
           </SignedOut>
         </body>
       </html>
-    </ClerkProvider> 
+    </ClerkProvider>
 
   )
 }
