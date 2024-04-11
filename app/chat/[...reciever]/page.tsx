@@ -526,7 +526,7 @@ const page: React.FC<Props> = ({
 
                   <Image src={videoConference} alt='loader' height={200} width={350} className=''></Image>
                 </div>
-                <Link href={`/videochat/`}>
+                <Link href={`/videoCall`}>
                   <button type="button" className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 my-10 ">Start Video Chat</button>
                 </Link>
 
