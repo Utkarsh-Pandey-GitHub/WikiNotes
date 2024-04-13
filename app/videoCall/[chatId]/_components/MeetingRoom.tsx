@@ -1,7 +1,10 @@
+import router from '@/backend/routes';
 import { CallControls, CallParticipantsList, PaginatedGridLayout, SpeakerLayout } from '@stream-io/video-react-sdk';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 
 function MeetingRoom() {
+    const router = useRouter();
     const [layout,setLayout] = useState<'grid'|'speaker-left'|'speaker-right'>('grid');
     const [showParticipants,setShowParticipants] = useState<boolean>(false); 
     const CallLayout =()=>{
@@ -26,7 +29,9 @@ function MeetingRoom() {
             }} />
         </div>
         <div className='fixed bottom-0 flex w-full items-center justify gap-5'>
-            <CallControls/>
+            <CallControls onLeave={()=>{
+                router.push('/')
+            }}/>
         </div>
         <button onClick={()=>{setShowParticipants(prev=>!prev)}} className='text-black'>click</button>
       </div>

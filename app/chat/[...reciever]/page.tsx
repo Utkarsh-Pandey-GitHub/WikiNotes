@@ -28,6 +28,7 @@ import recieve from '../../../public/recieve.png'
 import chooseFiles from '../../../public/chooseFile.png'
 import sendFile from '../../../public/sendMessage.png'
 import multitask from '../../../public/multitasking.gif'
+import RecieveFrom from '@/components/RecieveFrom';
 
 const baseURL = process.env.NODE_ENV === 'production'
   ? 'https://wikinotes-backend.onrender.com'
@@ -55,12 +56,14 @@ const page: React.FC<Props> = ({
   const userRef = useRef<HTMLDivElement>(null)
   const rec_blob = useRef<HTMLDivElement>(null)
   const send_blob = useRef<HTMLInputElement>(null)
+  const [checkedUsers, setCheckedUsers] = useState<any[]>([])
   const [visibilities, setVisibilities] = useState({
     post: false,
     user: false,
     videoCall: false,
     attachPreview: false,
-    homeGuide:true
+    homeGuide: true,
+    receiveFrom: false
   })
   const [mypost, setMypost] = useState([])
   const [userid, setUserid] = useState<any | undefined>()
@@ -157,19 +160,20 @@ const page: React.FC<Props> = ({
     console.log(user?.username);
     socket.on('blob message airdrop', (userid_rec, file, file_type, user, receiverid, chatid) => {
       if (userid != userid_rec) {
+        if (checkedUsers.includes(String(userid_rec))||checkedUsers.length==0) {
+          console.log(typeof file);
 
-        console.log(typeof file);
-
-        const new_ele = document.createElement('iframe')
-        const classes = ["w-full", "h-80", "m-", "rounded-lg", "shadow-lg"]
-        const FReader = new FileReader()
-        new_ele.classList.add(...classes)
-        const fileBlob = new Blob([file], { type: file_type })
-        FReader.onload = function (e: any) {
-          new_ele.src = e.target.result
+          const new_ele = document.createElement('iframe')
+          const classes = ["w-full", "h-80", "m-", "rounded-lg", "shadow-lg"]
+          const FReader = new FileReader()
+          new_ele.classList.add(...classes)
+          const fileBlob = new Blob([file], { type: file_type })
+          FReader.onload = function (e: any) {
+            new_ele.src = e.target.result
+          }
+          FReader.readAsDataURL(fileBlob)// use this function the file has to be converted as a blob first
+          rec_blob?.current?.appendChild(new_ele)
         }
-        FReader.readAsDataURL(fileBlob)// use this function the file has to be converted as a blob first
-        rec_blob?.current?.appendChild(new_ele)
       }
       else {
         alert('file sent successfully')
@@ -285,7 +289,7 @@ const page: React.FC<Props> = ({
       socket.disconnect()
 
     }
-  }, [user, userid, chatid])
+  }, [user, userid, chatid,checkedUsers])
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
 
@@ -407,7 +411,7 @@ const page: React.FC<Props> = ({
   let dark = true
   let hw = 45
   function handlevisibilitychange(e: any) {
-    setVisibilities(prev => ({ post: false, user: false, videoCall: false, attachPreview: false ,homeGuide:false}))
+    setVisibilities(prev => ({ post: false, user: false, videoCall: false, attachPreview: false, homeGuide: false, receiveFrom: false }))
     setVisibilities(prev => ({ ...prev, [e.target.id]: true }))
   }
   function readTheFileAndMakeURL(e: any) {
@@ -485,27 +489,27 @@ const page: React.FC<Props> = ({
 
               height: "87vh",
             }}>
-            {visibilities.homeGuide&&
-            <div className='text-white lg:px-24 md:px-18 sm:px-12 px-5'>
-              <Image alt='' src={multitask} width={250} height={250}/>
-              Welcome to wikinotes chats!  You can chat here with any wikinotes user and send files .
-              <br />
-              <br />
-              1. To send  files first choose files then click on Send (pdf, jpg/png [size less than 1MB])
-              <br />
-              <br />
-              2. To airdrop files first choose files the clisk on airdrop to send it to everyone who is online and wants to recieve from you.
-              <br />
-              <br />
-              3. Click recieve to recieve airdrops from anyone or onyl specific person.
-              <br />
-              <br />
-              4. Drag and  drop any text msg here to create your own note 
-              <br />
-              <br />
-              5. Inject your notes as message
+            {visibilities.homeGuide &&
+              <div className='text-white lg:px-24 md:px-18 sm:px-12 px-5'>
+                <Image alt='' src={multitask} width={250} height={250} />
+                Welcome to wikinotes chats!  You can chat here with any wikinotes user and send files .
+                <br />
+                <br />
+                1. To send  files first choose files then click on Send (pdf, jpg/png [size less than 1MB])
+                <br />
+                <br />
+                2. To airdrop files first choose files the clisk on airdrop to send it to everyone who is online and wants to recieve from you.
+                <br />
+                <br />
+                3. Click recieve to recieve airdrops from anyone or onyl specific person.
+                <br />
+                <br />
+                4. Drag and  drop any text msg here to create your own note
+                <br />
+                <br />
+                5. Inject your notes as message
 
-            </div>}
+              </div>}
             <div className={`flex  post_container flex-col-reverse `} id='experimental_post' ref={allRead}>
               {(mypost && visibilities.post) && (mypost.map((data) => {
                 return <><PostCard post={data} key={data} mypost={true} sendmsg={setInput} /></>
@@ -541,10 +545,12 @@ const page: React.FC<Props> = ({
               }))}
               <div className='flex justify-around flex-wrap'>
 
-                <div className='flex flex-col justify-center items-center' >
+                <div className='flex flex-col justify-center items-center' onClick={() => { setVisibilities({ ...visibilities, receiveFrom: !visibilities.receiveFrom }) }}>
                   <Image src={recieve} alt="image" width={50} height={50} />
-                  <div className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ">recieve</div>
+                  <div className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  " >recieve</div>
                 </div>
+
+
                 <div className='flex flex-col justify-center items-center'
                   onClick={airdropTheBlobFiles}
                 >
@@ -566,6 +572,11 @@ const page: React.FC<Props> = ({
                     <div className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  " >send</div>
                   </button>
                 </div>
+              </div>
+              <div className='mb-3'>
+                {visibilities.receiveFrom && visibilities.attachPreview &&
+                  <RecieveFrom checkedUsers={checkedUsers} setCheckedUsers={setCheckedUsers} />
+                }
               </div>
               <div className={`${dark ? "bg-black text-white" : " text-black bg-white"} m-5`}>
                 <div className="bg-slate-400 bg-opacity-20" ref={rec_blob}>
