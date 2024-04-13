@@ -35,16 +35,16 @@ function MeetingSetup({setIsSetupComplete}: {setIsSetupComplete: (value:boolean)
       <h1 className="text-2xl font-bold">Setup</h1>
       {call&&<VideoPreview />}
       <div className="flex gap-3">
-        <button onClick={() => setToggleMicCam((prev) => ({...prev, mic: !prev.mic}))} className={`p-2 rounded-full ${!toggleMicCam.mic ? 'bg-green-500' : 'bg-red-500'}`}>{toggleMicCam.mic ? 'Mute' : 'Unmute'}</button>
-        <button onClick={() => setToggleMicCam((prev) => ({...prev, cam: !prev.cam}))} className={`p-2 rounded-full ${!toggleMicCam.cam ? 'bg-green-500' : 'bg-red-500'}`}>{toggleMicCam.cam ? 'Stop Video' : 'Start Video'}</button>
-        <DeviceSettings/>
+        <button onClick={() => setToggleMicCam((prev) => ({...prev, mic: !prev.mic}))} className={`p-2 rounded-md font-bold ${!toggleMicCam.mic ? 'bg-green-500' : 'bg-red-500'}`}>{toggleMicCam.mic ? 'Mute' : 'Unmute'}</button>
+        <button onClick={() => setToggleMicCam((prev) => ({...prev, cam: !prev.cam}))} className={`p-2 rounded-md font-bold  ${!toggleMicCam.cam ? 'bg-green-500' : 'bg-red-500'}`}>{toggleMicCam.cam ? 'Stop Video' : 'Start Video'}</button>
         <br />
-        <button className="rounded-md bg-green-500 px-4 py-2.5" onClick={()=>{
+        <button className="rounded-md font-bold bg-green-500 px-4 py-2.5" onClick={()=>{
           call?.join();
           setIsSetupComplete(true);
         }}>
           Join Meeting
         </button>
+          <DeviceSettings/>
         </div>
     </div>
   )
