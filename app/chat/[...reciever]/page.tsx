@@ -513,7 +513,7 @@ const page: React.FC<Props> = ({
             ref={post_area}
             style={{
 
-              height: "87vh",
+              height: "82vh",
             }}>
             {visibilities.homeGuide &&
               <div className='text-white lg:px-24 md:px-18 sm:px-12 px-5'>
@@ -723,7 +723,7 @@ const page: React.FC<Props> = ({
           <div className={`col-span-5 bg-slate-50 bg-opacity-10  overflow-auto rounded-3xl overflow-x-hidden shadow-2xl `}
             style={
               {
-                height: "87vh",
+                height: `${(screenWidth>745)?"87vh":"82vh"}`,
               }
             }>
 
