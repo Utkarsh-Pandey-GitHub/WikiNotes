@@ -7,7 +7,7 @@ import chatimg from '../../public/chat1.gif'
 
 import { useEffect, useRef, useState } from 'react'
 
-import BottomBar from '@/components/shared/BottomBar'
+
 import createNote from '../../public/notegirl.png'
 import { SignOutButton, UserButton, useUser } from '@clerk/nextjs'
 import UserCard from '@/components/cards/UserCard'
@@ -136,9 +136,20 @@ export default function Home() {
   }
 
   function createPost() {
-    axios.post(`${baseURL}/routes/new-post`, newpost)
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err))
+    if (newpost.label !== '') {
+      axios.post(`${baseURL}/routes/new-post`, newpost)
+        .then((res) => console.log(res.data))
+        .then(() => {
+          setVisibility(prev => ({
+            create_post: false,
+            all_posts: true,
+            my_posts: false,
+            all_users: false
+          }))
+        })
+        .catch((err) => console.log(err))
+    }
+
   }
   function handleChange(e: any) {
     setNewpost((prev: any) => ({
@@ -188,10 +199,10 @@ export default function Home() {
   return (
     <div className=''>
 
-      <div className=' absolute right-3 top-3 gap-1 sm:flex hidden'>
+      {/* <div className=' absolute right-3 top-3 gap-1 sm:flex z-50 text-white'>
         <UserButton />
         <SignOutButton />
-      </div>
+      </div> */}
       <div className={`grid grid-cols-11  clear-both`}  >
 
 
@@ -202,7 +213,7 @@ export default function Home() {
 
           </div>
           <div className='  mb-10 clear-both grid grid-cols-1 ' id='head'>
-            <div className=' w-full md:fixed sm:bg-slate-800  sm:text-white'>
+            <div className=' w-full fixed bg-slate-800 text-white'>
               <div className='flex  justify-center  '>
 
 
@@ -219,7 +230,7 @@ export default function Home() {
 
 
               </div>
-              <div className='sm:flex sm:gap-4 sm:justify-evenly gap-4 grid grid-cols-1  border-b border-b-slate-300 bg-inherit' >
+              <div className='flex justify-evenly gap-4   border-b border-b-slate-300 bg-inherit' >
                 <button className='flex items-center flex-col  '
                   onClick={() => {
                     setVisibility(prev => ({
@@ -250,7 +261,7 @@ export default function Home() {
                 >
                   <Image src={mypost} alt='' height={35} width={35} className='' />
                   <div className=' text-sm'>
-                    MEIN POSTS
+                    MY POSTS
                   </div>
                 </button>
 
@@ -261,6 +272,10 @@ export default function Home() {
                     Find Friends
                   </div>
                 </button>
+                <div className=' absolute right-3 top-3 gap-1 sm:flex z-50 text-white'>
+                  <UserButton />
+                  <SignOutButton />
+                </div>
               </div>
             </div>
 
@@ -304,24 +319,25 @@ export default function Home() {
                 </div>
                 <li className='col-span-1 '>
 
-                  <label htmlFor="label" className={""}>label</label><br />
-                  <input type="text" id='label' name='label' className='border border-red-700 rounded-3xl mx-2 px-2 py-1  w-full'
+                  <label htmlFor="label" className={"px-6 text-xl font-semibold"}>Title/Label</label><br />
+                  <input type="text" id='label' name='label' className='border border-indigo-700 rounded-3xl mx-2 px-2 py-1  w-full'
                     onChange={(e: any) => (handleChange(e))}
+
                   />
                 </li>
                 <li className='col-span-1 '>
 
-                  <label htmlFor="link" className={""}>link</label><br />
-                  <input type="text" id='link' name='link' className='border border-red-700 rounded-3xl mx-2 px-2 py-1  w-full'
+                  <label htmlFor="link" className={"px-6 text-xl font-semibold"}>link</label><br />
+                  <input type="text" id='link' name='link' className='border border-indigo-700 rounded-3xl mx-2 px-2 py-1  w-full'
                     onChange={(e: any) => (handleChange(e))}
                   />
                 </li>
-                
+
                 <li className='col-span-1'>
 
-                  <label htmlFor="description" className={""}>description</label><br />
+                  <label htmlFor="description" className={"px-6 text-xl font-semibold"}>description</label><br />
                   <textarea name="description" id="description" rows={10}
-                    className='border border-blue-700 rounded-3xl mx-2 px-2 py-1 w-full'
+                    className='border border-indigo-700 rounded-3xl mx-2 px-2 py-1 w-full'
                     onChange={(e: any) => (handleChange(e))}
                   >
                   </textarea>
@@ -361,7 +377,7 @@ export default function Home() {
                 :
                 <div>
                   <Image src={loader} alt='loading..' height={45} width={45} className='flex justify-center' />
-                  <div className='text-slate-500 italic flex justify-center'>Just a minute...the notes are being loaded 🙂</div>
+                  <div className='text-slate-500 italic flex justify-center'>Just a minute...the notes are being loaded </div>
                 </div>
               }
               </div>}
@@ -369,20 +385,13 @@ export default function Home() {
 
 
             {visibility.all_users &&
-              <div className=' grid grid-rows-2 ' id='experimental_users'>
+              <div className='mt-24 flex w-3/4 flex-col mx-auto' id='experimental_users'>
 
-                <div>
-
-                  <Image src={chatimg} alt='' className='m-0 float-left' />
-                  <div className='italic  lg:block text-3xl mt-80'>
-                    WikiNotes is a platform where you can share your knowledge with others and learn from others. The live-Chat feature allows you to interact with other users and share your thoughts.
-                  </div>
+                
+                <div className='text-xl font-semibold mx-auto'>
+                  People in Community
                 </div>
-                <div className={`   grid  grid-flow-row md:grid-cols-4 sm:grid-cols-2  grid-cols-1  gap-5`} ref={myRead}>
-
-                  <div className='text-5xl absolute '>
-                    Users
-                  </div>
+                <div className={`   flex justify-start  sm:flex-wrap sm:gap-4 sm:flex-row flex-col gap-4`} ref={myRead}>
 
                   {us ? (us.map((data: any, index: any) => {
                     return <><UserCard user={data} key={index} /></>
@@ -391,18 +400,15 @@ export default function Home() {
                     :
                     <div>
                       <Image src={loader} alt='loading..' height={45} width={45} className='flex justify-center' />
-                      <div className='text-slate-500 italic flex justify-center'>Just a minute...the notes are being loaded. 🙂</div>
+                      <div className='text-slate-500 italic flex justify-center'>Loading...</div>
                     </div>
                   }
                 </div>
               </div>}
           </div>
         </div>
-        <div></div>
-        <div className='col-span-11'>
-
-          <BottomBar />
-        </div>
+        
+       
       </div>
     </div>
   )

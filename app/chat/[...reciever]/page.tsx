@@ -65,9 +65,9 @@ const page: React.FC<Props> = ({
     attachPreview: false,
     homeGuide: true,
     receiveFrom: false,
-    
+
   })
-  const [allOptions, setAllOptions] = useState<boolean>(true)
+  const [allOptions, setAllOptions] = useState<boolean>(false)
   const [mypost, setMypost] = useState([])
   const [userid, setUserid] = useState<any | undefined>()
   const [receiverid, setReceiverid] = useState<any | undefined>(params.reciever[0])
@@ -180,7 +180,7 @@ const page: React.FC<Props> = ({
     console.log(user?.username);
     socket.on('blob message airdrop', (userid_rec, file, file_type, user, receiverid, chatid) => {
       if (userid != userid_rec) {
-        if (checkedUsers.includes(String(userid_rec))||checkedUsers.length==0) {
+        if (checkedUsers.includes(String(userid_rec)) || checkedUsers.length == 0) {
           console.log(typeof file);
 
           const new_ele = document.createElement('iframe')
@@ -260,7 +260,7 @@ const page: React.FC<Props> = ({
         new_ele_lbl.textContent = `you `
         new_ele.textContent = `${data}`
         const usr_lbl_cls = ['float-right', 'clear-both', 'mx-2', 'text-bold', 'italic', "mb-0", "pb-0"]
-        const usr_cls = ['bg-blue-700', 'rounded-bl-2xl', 'rounded-tr-2xl', "text-white", "p-2", "m-2", "float-right", "clear-both", "mt-0", "drag", "shadow-lg", "lg:w-1/5", "md:w-1/3", "sm:w-1/2", "w-3/4", "h-fit"]
+        const usr_cls = ['bg-blue-700', 'rounded-bl-2xl', 'rounded-tr-2xl', "text-white", "p-2", "m-2", "float-right", "clear-both", "mt-0", "drag", "shadow-lg", "lg:w-1/5", "md:w-1/3", "sm:w-1/2", "w-3/4", "h-fit", "break-words"]
         new_ele_lbl.classList.add(...usr_lbl_cls)
         new_ele.classList.add(...usr_cls)
 
@@ -269,7 +269,7 @@ const page: React.FC<Props> = ({
         new_ele_lbl.textContent = `${username} `
         new_ele.textContent = `${data}`
         const usr_lbl_cls = ['float-left', 'clear-both', 'mx-2', 'text-bold', 'italic', "mb-0", "pb-0"]
-        const usr_cls = ['bg-slate-700', 'rounded-tl-2xl', 'rounded-br-2xl', "lg:w-1/5", "md:w-1/3", "sm:w-1/2", "w-3/4", "text-white", "p-2", "m-2", "float-left", "clear-both", "mt-0", "drag", "shadow-lg"]
+        const usr_cls = ['bg-slate-700', 'rounded-tl-2xl', 'rounded-br-2xl', "lg:w-1/5", "md:w-1/3", "sm:w-1/2", "w-3/4", "text-white", "p-2", "m-2", "float-left", "clear-both", "mt-0", "drag", "shadow-lg", "break-words"]
         new_ele_lbl.classList.add(...usr_lbl_cls)
         new_ele.classList.add(...usr_cls)
 
@@ -312,7 +312,7 @@ const page: React.FC<Props> = ({
       }
 
     }
-  }, [user, userid, chatid,checkedUsers])
+  }, [user, userid, chatid, checkedUsers])
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
 
@@ -438,7 +438,7 @@ const page: React.FC<Props> = ({
     setVisibilities(prev => ({ ...prev, [e.target.id]: true }))
   }
   function allFalse() {
-    setVisibilities({ post: false, user: false, videoCall: false, attachPreview: false, homeGuide: false, receiveFrom: false})
+    setVisibilities({ post: false, user: false, videoCall: false, attachPreview: false, homeGuide: true, receiveFrom: false })
   }
   function readTheFileAndMakeURL(e: any) {
     const fileInputElement = document.getElementById('attachFile') as HTMLInputElement;
@@ -498,7 +498,7 @@ const page: React.FC<Props> = ({
             {visibilities.videoCall && <div className='text-2xl font-bold text-center'>VIDEO CALL</div>}
             {visibilities.attachPreview && <div className='text-2xl font-bold text-center'>SHARE FILE</div>}
           </div>
-          <div className={`md:col-span-5 col-span-7 ${dark ? 'text-white bg-black' : 'text-black bg-white'} flex`}>
+          <div className={`md:col-span-5 col-span-7 ${dark ? 'text-white bg-blaallOptionsck' : 'text-black bg-white'} flex`}>
             <div className='rounded-full'>
 
               <img src={receiver?.imageUrl} alt="" height={hw} width={hw} className='rounded-full' />
@@ -509,7 +509,7 @@ const page: React.FC<Props> = ({
 
         <div className='md:grid grid-cols-7 mx-5  border border-slate-900 rounded-3xl'>
 
-          {screenWidth<745&&allOptions&&<div className={`md:col-span-2 absolute   md:block border  h-full  overflow-y-auto overflow-x-hidden rounded-3xl shadow-lg  z-50 sm:z-0 bg-black w-1/2 `}
+          {screenWidth < 745 && allOptions && <div className={`md:col-span-2 absolute   md:block border  h-full  overflow-y-auto overflow-x-hidden rounded-3xl shadow-lg  z-50 sm:z-0 bg-black w-1/2 `}
             ref={post_area}
             style={{
 
@@ -541,7 +541,7 @@ const page: React.FC<Props> = ({
                 return <><PostCard post={data} key={data} mypost={true} sendmsg={setInput} /></>
 
               }))}
-              {mypost?.length==0?<div className='text-white text-center'>No posts yet</div>:""}
+              {mypost?.length == 0 ? <div className='text-white text-center'>No posts yet</div> : ""}
             </div>
             <div className={`  post_container flex-col-reverse   `} id='' ref={userRef}>
               {(us && visibilities.user) && (us.map((data: any, index: any) => {
@@ -614,7 +614,7 @@ const page: React.FC<Props> = ({
             </div>)}
 
           </div>}
-          {screenWidth>745&&<div className={`md:col-span-2 static  md:block border  h-full  overflow-y-auto overflow-x-hidden rounded-3xl shadow-lg  z-50 sm:z-0 bg-black`}
+          {screenWidth > 745 && <div className={`md:col-span-2 static  md:block border  h-full  overflow-y-auto overflow-x-hidden rounded-3xl shadow-lg  z-50 sm:z-0 bg-black`}
             ref={post_area}
             style={{
 
@@ -646,7 +646,7 @@ const page: React.FC<Props> = ({
                 return <><PostCard post={data} key={data} mypost={true} sendmsg={setInput} /></>
 
               }))}
-               {mypost?.length==0?<div className='text-white text-center'>No posts yet</div>:null}
+              {mypost?.length == 0 ? <div className='text-white text-center'>No posts yet</div> : null}
             </div>
             <div className={`  post_container flex-col-reverse   `} id='' ref={userRef}>
               {(us && visibilities.user) && (us.map((data: any, index: any) => {
@@ -734,43 +734,53 @@ const page: React.FC<Props> = ({
           </div>
         </div>
         <div className='grid grid-cols-7  border-slate-50 h-10  mx-5 my-1'>
-          <div className='md:col-span-2 col-span-7 flex flex-row justify-evenly'>
+          <div className={`md:col-span-2 col-span-7 flex flex-row justify-evenly `}>
+            <div className='md:hidden'>
+
+              <Image src={chat} alt='loader' id='chat' height={50} width={50} onClick={(e) => {
+                allFalse();
+                setAllOptions(prev => !prev)
+              }} />
+            </div>
+            <div className=''>
             <Image src={readpost} alt='loader' id='post' height={50} width={50} onClick={(e) => {
               handlevisibilitychange(e)
               read_my_post()
-            }} />
+            }} className={`${!(screenWidth < 745) || (screenWidth < 745 && allOptions) ? "visible" : "invisible"}`} />
+            </div>
+            <div className=''>
             <Image src={friends} alt='loader' id='user' height={50} width={50} onClick={(e) => {
               handlevisibilitychange(e)
               read_user()
-            }} />
-            <Image src={videoConf} alt='loader' id='videoCall' height={50} width={50} onClick={(e) => {
-              handlevisibilitychange(e)
-            }} />
+            }} className={`${!(screenWidth < 745) || (screenWidth < 745 && allOptions) ? "visible" : "invisible"}`} />
+            </div>
+            <div className=''>
+
+              <Image src={videoConf} alt='loader' id='videoCall' height={50} width={50} onClick={(e) => {
+                handlevisibilitychange(e)
+              }} className={`${!(screenWidth < 745) || (screenWidth < 745 && allOptions) ? "visible" : "invisible"}`} />
+            </div>
             <label htmlFor=""  >
               <Image src={attach} alt='loader' height={50} width={50}
                 id="attachPreview"
                 onClick={(e) => {
                   handlevisibilitychange(e)
                 }}
+                className={`${!(screenWidth < 745) || (screenWidth < 745 && allOptions) ? "visible" : "invisible"}`}
               />
             </label>
-            <div className='md:hidden'>
 
-            <Image src={chat} alt='loader' id='chat' height={50} width={50} onClick={(e) => {
-              allFalse();
-              setAllOptions(prev=>!prev)
-            }} />
-            </div>
             <input type="file" id="attachFile" name='attachFile' className='hidden'
               multiple
               ref={send_blob}
               onChange={(e: any) => {
                 readTheFileAndMakeURL(e)
               }} />
-            <Link href={`/`} className='hidden sm:block'>
+            <Link href={`/`} className={`${!(screenWidth < 745) || (screenWidth < 745 && allOptions) ? "visible" : "invisible"}`}>
               <Image src={home} alt='loader' height={50} width={50} />
             </Link>
           </div>
+
           <form id="form" action="" className=' bottom-2 right-4 grid grid-cols-4  md:col-span-5 col-span-7 msg_box ' >
             <textarea id="input" className='border border-black col-span-3  rounded-xl h-9' ref={i}
               onChange={(e: any) => setInput(e.target.value)} value={input}>
