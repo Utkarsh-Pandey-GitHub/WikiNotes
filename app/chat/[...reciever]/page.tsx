@@ -541,7 +541,7 @@ const page: React.FC<Props> = ({
                 return <><PostCard post={data} key={data} mypost={true} sendmsg={setInput} /></>
 
               }))}
-              {mypost?.length == 0 ? <div className='text-white text-center'>No posts yet</div> : ""}
+              {mypost?.length == 0 && visibilities.post ? <div className='text-white text-center'>No posts yet</div> : ""}
             </div>
             <div className={`  post_container flex-col-reverse   `} id='' ref={userRef}>
               {(us && visibilities.user) && (us.map((data: any, index: any) => {
@@ -605,10 +605,10 @@ const page: React.FC<Props> = ({
                   <RecieveFrom checkedUsers={checkedUsers} setCheckedUsers={setCheckedUsers} />
                 }
               </div>
-              <div className={`${dark ? "bg-black text-white" : " text-black bg-white"} m-5`}>
-                <div className="bg-slate-400 bg-opacity-20" ref={rec_blob}>
+              <div className={`${dark ? "bg-black text-white" : " text-black bg-white"} m-5 font-semibold bg-gradient-to-r from-fuchsia-700 via-indigo-600 to--500 pb-1`}>
+                <div className="bg-black " ref={rec_blob}>
 
-                  the files you recieve will be visible here
+                  Files received from airdrop broadcast will be visible here
                 </div>
               </div>
             </div>)}
@@ -646,7 +646,7 @@ const page: React.FC<Props> = ({
                 return <><PostCard post={data} key={data} mypost={true} sendmsg={setInput} /></>
 
               }))}
-              {mypost?.length == 0 ? <div className='text-white text-center'>No posts yet</div> : null}
+              {(mypost?.length == 0 && visibilities.post) ? <div className='text-white text-center'>No posts yet</div> : null}
             </div>
             <div className={`  post_container flex-col-reverse   `} id='' ref={userRef}>
               {(us && visibilities.user) && (us.map((data: any, index: any) => {
@@ -710,10 +710,10 @@ const page: React.FC<Props> = ({
                   <RecieveFrom checkedUsers={checkedUsers} setCheckedUsers={setCheckedUsers} />
                 }
               </div>
-              <div className={`${dark ? "bg-black text-white" : " text-black bg-white"} m-5`}>
-                <div className="bg-slate-400 bg-opacity-20" ref={rec_blob}>
+              <div className={`${dark ? "bg-black text-white" : " text-black bg-white"} m-5 font-semibold bg-gradient-to-r from-fuchsia-700 via-indigo-600 to--500 pb-1`}>
+                <div className="bg-black" ref={rec_blob}>
 
-                  the files you recieve will be visible here
+                Files received from airdrop broadcast will be visible here
                 </div>
               </div>
             </div>)}
@@ -725,7 +725,11 @@ const page: React.FC<Props> = ({
               {
                 height: `${(screenWidth>745)?"87vh":"82vh"}`,
               }
-            }>
+            }
+            onClick={(e) => {
+              setAllOptions(false)
+            }}
+            >
 
 
             <ul id="messages" ref={u} className=''></ul>
@@ -737,7 +741,7 @@ const page: React.FC<Props> = ({
           <div className={`md:col-span-2 col-span-7 flex flex-row justify-evenly `}>
             <div className='md:hidden'>
 
-              <Image src={chat} alt='loader' id='chat' height={50} width={50} onClick={(e) => {
+              <Image src={chat} alt='loader' id='options' height={50} width={50} onClick={(e) => {
                 allFalse();
                 setAllOptions(prev => !prev)
               }} />

@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
 
-import { getCookie,setCookie,deleteCookie } from '../../app/lib/cookiemaker'
+import { getCookie, setCookie, deleteCookie } from '../../app/lib/cookiemaker'
 interface CardProps {
     user?: {
         _id?: string; // Add the _id property
@@ -23,7 +23,7 @@ const UserCard: React.FC<CardProps> = ({ user, dark }) => {
             <div className='flex justify-center flex-col  col-span-1  '>
                 <Image src={user?.imageUrl as string} alt='image' height={70} width={70} className='rounded-full border border-slate-300 shadow-slate-700 shadow-lg  border-b-2' />
             </div>
-            <div className='col-span-2 flex flex-col justify-start my-auto'>
+            <div className='col-span-2 flex flex-col justify-start my-auto mx-0'>
                 <div className=' font-bold mx-5 '>
                     {user?.name}
                 </div>
@@ -36,16 +36,16 @@ const UserCard: React.FC<CardProps> = ({ user, dark }) => {
             {/* <div className='border border-black italic'>
         {user?.email}
       </div> */}
-      <div className='col-span-1 flex items-center '>
+            <div className='col-span-1 flex items-center '>
 
-            <Link href={`/chat/${user?._id}`}><button className="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-3xl "
-            onClick={async() => {
-                await setCookie(user?._id as string,user)
-              }}
-            >
-                Chat
-            </button></Link>
-      </div>
+                <Link href={`/chat/${user?._id}`}><button className="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-2 rounded-3xl "
+                    onClick={async () => {
+                        await setCookie(user?._id as string, user)
+                    }}
+                >
+                    Chat
+                </button></Link>
+            </div>
 
         </div>
     )
