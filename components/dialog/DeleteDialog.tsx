@@ -26,7 +26,7 @@ const DeleteDialog: React.FC<CardProps> = ({ id, userId, dark, viz }
     uid: userId
   }
   function deletepost() {
-    console.log(id);
+    //console.log(id);
 
     setViza(prevviza => !prevviza)
     interface MyRequestBody {
@@ -41,7 +41,7 @@ const DeleteDialog: React.FC<CardProps> = ({ id, userId, dark, viz }
     axios.post<MyRequestBody, AxiosResponse<any>>(`${baseURL}/routes/delete-post`, requestBody)
       .then((response: AxiosResponse<any>) => {
         // Handle the successful response here
-        console.log('Response:', response.data);
+        //console.log('Response:', response.data);
       })
       .catch((error: AxiosError) => {
         // Handle errors here

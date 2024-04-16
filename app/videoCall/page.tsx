@@ -28,18 +28,18 @@ export default function Home() {
   const createMeeting = async () => {
     if (!client || !user) return;
     try {
-     
+
       //generate a random id 
       let id = crypto.randomUUID();
-      
+
       // calling a meeting with random id
-      console.log("calling meeting")
+      // //console.log("calling meeting")
       const call = client.call('default', id as string);
       if (!call) throw new Error('failed to create call');
       // time as which meeting started
       const startsAt = values.dateTime.toISOString() || new Date(Date.now()).toISOString();
       const description = values.description || "Instant Meeting";
-      console.log("getting or creating");
+      //console.log("getting or creating");
       await call.getOrCreate({
         data: {
           starts_at: startsAt,
@@ -48,7 +48,7 @@ export default function Home() {
           }
         }
       })
-      console.log("meeting created")
+      //console.log("meeting created")
       setCallDetails(call);
       if (!values.description) {
         router.push(`/videoCall/${call.id}`)
@@ -79,7 +79,7 @@ export default function Home() {
                 placeholder="meeting id"
                 name="meet"
               />
-              
+
               <div className="flex justify-between m-10">
 
                 <input
@@ -93,11 +93,11 @@ export default function Home() {
                 />
               </div>
             </form>
-              <button className="mx-auto relative px-6 py-3 font-bold text-white rounded-lg group" onClick={createMeeting}>
-                <span className="absolute inset-0 w-full h-full transition duration-300 transform -translate-x-1 -translate-y-1 bg-purple-800 ease opacity-80 group-hover:translate-x-0 group-hover:translate-y-0"></span>
-                <span className="absolute inset-0 w-full h-full transition duration-300 transform translate-x-1 translate-y-1 bg-pink-800 ease opacity-80 group-hover:translate-x-0 group-hover:translate-y-0 mix-blend-screen"></span>
-                <span className="relative">Create Meeting and Join Instantly</span>
-              </button>
+            <button className="mx-auto relative px-6 py-3 font-bold text-white rounded-lg group" onClick={createMeeting}>
+              <span className="absolute inset-0 w-full h-full transition duration-300 transform -translate-x-1 -translate-y-1 bg-purple-800 ease opacity-80 group-hover:translate-x-0 group-hover:translate-y-0"></span>
+              <span className="absolute inset-0 w-full h-full transition duration-300 transform translate-x-1 translate-y-1 bg-pink-800 ease opacity-80 group-hover:translate-x-0 group-hover:translate-y-0 mix-blend-screen"></span>
+              <span className="relative">Create Meeting and Join Instantly</span>
+            </button>
           </div>
         </div>
       </div>

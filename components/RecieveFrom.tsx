@@ -17,12 +17,12 @@ function RecieveFrom({ checkedUsers, setCheckedUsers }: { checkedUsers: any[], s
         })
             .then(data => {
                 setUsers(data);
-                console.log(data)
+                //console.log(data)
             })
             .catch(error => console.error(error))
 
     }
-    function handleChecked(e:any,id: any) {
+    function handleChecked(e: any, id: any) {
 
         if (e.target.checked) {
             setCheckedUsers([...checkedUsers, id])
@@ -41,12 +41,12 @@ function RecieveFrom({ checkedUsers, setCheckedUsers }: { checkedUsers: any[], s
                 <div>
                     <div>
                         <label className="inline-flex items-center" htmlFor="indigoCheckBox">
-                            <input id="indigoCheckBox" type="checkbox" className="w-4 h-4 accent-indigo-700 text-slate-300 " checked={!(checkedUsers.length>0)} />
+                            <input id="indigoCheckBox" type="checkbox" className="w-4 h-4 accent-indigo-700 text-slate-300 " checked={!(checkedUsers.length > 0)} />
                             <span className="ml-2 text-slate-300">Recieve airdrop from anyone</span>
                         </label>
                     </div>
                 </div>
-                {users && users.map((user:any, index) => {
+                {users && users.map((user: any, index) => {
 
 
 
@@ -58,7 +58,7 @@ function RecieveFrom({ checkedUsers, setCheckedUsers }: { checkedUsers: any[], s
 
                             </div>
                         </div>
-                        <input id="indigoCheckBox" type="checkbox" className="w-4 h-4 accent-indigo-700" defaultChecked={checkedUsers.includes(user._id)} onChange={(e) => { handleChecked(e,user._id) }} />
+                        <input id="indigoCheckBox" type="checkbox" className="w-4 h-4 accent-indigo-700" defaultChecked={checkedUsers.includes(user._id)} onChange={(e) => { handleChecked(e, user._id) }} />
                     </div>)
                 })}
 

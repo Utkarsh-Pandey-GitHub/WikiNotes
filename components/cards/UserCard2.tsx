@@ -16,7 +16,7 @@ interface CardProps {
 
 const UserCard: React.FC<CardProps> = ({ user, dark }) => {
     const strUser = JSON.stringify(user)
-    console.log(user);
+    //console.log(user);
 
     return (
         <div className={`${dark && "text-white bg-slate-600 my-4"} text-white   col-span-1  bg-opacity-0 rounded-2xl border border-slate-900 clear-both rounded-l-full grid grid-cols-4 my-2 mx-1`}>

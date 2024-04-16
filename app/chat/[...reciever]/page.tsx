@@ -22,8 +22,6 @@ import Link from 'next/link';
 import home from '../../../public/home.png'
 import chat from '../../../public/chat.png'
 import PreviewModal from '@/components/PreviewModal';
-import { Input } from 'postcss';
-import { set } from 'mongoose';
 import airdrop from '../../../public/airdrop.png'
 import recieve from '../../../public/recieve.png'
 import chooseFiles from '../../../public/chooseFile.png'
@@ -87,7 +85,7 @@ const page: React.FC<Props> = ({
   const [hidden, setHidden] = useState<boolean>(true)
   const handleFromhidden = () => {
     setHidden(!hidden)
-    console.log('hidden', hidden);
+
   }
   const WS_URL = 'https://wikinotes-backend-socket.onrender.com'
   const wsbaseURL = process.env.NODE_ENV === 'production'
@@ -96,7 +94,7 @@ const page: React.FC<Props> = ({
   const reload = () => {
     if (userid) {
       const url = `${baseURL}/routes/read-post/${encodeURIComponent(userid)}`;
-      console.log(userid);
+
 
 
       fetch(url, {
@@ -128,7 +126,7 @@ const page: React.FC<Props> = ({
     })
       .then(data => {
         setUs(data);
-        console.log(data)
+
       })
       .catch(error => console.error(error))
 
@@ -136,7 +134,7 @@ const page: React.FC<Props> = ({
   const read_my_post = () => {
     if (userid) {
       const url = `${baseURL}/routes/read-post/${encodeURIComponent(userid)}`;
-      console.log(userid);
+
 
 
       fetch(url, {
@@ -145,12 +143,11 @@ const page: React.FC<Props> = ({
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        console.log(response);
+
 
         return response.json();
       })
         .then(data => setMypost(data))
-        .then(() => { console.log(users); })
         .catch(error => console.error(error));
     }
   }
@@ -177,11 +174,11 @@ const page: React.FC<Props> = ({
 
     socket.emit('fetch_prev_msgs', chatid, user)
 
-    console.log(user?.username);
+
     socket.on('blob message airdrop', (userid_rec, file, file_type, user, receiverid, chatid) => {
       if (userid != userid_rec) {
         if (checkedUsers.includes(String(userid_rec)) || checkedUsers.length == 0) {
-          console.log(typeof file);
+
 
           const new_ele = document.createElement('iframe')
           const classes = ["w-full", "h-80", "m-", "rounded-lg", "shadow-lg"]
@@ -201,11 +198,11 @@ const page: React.FC<Props> = ({
     })
     socket.on('blob message send', (userid_rec, file, file_type, user, receiverid, chatid) => {
       // file.forEach((file: any) => {
-      console.log("kuch to blob aya", file.constructor.name);
+
 
       if (userid != userid_rec) {
 
-        console.log(typeof file);
+
 
         const new_ele = document.createElement('iframe')
         const classes = ["w-full", "h-80", "m-0", "rounded-lg", "shadow-lg"]
@@ -251,7 +248,7 @@ const page: React.FC<Props> = ({
 
     socket.on('chat message', (senderid, data, id, username, receiverid, chatId) => {
 
-      console.log("dkdork", userid);
+      //console.log("dkdork", userid);
 
 
       const new_ele = document.createElement('li')
@@ -277,11 +274,11 @@ const page: React.FC<Props> = ({
       new_ele.draggable = true;
       new_ele.addEventListener('dragstart', (e: any) => {
         new_ele.classList.add('dragged')
-        console.log('dragstart');
+        //console.log('dragstart');
       })
       new_ele.addEventListener('dragend', (e: any) => {
         new_ele.classList.remove('dragged')
-        console.log('dragend');
+        //console.log('dragend');
       })
       // u.current?.appendChild(new_ele_lbl);
       u.current?.appendChild(new_ele);
@@ -295,10 +292,13 @@ const page: React.FC<Props> = ({
     b.current?.addEventListener('click', (e: any) => {
       e.preventDefault()
       if (userid && receiverid && chatid) {
-        console.log('chatid:::', chatid);
+        //console.log('chatid:::', chatid);
 
         socket.emit('chat message', userid, i.current?.value, user, receiverid, chatid)
       }
+      setTimeout(() => {
+        setInput('');
+      }, 100);
 
     })
 
@@ -318,8 +318,8 @@ const page: React.FC<Props> = ({
 
   useEffect(() => {
     if (user) {
-      console.log(user);
-      console.log(params.reciever);
+      //console.log(user);
+      //console.log(params.reciever);
 
       axios.post(`${baseURL}/routes/new-user`, user).then((res) => {
         setUserid(res.data.active)
@@ -342,7 +342,7 @@ const page: React.FC<Props> = ({
             return res.json()
           })
             .then((data) => {
-              console.log(data);
+              //console.log(data);
               setChatid(data.id)
             })
             .catch((err) => { console.log(err); })
@@ -353,7 +353,7 @@ const page: React.FC<Props> = ({
 
     if (userid) {
       const url = `${baseURL}/routes/read-post/${encodeURIComponent(userid)}`;
-      console.log(userid);
+      //console.log(userid);
 
 
       fetch(url, {
@@ -405,15 +405,15 @@ const page: React.FC<Props> = ({
 
 
       }
-      console.log(hidden);
+      //console.log(hidden);
 
-      console.log('dragover');
+      //console.log('dragover');
 
 
     })
     const getC = async () => {
       const rec: string | any = await getCookie(receiverid)
-      console.log("rec", rec);
+      //console.log("rec", rec);
 
       setReciver(JSON.parse(rec.value))
     }
@@ -425,7 +425,7 @@ const page: React.FC<Props> = ({
     }
   }, [user, userid])
 
-  console.log(lenchild);
+  //console.log(lenchild);
   useEffect(() => {
 
     u.current?.children[u.current?.children.length - 1]?.scrollIntoView({ behavior: "smooth" })
@@ -454,14 +454,14 @@ const page: React.FC<Props> = ({
         reader.readAsDataURL(file)
       })
     }
-    console.log(inputFileUrl);
+    //console.log(inputFileUrl);
 
   }
   function sendTheBlobFiles() {
     const fileInputElement = document.getElementById('attachFile') as HTMLInputElement;
 
     if (fileInputElement?.files) {
-      console.log('reached stbf');
+      //console.log('reached stbf');
 
       const filesArray = Array.from(fileInputElement.files);
       const socket = io(wsbaseURL);
@@ -474,7 +474,7 @@ const page: React.FC<Props> = ({
   function airdropTheBlobFiles() {
     const fileInputElement = document.getElementById('attachFile') as HTMLInputElement;
     if (fileInputElement?.files) {
-      console.log('reached stbf airdrop');
+      //console.log('reached stbf airdrop');
 
       const filesArray = Array.from(fileInputElement.files);
       const socket = io(wsbaseURL);
@@ -713,7 +713,7 @@ const page: React.FC<Props> = ({
               <div className={`${dark ? "bg-black text-white" : " text-black bg-white"} m-5 font-semibold bg-gradient-to-r from-fuchsia-700 via-indigo-600 to--500 pb-1`}>
                 <div className="bg-black" ref={rec_blob}>
 
-                Files received from airdrop broadcast will be visible here
+                  Files received from airdrop broadcast will be visible here
                 </div>
               </div>
             </div>)}
@@ -723,13 +723,13 @@ const page: React.FC<Props> = ({
           <div className={`col-span-5 bg-slate-50 bg-opacity-10  overflow-auto rounded-3xl overflow-x-hidden shadow-2xl `}
             style={
               {
-                height: `${(screenWidth>745)?"87vh":"82vh"}`,
+                height: `${(screenWidth > 745) ? "87vh" : "82vh"}`,
               }
             }
             onClick={(e) => {
               setAllOptions(false)
             }}
-            >
+          >
 
 
             <ul id="messages" ref={u} className=''></ul>
@@ -747,16 +747,16 @@ const page: React.FC<Props> = ({
               }} />
             </div>
             <div className=''>
-            <Image src={readpost} alt='loader' id='post' height={50} width={50} onClick={(e) => {
-              handlevisibilitychange(e)
-              read_my_post()
-            }} className={`${!(screenWidth < 745) || (screenWidth < 745 && allOptions) ? "visible" : "invisible"}`} />
+              <Image src={readpost} alt='loader' id='post' height={50} width={50} onClick={(e) => {
+                handlevisibilitychange(e)
+                read_my_post()
+              }} className={`${!(screenWidth < 745) || (screenWidth < 745 && allOptions) ? "visible" : "invisible"}`} />
             </div>
             <div className=''>
-            <Image src={friends} alt='loader' id='user' height={50} width={50} onClick={(e) => {
-              handlevisibilitychange(e)
-              read_user()
-            }} className={`${!(screenWidth < 745) || (screenWidth < 745 && allOptions) ? "visible" : "invisible"}`} />
+              <Image src={friends} alt='loader' id='user' height={50} width={50} onClick={(e) => {
+                handlevisibilitychange(e)
+                read_user()
+              }} className={`${!(screenWidth < 745) || (screenWidth < 745 && allOptions) ? "visible" : "invisible"}`} />
             </div>
             <div className=''>
 

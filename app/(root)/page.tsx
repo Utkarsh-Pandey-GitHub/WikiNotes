@@ -81,7 +81,7 @@ export default function Home() {
   const read_my_post = (e: any) => {
 
     const url = `${baseURL}/routes/read-post/${encodeURIComponent(userid)}`
-    console.log(userid);
+
 
     fetch(url, {
       method: 'GET'
@@ -119,7 +119,7 @@ export default function Home() {
       return response.json();
     }).then(data => setPos(data))
       .catch(error => console.error(error))
-    console.log('clicked');
+
 
 
     const ele = document.getElementById('experimental_post_my')
@@ -138,8 +138,7 @@ export default function Home() {
   function createPost() {
     if (newpost.label !== '') {
       axios.post(`${baseURL}/routes/new-post`, newpost)
-        .then((res) => console.log(res.data))
-        .then(() => {
+        .then((res) => {
           setVisibility(prev => ({
             create_post: false,
             all_posts: true,
@@ -164,7 +163,7 @@ export default function Home() {
   const usercontext = useCurrUser()
   useEffect(() => {
     if (isSignedIn && user) {
-      console.log(user);
+      //console.log(user);
       axios.post(`${baseURL}/routes/new-user`, user).then((res) => {
         setuserid(res.data.active)
         setNewpost((prev: any) => ({
@@ -387,7 +386,7 @@ export default function Home() {
             {visibility.all_users &&
               <div className='mt-24 flex w-3/4 flex-col mx-auto' id='experimental_users'>
 
-                
+
                 <div className='text-xl font-semibold mx-auto'>
                   People in Community
                 </div>
@@ -407,8 +406,8 @@ export default function Home() {
               </div>}
           </div>
         </div>
-        
-       
+
+
       </div>
     </div>
   )

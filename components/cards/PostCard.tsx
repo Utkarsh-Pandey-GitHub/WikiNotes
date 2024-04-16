@@ -10,7 +10,7 @@ import sendMessage from '../../public/sendMessage.png';
 import axios from 'axios';
 import noteboy from '../../public/notemaking.gif';
 import Link from 'next/link';
-import { getCookie,setCookie,deleteCookie } from '../../app/lib/cookiemaker'
+import { getCookie, setCookie, deleteCookie } from '../../app/lib/cookiemaker'
 import { log } from 'console';
 
 
@@ -26,7 +26,7 @@ const baseURL = process.env.NODE_ENV === 'production'
   ? 'https://wikinotes-backend.onrender.com'
   : 'http://localhost:3001';
 
-const PostCard: React.FC<CardProps> = ({ post, dark=true, mypost, main, sendmsg }) => {
+const PostCard: React.FC<CardProps> = ({ post, dark = true, mypost, main, sendmsg }) => {
   const words = post?.description.split(' ');
   const [truncatedText, setTruncatedText] = useState(words.slice(0, 30).join(' '))
 
@@ -44,7 +44,7 @@ const PostCard: React.FC<CardProps> = ({ post, dark=true, mypost, main, sendmsg 
       ...prevupdatedPost,
       [e.target.name]: e.target.value
     }))
-    console.log(updatedPost);
+    //console.log(updatedPost);
 
   }
 
@@ -57,8 +57,8 @@ const PostCard: React.FC<CardProps> = ({ post, dark=true, mypost, main, sendmsg 
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(updatedPost)
-    }).then(res => console.log(res))
-    setEdit(prevedit => !prevedit)
+    }).then(res => //console.log(res))
+      setEdit(prevedit => !prevedit)
   }
 
   function toggleWords() {
@@ -72,7 +72,7 @@ const PostCard: React.FC<CardProps> = ({ post, dark=true, mypost, main, sendmsg 
     words.slice(0, 30).join(' ')
 
   }
-  console.log(mypost);
+  //console.log(mypost);
 
   useEffect(() => {
     if (post.link) {
@@ -93,44 +93,44 @@ const PostCard: React.FC<CardProps> = ({ post, dark=true, mypost, main, sendmsg 
         })
         .catch((err) => console.log(err))
     }
-    
-    
+
+
 
 
   }, [post])
   const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
-  const date:any|undefined = new Date(post.date_Created).toLocaleString();
+  const date: any | undefined = new Date(post.date_Created).toLocaleString();
   const handleSeS = () => {
-    window.sessionStorage.setItem(`${post?.author}`, author?JSON.stringify(author):"no user" as string) 
-    
+    window.sessionStorage.setItem(`${post?.author}`, author ? JSON.stringify(author) : "no user" as string)
+
   }
   return (
-    
 
-    <div className={`flex  justify-center  border border-black   max-h-fit shadow-xl mb-4 rounded-md ${dark &&!main? 'text-white bg-black' : 'text-black bg-white'} border border-slate-400`} style={{ width:  "100%" }}>
-      {main&&chatToggle && <Link href={`/chat/${post.author}`}><button className="float-left absolute   bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-3xl" 
-      style={{
-        left: "30vw",
-      }}
-      onClick={async() => {
-        await setCookie(post.author,author)
-      }}
+
+    <div className={`flex  justify-center  border border-black   max-h-fit shadow-xl mb-4 rounded-md ${dark && !main ? 'text-white bg-black' : 'text-black bg-white'} border border-slate-400`} style={{ width: "100%" }}>
+      {main && chatToggle && <Link href={`/chat/${post.author}`}><button className="float-left absolute   bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-3xl"
+        style={{
+          left: "30vw",
+        }}
+        onClick={async () => {
+          await setCookie(post.author, author)
+        }}
       >
         Chat
       </button></Link>}
       {edit ?
-        <div className={`m-2 ${dark && !main? 'text-white bg-black' : 'text-black bg-white'}    flex flex-col  text-center   bg-opacity-0 rounded-2xl   mb-1 w-full ${main && ""} p-1`}>
+        <div className={`m-2 ${dark && !main ? 'text-white bg-black' : 'text-black bg-white'}    flex flex-col  text-center   bg-opacity-0 rounded-2xl   mb-1 w-full ${main && ""} p-1`}>
           <div className='font-bold text-lg mb-7 shadow-sm'>
             <Image src={author ? author.imageUrl : noteboy} alt="" className='w-12 h-12 rounded-full float-left mr-1 ' width={120} height={12} onClick={() => setChatToggle(prev => !prev)} />
-            <div className={`text-left ${dark && !main? 'text-white bg-black' : 'text-black bg-white'}`} onClick={() => setChatToggle(prev => !prev)}>
+            <div className={`text-left ${dark && !main ? 'text-white bg-black' : 'text-black bg-white'}`} onClick={() => setChatToggle(prev => !prev)}>
               {author?.username}
               <p className='text-slate-400 text-sm'>
 
-                {post.date_Created? date: ""}
+                {post.date_Created ? date : ""}
               </p>
             </div>
           </div>
-          <div className={` font-bold text-base text-left ${dark && !main? 'text-white bg-black' : 'text-black bg-white'} `}>
+          <div className={` font-bold text-base text-left ${dark && !main ? 'text-white bg-black' : 'text-black bg-white'} `}>
             {post?.label}
           </div>
 
@@ -142,7 +142,7 @@ const PostCard: React.FC<CardProps> = ({ post, dark=true, mypost, main, sendmsg 
               <p className=''>{post?.link}</p></a>
 
           </div>}
-          
+
           <div className='  italic h-auto break-words text-justify mt-3 '>
             {truncatedText}{words.length > 30 && truncatedText.split().length !== 30 ? <span onClick={toggleWords}>...</span> : ""}
           </div>
