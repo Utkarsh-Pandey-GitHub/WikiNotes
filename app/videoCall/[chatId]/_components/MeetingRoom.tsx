@@ -27,7 +27,7 @@ function MeetingRoom() {
                 </div>
                 <SpeakerLayout/>
 
-                <div className='fixed bottom-0 flex w-full items-center justify gap-5'>
+                <div className='fixed bottom-0  w-full items-center  gap-5 mx-auto'>
                     <CallControls onLeave={() => {
                         router.push('/')
                     }}
