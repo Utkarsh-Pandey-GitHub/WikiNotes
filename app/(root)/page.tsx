@@ -387,10 +387,10 @@ export default function Home() {
               <div className='mt-24 flex w-3/4 flex-col mx-auto' id='experimental_users'>
 
 
-                <div className='text-xl font-semibold mx-auto'>
+                <div className='text-xl font-semibold mx-auto my-16'>
                   People in Community
                 </div>
-                <div className={`   flex justify-start  sm:flex-wrap sm:gap-4 sm:flex-row flex-col gap-4`} ref={myRead}>
+                <div className={`   flex justify-center  sm:flex-wrap sm:gap-4 sm:flex-row flex-col gap-4`} ref={myRead}>
 
                   {us ? (us.map((data: any, index: any) => {
                     return <><UserCard user={data} key={index} /></>
