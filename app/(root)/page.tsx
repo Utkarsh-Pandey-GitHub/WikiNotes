@@ -273,7 +273,7 @@ export default function Home() {
                 </button>
                 <div className=' absolute right-3 top-3 gap-1 sm:flex z-50 text-white'>
                   <UserButton />
-                  <SignOutButton />
+                  {/* <SignOutButton /> */}
                 </div>
               </div>
             </div>
@@ -281,7 +281,7 @@ export default function Home() {
 
 
 
-            <div className='text-gray-500 w-1/5  h-fit bg-slate-200 p-2 rounded-xl fixed top-1/2' id='tip'>
+            {/* <div className='text-gray-500 sm:w-1/5  w-fit h-fit bg-slate-200 p-2 rounded-xl absolute top-1/2 left-1/3' id='tip'>
               <Image src={tip} alt='' className='float-left' />
               <div className='float-right text-red-700 cursor-default font-bold' onClick={() => {
                 const ele = document.getElementById('tip')
@@ -305,7 +305,7 @@ export default function Home() {
 
               </div>
 
-            </div>
+            </div> */}
 
             {visibility.create_post && <div id='form1' className='flex  justify-center w-full mt-44'>
               <ul className='mx-5 grid grid-cols-1 w-2/3 '>
