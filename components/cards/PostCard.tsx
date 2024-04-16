@@ -57,7 +57,7 @@ const PostCard: React.FC<CardProps> = ({ post, dark = true, mypost, main, sendms
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(updatedPost)
-    }).then(res => //console.log(res))
+    })
       setEdit(prevedit => !prevedit)
   }
 
