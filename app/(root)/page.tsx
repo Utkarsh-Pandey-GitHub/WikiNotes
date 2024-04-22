@@ -370,7 +370,7 @@ export default function Home() {
 
             {visibility.my_posts &&
               <div className={`flex   h-auto flex-col-reverse items-center gap-5 mt-24 lg:w-1/3 lg:mx-auto w-full`} id='experimental_post_my'>{mypos ? (mypos.map((data: any, index: any) => {
-                return <><PostCard post={data} mypost={true} key={index} main={true} /></>
+                return <><PostCard post={data} mypost={true} key={index} main={true} setVisibility={read_my_post}/></>
 
               }))
                 :

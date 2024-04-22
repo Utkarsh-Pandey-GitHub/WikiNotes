@@ -9,12 +9,13 @@ interface CardProps {
   userId?: any; // Optional prop
   dark?: boolean;
   viz?: boolean;
+  setVisibility?: any;
 }
 
 const baseURL = process.env.NODE_ENV === 'production'
   ? 'https://wikinotes-backend.onrender.com'
   : 'http://localhost:3001';
-const DeleteDialog: React.FC<CardProps> = ({ id, userId, dark, viz }
+const DeleteDialog: React.FC<CardProps> = ({ id, userId, dark, viz, setVisibility }
 ) => {
   const [viza, setViza] = useState<boolean>(true)
   interface ID {
@@ -47,10 +48,15 @@ const DeleteDialog: React.FC<CardProps> = ({ id, userId, dark, viz }
         // Handle errors here
         console.error('Error:', error.message);
       });
+    setVisibility()
+    setTimeout(() => {
+      setVisibility();
+    }, 300)
+
   }
   return (!(viz !== viza) ?
     <div className='h-44 w-96 bg-slate-500 z-10  rounded-3xl   absolute'>
-      {id}
+
       <div className='text-white bold text-4xl float-right'  >
         <Image src={delet} height={25} width={25} alt='bin' onClick={() => { setViza(prevviza => !prevviza) }} />
 

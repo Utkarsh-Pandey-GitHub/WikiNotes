@@ -20,13 +20,14 @@ interface CardProps {
   dark?: boolean
   mypost?: boolean;
   main?: boolean
-  sendmsg?: any | undefined
+  sendmsg?: any | undefined,
+  setVisibility?:any|undefined
 }
 const baseURL = process.env.NODE_ENV === 'production'
   ? 'https://wikinotes-backend.onrender.com'
   : 'http://localhost:3001';
 
-const PostCard: React.FC<CardProps> = ({ post, dark = true, mypost, main, sendmsg }) => {
+const PostCard: React.FC<CardProps> = ({ post, dark = true, mypost, main, sendmsg,setVisibility }) => {
   const words = post?.description.split(' ');
   const [truncatedText, setTruncatedText] = useState(words.slice(0, 30).join(' '))
 
@@ -166,7 +167,7 @@ const PostCard: React.FC<CardProps> = ({ post, dark = true, mypost, main, sendms
             </span>
           </div>
           <div>
-            <DeleteDialog id={post._id} userId={post.author} dark={dark} viz={viz} />
+            <DeleteDialog id={post._id} userId={post.author} dark={dark} viz={viz} setVisibility={setVisibility} />
           </div>
           <div>
             <UpdateDialog id={post._id} post={post} userId={post.author} dark={dark} viz={vize} />
@@ -201,7 +202,7 @@ const PostCard: React.FC<CardProps> = ({ post, dark = true, mypost, main, sendms
 
             </div>
             <div>
-              <DeleteDialog id={post._id} userId={post.author} dark={dark} viz={viz} />
+              <DeleteDialog id={post._id} userId={post.author} dark={dark} viz={viz} setVisibility={setVisibility}/>
             </div>
             <div>
               <UpdateDialog id={post._id} post={post} userId={post.author} dark={dark} viz={vize} />
