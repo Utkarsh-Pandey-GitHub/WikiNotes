@@ -139,14 +139,14 @@ export default function Home() {
     if (newpost.label !== '') {
       axios.post(`${baseURL}/routes/new-post`, newpost)
         .then((res) => {
-          setVisibility(prev => ({
-            create_post: false,
-            all_posts: true,
-            my_posts: false,
-            all_users: false
-          }))
+         
         })
         .catch((err) => console.log(err))
+        setTimeout(() => {
+          
+          read_post("");
+        }, 500);
+      
     }
 
   }
@@ -173,7 +173,7 @@ export default function Home() {
         usercontext?.setUser(res.data.active)
       })
     }
-    read_post('')
+    read_post('');
 
 
 
